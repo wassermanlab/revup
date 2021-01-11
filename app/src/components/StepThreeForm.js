@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     Button,
@@ -61,8 +61,8 @@ export default function StepThreeForm(props) {
     }
 
     const handleNext = () => {
-        props.setCalcScores(true)
         props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        props.setModifiedScores({...props.modifiedScores, "calc_scores": true});
     };
     const handleBack = () => {
         props.setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -78,17 +78,19 @@ export default function StepThreeForm(props) {
                         <TableContainer>
                             <Table aria-label="simple table">
                                 <colgroup>
-                                    <col style={{width:'25%'}}/>
-                                    <col style={{width:'25%'}}/>
-                                    <col style={{width:'25%'}}/>
-                                    <col style={{width:'25%'}}/>
+                                    <col style={{width:'8%'}}/>
+                                    <col style={{width:'28%'}}/>
+                                    <col style={{width:'8%'}}/>
+                                    <col style={{width:'23%'}}/>
+                                    <col style={{width:'33%'}}/>
                                 </colgroup>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Initial Value</TableCell>
                                         <TableCell>Evidence Description</TableCell>
                                         <TableCell>Final Result</TableCell>
-                                        <TableCell>Additional Comments</TableCell>
+                                        <TableCell>Additional Information</TableCell>
+                                        <TableCell>Comments</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -108,7 +110,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_5_2_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_5_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_5_1_row"}>
@@ -127,7 +132,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_5_1_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_5_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_4_2_row"}>
@@ -146,7 +154,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_4_2_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_4_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_4_1_row"}>
@@ -165,7 +176,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_4_1_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_4_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_3_1_row"}>
@@ -184,7 +198,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_3_1_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_3_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_4_row"}>
@@ -203,7 +220,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_2_4_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_2_4_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_3_row"}>
@@ -222,7 +242,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_2_3_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            {props.additionalInfo["c_2_3"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_2_3_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_2_row"}>
@@ -241,7 +264,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_2_2_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_2_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_1_row"}>
@@ -260,7 +286,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_2_1_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_2_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_1_3_row"}>
@@ -279,7 +308,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_1_3_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_1_3_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_1_2_row"}>
@@ -298,7 +330,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_1_2_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            {props.additionalInfo["c_1_2"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_1_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_1_1_row"}>
@@ -317,7 +352,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="c_1_1_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            {props.additionalInfo["c_1_1"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_1_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
@@ -327,17 +365,19 @@ export default function StepThreeForm(props) {
                         <TableContainer>
                             <Table aria-label="simple table">
                                 <colgroup>
-                                    <col style={{width:'25%'}}/>
-                                    <col style={{width:'25%'}}/>
-                                    <col style={{width:'25%'}}/>
-                                    <col style={{width:'25%'}}/>
+                                    <col style={{width:'8%'}}/>
+                                    <col style={{width:'28%'}}/>
+                                    <col style={{width:'8%'}}/>
+                                    <col style={{width:'23%'}}/>
+                                    <col style={{width:'33%'}}/>
                                 </colgroup>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Initial Value</TableCell>
                                         <TableCell>Evidence Description</TableCell>
                                         <TableCell>Final Result</TableCell>
-                                        <TableCell>Additional Comments</TableCell>
+                                        <TableCell>Additional Information</TableCell>
+                                        <TableCell>Comments</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -357,7 +397,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_1_1_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            {props.additionalInfo["f_1_1"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_1_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_2_row"}>
@@ -376,7 +419,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_1_2_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            {props.additionalInfo["f_1_2"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_1_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_3_row"}>
@@ -395,7 +441,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_1_3_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            {props.additionalInfo["f_1_3"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_1_3_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_4_row"}>
@@ -414,7 +463,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_1_4_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            {props.additionalInfo["f_1_4"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_1_4_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_5_row"}>
@@ -433,7 +485,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_1_5_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_1_5_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_2_1_row"}>
@@ -453,7 +508,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_2_1_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_2_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_2_2_row"}>
@@ -472,7 +530,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_2_2_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_2_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_3_1_row"}>
@@ -491,7 +552,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_3_1_comments" label="Comments" multiline rows={1} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_3_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_4_1_row"}>
@@ -512,7 +576,10 @@ export default function StepThreeForm(props) {
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            <TextField id="f_4_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="f_4_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>

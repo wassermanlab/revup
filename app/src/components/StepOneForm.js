@@ -49,7 +49,8 @@ export default function StepOneForm(props) {
     const classes = useStyles();
 
     const handleChange = (key, event) => {
-        props.setResults({...props.results, [key]: event.target.value});
+        //props.setResults({...props.results, [key]: event.target.value});
+        props.setQuery({...props.query, [key]: event.target.value});
 
         if (key === "c_3_1") {
             if (event.target.value === "yes") {
@@ -62,11 +63,14 @@ export default function StepOneForm(props) {
    
     const handleNext = () => {
         props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        props.setResults({
-            ...props.results,
+        props.setQuery({
+            ...props.query,
             "patient_id": document.getElementById("patient_id").value,
             "variant_id": document.getElementById("variant_id").value,
-            "target_gene": document.getElementById("target_gene").value
+            "target_gene": document.getElementById("target_gene").value,
+            "chro": document.getElementById("chro").value,
+            "pos": document.getElementById("pos").value,
+            "alt": document.getElementById("alt").value,
         })
     };
 
@@ -89,7 +93,7 @@ export default function StepOneForm(props) {
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl component="fieldset">
-                                    <RadioGroup aria-label="ref_genome" name="ref_genome" value={props.results["ref_genome"]} onChange={(e) => handleChange('ref_genome', e)} row>
+                                    <RadioGroup aria-label="ref_genome" id="ref_genome" name="ref_genome" value={props.query["ref_genome"]} onChange={(e) => handleChange('ref_genome', e)} row>
                                         <FormControlLabel value="hg19" control={<Radio />} label="hg19" row="True" />
                                         <FormControlLabel value="hg38" control={<Radio />} label="hg38" row="True" />
                                     </RadioGroup>
@@ -130,7 +134,7 @@ export default function StepOneForm(props) {
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
-                                    <Select fullWidth id="c_1_3" value={props.results["c_1_3"] ? props.results["c_1_3"] : " "} onChange={(e) => handleChange('c_1_3', e)} variant="outlined">
+                                    <Select fullWidth id="c_1_3" value={props.query["c_1_3"] ? props.query["c_1_3"] : " "} onChange={(e) => handleChange('c_1_3', e)} variant="outlined">
                                         <MenuItem value={"yes"}>Yes</MenuItem>
                                         <MenuItem value={"no"}>No</MenuItem>
                                         <MenuItem value={"unknown"}>Unknown</MenuItem>
@@ -147,7 +151,7 @@ export default function StepOneForm(props) {
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
-                                    <Select id="c_3_1" value={props.results["c_3_1"] ? props.results["c_3_1"] : " "} onChange={(e) => handleChange('c_3_1', e)} variant="outlined">
+                                    <Select id="c_3_1" value={props.query["c_3_1"] ? props.query["c_3_1"] : " "} onChange={(e) => handleChange('c_3_1', e)} variant="outlined">
                                         <MenuItem value={"yes"}>Yes</MenuItem>
                                         <MenuItem value={"no"}>No</MenuItem>
                                         <MenuItem value={"unknown"}>Unknown</MenuItem>
@@ -162,7 +166,7 @@ export default function StepOneForm(props) {
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl component="fieldset">
-                                        <RadioGroup aria-label="c_3_1_additional" name="c_3_1_additional" value={props.results["c_3_1_additional"] ? props.results["c_3_1_additional"] : " "} onChange={(e) => handleChange('c_3_1_additional', e)}>
+                                        <RadioGroup aria-label="c_3_1_additional" name="c_3_1_additional" value={props.query["c_3_1_additional"] ? props.query["c_3_1_additional"] : " "} onChange={(e) => handleChange('c_3_1_additional', e)}>
                                             <FormControlLabel value="trio" control={<Radio />} label="Variant segregate as expected in a trio* (parents and proband)"/>
                                             <FormControlLabel value="small_family" control={<Radio />} label="Variant segregate as expected in a small family* (trio and 1 or 2 siblings)"/>
                                             <FormControlLabel value="large_family" control={<Radio />} label="Variant segregate as expected in a large family* (over 5 individuals)"/>
@@ -178,7 +182,7 @@ export default function StepOneForm(props) {
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
-                                    <Select id="c_4_1" value={props.results["c_4_1"] ? props.results["c_4_1"] : " "} onChange={(e) => handleChange('c_4_1', e)} variant="outlined">
+                                    <Select id="c_4_1" value={props.query["c_4_1"] ? props.query["c_4_1"] : " "} onChange={(e) => handleChange('c_4_1', e)} variant="outlined">
                                         <MenuItem value={"yes"}>Yes</MenuItem>
                                         <MenuItem value={"no"}>No</MenuItem>
                                         <MenuItem value={"unknown"}>Unknown</MenuItem>
@@ -200,7 +204,7 @@ export default function StepOneForm(props) {
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
-                                    <Select id="new_c" value={props.results["new_c"] ? props.results["new_c"] : ""} onChange={(e) => handleChange('new_c', e)} variant="outlined">
+                                    <Select id="new_c" value={props.query["new_c"] ? props.query["new_c"] : ""} onChange={(e) => handleChange('new_c', e)} variant="outlined">
                                         <MenuItem value={"heterozygous"}>Heterozygous</MenuItem>
                                         <MenuItem value={"homozygous"}>Homozygous</MenuItem>
                                         <MenuItem value={"compound_het"}>Compound Het</MenuItem>

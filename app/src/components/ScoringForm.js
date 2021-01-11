@@ -55,41 +55,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function ScoringForm(props) {
-    var defaultDict = {
-        "patient_id": "",
-        "variant_id": "",
-        "target_gene": "",
-        "ref_genome": "",
-        "chr": "",
-        "pos": "",
-        "alt": "",
-        "gnomad_coord": "",
-        "c_1_3": "unknown",
-        "c_3_1": "unknown",
-        "c_3_1_additional": "trio",
-        "c_4_1": "unknown",
-        "c_2_1": "unknown",
-        "c_2_2": "unknown",
-        "c_2_4": "unknown",
-        "func_analysis": "no",
-        "c_4_2": "unknown",
-        "c_5_1": "unknown",
-        "c_5_2": "unknown",
-        "f_1_1": "unknown",
-        "f_1_5": "unknown",
-        "f_2_1": "unknown",
-        "f_2_2": "unknown",
-        "f_3_1": "unknown",
-        "f_4_1": "unknown",
-        "new_c": "",
-    }
     const classes = useStyles();
     const steps = getSteps();
     const [activeStep, setActiveStep] = useState(0);
-    const [results, setResults] = useState(defaultDict)
+    //const [results, setResults] = useState(defaultDict)
     const handleReset = () => {
         setActiveStep(0);
-        setResults(defaultDict)
+        //setResults(defaultDict)
+        props.setQuery(props.defaultQueryDict)
     }
 
     function NewlineText(props) {
@@ -108,28 +81,33 @@ export default function ScoringForm(props) {
             case 0:
                 return (
                     <StepOneForm 
-                        results={results}
-                        setResults={setResults} 
+                        //results={results}
+                        //setResults={setResults} 
+                        query={props.query}
+                        setQuery={props.setQuery}
                         setActiveStep={setActiveStep}>
                     </StepOneForm>
                 )
             case 1:
                 return (
                     <StepTwoForm 
-                        results={results}
-                        setResults={setResults} 
-                        setActiveStep={setActiveStep}
-                        setQuery={props.setQuery}>
+                        //results={results}
+                        //setResults={setResults} 
+                        query={props.query}
+                        setQuery={props.setQuery}
+                        setActiveStep={setActiveStep}>
                     </StepTwoForm>
                 )
             case 2:
                 return (
                     <StepThreeForm 
-                        results={results}
+                        //results={results}
+                        query={props.query}
+                        setQuery={props.setQuery}
                         initialScores={props.initialScores}
                         modifiedScores={props.modifiedScores}
+                        additionalInfo={props.additionalInfo}
                         setModifiedScores={props.setModifiedScores}
-                        setCalcScores={props.setCalcScores}
                         setActiveStep={setActiveStep}>
                     </StepThreeForm>
                 )
@@ -163,7 +141,7 @@ export default function ScoringForm(props) {
     return (
         <React.Fragment>
             <div className={classes.root}>
-                <Container maxWidth="md" className={classes.greyBackground}>
+                <Container maxWidth="lg" className={classes.greyBackground}>
                     <Stepper className={classes.greyBackground} activeStep={activeStep} alternativeLabel>
                         {steps.map((label) => (
                             <Step key={label}>

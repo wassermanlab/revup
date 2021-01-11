@@ -212,6 +212,24 @@ def ucsc_get_data(**kwargs):
     phastcons_score = phastcons_results[chro][0]["value"]
     print(phastcons_score)
 
+    # Get ENCODE cCRE 
+    track_query = "track?track=encodeCcreCombined;genome=hg38;chrom={};start={};end={}".format(chro, start, end)
+    ccre_query = os.path.join(ucsc_api_url, "getData", track_query)
+
+    ccre_results = make_request(ccre_query)
+    ccre_data = []
+    if len(ccre_results["encodeCcreCombined"]) > 0:
+        for ccre_result in ccre_results["encodeCcreCombined"]:
+            ccre_data.append({
+                "ccre": ccre_result["ccre"],
+                "description": ccre_result["description"],
+                "name": ccre_result["name"]
+            })
+    print(ccre_data)
+
+    #ccre_score = ccre_results["encodeCcreCombined"][0]["score"]
+    #print(ccre_score)
+
 
 if __name__=='__main__':
     query()

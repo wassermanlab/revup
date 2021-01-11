@@ -1,8 +1,11 @@
 import os
+import sys
+
 from flask import Flask
 from flask_cors import CORS
 
-app = Flask(__name__)
+
+app = Flask(__name__, static_folder='./app/build', static_url_path='/')
 app.config.from_mapping(
     SECRET_KEY='dev'
 )
@@ -20,4 +23,4 @@ cors = CORS(app, resources={
     r"/*": {"origins": ["http://localhost:3000"]}
 })
 
-import webpage_rvs.routes
+import webpage_rvs.src.routes

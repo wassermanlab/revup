@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { 
     ThemeProvider,
     makeStyles 
@@ -7,31 +7,72 @@ import {
     Container,
     Typography, 
 } from '@material-ui/core';
-
+import clsx from 'clsx';
 import theme from '../styles/theme';
 import NavBar from '../components/NavBar';
 
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-        pageHeader: {
-            paddingTop: '50px',
-        },
+    pageHeader: {
+        paddingTop: '50px',
+    },
+    root: {
+        display: 'flex',
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+    },
+    contentShift: {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+    },
 }));
 
 
 export default function Results() {
     const classes = useStyles();
+    const [open, setOpen] = useState(false);
     return (
         <React.Fragment>
-            <ThemeProvider theme={theme}>
-                <NavBar/>
-                { /*  TODO: Insert logo image here */ }
-                <Container maxWidth="lg">
-                    <Typography className={classes.pageHeader} variant="h2" align="center" gutterBottom>
-                        Results Page
-                    </Typography>
-                </Container>
-            </ThemeProvider>
+            <div className={classes.root}>
+                <ThemeProvider theme={theme}>
+                    <NavBar
+                        open={open}
+                        setOpen={setOpen}
+                    />
+                    { /*  TODO: Insert logo image here */ }
+                    <main
+                        className={clsx(classes.content, {
+                        [classes.contentShift]: open,
+                        })}
+                    >
+                        <div className={classes.drawerHeader} />
+                        <Container maxWidth="lg">
+                            <Typography className={classes.pageHeader} variant="h2" align="center" gutterBottom>
+                                Results Page
+                            </Typography>
+                        </Container>
+                    </main>
+                </ThemeProvider>
+            </div>
         </React.Fragment>
     )
 }
