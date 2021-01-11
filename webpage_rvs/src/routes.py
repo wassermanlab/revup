@@ -17,12 +17,6 @@ from webpage_rvs.src.variant import (
 def index():
     output = "{}".format(request.method)
     return output
-    #return app.send_static_file('index.html')
-
-@app.route('/test')
-def test():
-    print("hi")
-    return "bye"
 
 
 @app.route('/initial_scores', methods=["POST"])
