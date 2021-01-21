@@ -1,12 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     Button,
+    Divider,
     FormControl,
     FormControlLabel,
     FormHelperText,
     FormLabel,
     Grid,
+    Link,
     MenuItem,
     Paper,
     Select,
@@ -14,6 +16,7 @@ import {
     RadioGroup,
     TextField,
     Tooltip,
+    Typography, 
 } from '@material-ui/core';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
@@ -47,6 +50,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StepOneForm(props) {
     const classes = useStyles();
+    const [targetGeneError, setTargetGeneError] = useState({
+        "error": false,
+        "message": "",
+    })
+    const [refGenomeError, setRefGenomeError] = useState({
+        "error": false,
+        "message": "",
+    })
+    const [variantCoordError, setVariantCoordError] = useState({
+        "error": false,
+        "message": "",
+    })
 
     const handleChange = (key, event) => {
         //props.setResults({...props.results, [key]: event.target.value});
@@ -60,18 +75,58 @@ export default function StepOneForm(props) {
             }
         }
     }
-   
-    const handleNext = () => {
-        props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+    const handleExample = () => {
         props.setQuery({
             ...props.query,
-            "patient_id": document.getElementById("patient_id").value,
-            "variant_id": document.getElementById("variant_id").value,
-            "target_gene": document.getElementById("target_gene").value,
-            "chro": document.getElementById("chro").value,
-            "pos": document.getElementById("pos").value,
-            "alt": document.getElementById("alt").value,
+            "chro": "1",
+            "pos": "101493333",
+            "alt": "T",
+            "target_gene": "GRHL2",
+            "ref_genome": "hg38",
+            "gnomad_coor": "1-101493333-G-T"
         })
+    }
+   
+    const handleNext = () => {
+        var isError = false;
+
+        // Check target gene
+        if (document.getElementById("target_gene").value === "") {
+            setTargetGeneError({...targetGeneError, "error": true, "message": "This field cannot be empty"})
+            isError = true;
+        } else {
+            setTargetGeneError({...targetGeneError, "error": false, "message": ""})
+        }
+        // Check reference genome
+        if (props.query["ref_genome"] === "") {
+            setRefGenomeError({...refGenomeError, "error": true, "message": "This field cannot be empty"})
+            isError = true;
+        } else {
+            setRefGenomeError({...refGenomeError, "error": false, "message": ""})
+        }
+        // Check variant coordinates
+        var chro = document.getElementById("chro").value
+        var pos = document.getElementById("pos").value
+        var alt = document.getElementById("alt").value
+        var gnomad = document.getElementById("gnomad_coor")
+        if ((chro === "" && pos === "" && alt === "") && (gnomad === "")) {
+            setVariantCoordError({...variantCoordError, "error": true, "message": "One of these fields must be filled"})
+            isError = true;
+        } else if ((chro === "" && pos === "" && alt === "") && (gnomad !== "")) {
+            setVariantCoordError({...variantCoordError, "error": true, "message": "One of these fields must be filled"})
+            isError = true;
+        } else if ((chro !== "" && pos !== "" && alt !== "") && (gnomad === "")) {
+            setVariantCoordError({...variantCoordError, "error": true, "message": "One of these fields must be filled"})
+            isError = true;
+        } else {
+            setVariantCoordError({...variantCoordError, "error": false, "message": ""})
+        }
+        
+        // If there are no errors on the page
+        if (isError === false) {
+            props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }  
     };
 
     return (
@@ -80,64 +135,151 @@ export default function StepOneForm(props) {
                 <Grid className={classes.grid} container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
                     <Paper className={classes.paper}>
                         <Grid justify="center" container spacing={3}>
-                            <Grid item xs={5}>
-                                <TextField fullWidth id="patient_id" label="Patient ID" helperText="(optional)" variant="outlined"/>
+                            <Grid item xs={2}>
+                                Example Variant:  
                             </Grid>
-                            <Grid item xs={5}>
-                                <TextField fullWidth id="variant_id" label="Variant ID" helperText="(optional)" variant="outlined"/>
+                            <Grid item xs={8}>
+                                <Link href="#" onClick={handleExample}>
+                                    8-101493333-G-T
+                                </Link>
                             </Grid>
                         </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel component="legend">Reference Genome</FormLabel>
+                                <TextField 
+                                    fullWidth 
+                                    id="patient_id" 
+                                    label="Patient ID" 
+                                    helperText="(optional)" 
+                                    variant="outlined"
+                                    value={props.query["patient_id"]}
+                                    onChange={(e) => handleChange('patient_id', e)} 
+                                />
                             </Grid>
                             <Grid item xs={5}>
-                                <FormControl component="fieldset">
+                                <TextField 
+                                    fullWidth 
+                                    id="variant_id" 
+                                    label="Variant ID" 
+                                    helperText="(optional)" 
+                                    variant="outlined"
+                                    value={props.query["variant_id"]}
+                                    onChange={(e) => handleChange('variant_id', e)} 
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={5}>
+                                <FormLabel component="legend">Reference Genome *</FormLabel>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <FormControl component="fieldset" error={refGenomeError["error"]}>
                                     <RadioGroup aria-label="ref_genome" id="ref_genome" name="ref_genome" value={props.query["ref_genome"]} onChange={(e) => handleChange('ref_genome', e)} row>
-                                        <FormControlLabel value="hg19" control={<Radio />} label="hg19" row="True" />
-                                        <FormControlLabel value="hg38" control={<Radio />} label="hg38" row="True" />
+                                        <FormControlLabel value="hg19" control={<Radio />} label="GRCh37/hg19" row="True" />
+                                        <FormControlLabel value="hg38" control={<Radio />} label="GRCh38/hg38" row="True" />
                                     </RadioGroup>
+                                    <FormHelperText>{refGenomeError["message"]}</FormHelperText>
                                 </FormControl>
                             </Grid>
                         </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Variant Coordinates</FormLabel>
+                                <FormLabel>Variant Coordinates *</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={4}>
-                                        <TextField fullWidth id="chro" label="chr" variant="outlined"/>
+                                <FormControl component="fieldset" error={variantCoordError["error"]}>
+                                    <Grid justify="center" container spacing={3}>
+                                        <Grid item xs={4}>
+                                            <TextField 
+                                                fullWidth 
+                                                id="chro" 
+                                                label="chr" 
+                                                variant="outlined" 
+                                                value={props.query["chro"]}
+                                                error={variantCoordError["error"]}
+                                                onChange={(e) => handleChange('chro', e)} 
+                                            />
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <TextField 
+                                                fullWidth 
+                                                id="pos" 
+                                                label="pos" 
+                                                variant="outlined" 
+                                                value={props.query["pos"]}
+                                                error={variantCoordError["error"]}
+                                                onChange={(e) => handleChange('pos', e)} 
+                                            />
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <TextField 
+                                                fullWidth 
+                                                id="alt" 
+                                                label="alt" 
+                                                variant="outlined" 
+                                                value={props.query["alt"]}
+                                                error={variantCoordError["error"]}
+                                                onChange={(e) => handleChange('alt', e)} 
+                                            />
+                                        </Grid>
+                                        <FormHelperText>{variantCoordError["message"]}</FormHelperText>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <TextField fullWidth id="pos" label="pos" variant="outlined"/>
+                                    <Grid justify="center" container spacing={3}>
+                                        <Grid item xs={2}>
+                                            OR
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <TextField fullWidth id="alt" label="alt" variant="outlined"/>
+                                    <Grid justify="center" container spacing={3}>
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                fullWidth 
+                                                id="gnomad_coor" 
+                                                label="chr-pos-ref-alt" 
+                                                variant="outlined" 
+                                                value={props.query["gnomad_coor"] || ""}
+                                                error={variantCoordError["error"]}
+                                                onChange={(e) => handleChange('gnomad_coor', e)} 
+                                            />
+                                            <FormHelperText>{variantCoordError["message"]}</FormHelperText>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={12}>
-                                        OR
-                                    </Grid>
-                                </Grid>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <TextField fullWidth id="gnomad_coor" label="chr-pos-ref-alt" variant="outlined"/>
-                                    </Grid>
-                                </Grid>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={5}>
+                                <FormLabel>Target Gene *</FormLabel>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <TextField 
+                                    fullWidth 
+                                    id="target_gene" 
+                                    label="" 
+                                    helperText={targetGeneError["message"]}
+                                    variant="outlined"
+                                    value={props.query["target_gene"]}
+                                    error={targetGeneError["error"]}
+                                />
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
+                            <Grid item xs={10}>
+                                <Divider />
+                                <Typography variant="h4" align="left" gutterBottom>
+                                    Variant Information
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Variant or locus previously statistically associated with the same or a similar phenotype?</FormLabel>
+                                <FormLabel>Variant genotype in the patient</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
-                                    <Select fullWidth id="c_1_3" value={props.query["c_1_3"] ? props.query["c_1_3"] : " "} onChange={(e) => handleChange('c_1_3', e)} variant="outlined">
-                                        <MenuItem value={"yes"}>Yes</MenuItem>
-                                        <MenuItem value={"no"}>No</MenuItem>
-                                        <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                    <Select id="new_c" value={props.query["new_c"] ? props.query["new_c"] : ""} onChange={(e) => handleChange('new_c', e)} variant="outlined">
+                                        <MenuItem value={"heterozygous"}>Heterozygous</MenuItem>
+                                        <MenuItem value={"homozygous"}>Homozygous</MenuItem>
+                                        <MenuItem value={"compound_het"}>Compound Het</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
@@ -167,18 +309,18 @@ export default function StepOneForm(props) {
                                 <Grid item xs={5}>
                                     <FormControl component="fieldset">
                                         <RadioGroup aria-label="c_3_1_additional" name="c_3_1_additional" value={props.query["c_3_1_additional"] ? props.query["c_3_1_additional"] : " "} onChange={(e) => handleChange('c_3_1_additional', e)}>
-                                            <FormControlLabel value="trio" control={<Radio />} label="Variant segregate as expected in a trio* (parents and proband)"/>
-                                            <FormControlLabel value="small_family" control={<Radio />} label="Variant segregate as expected in a small family* (trio and 1 or 2 siblings)"/>
-                                            <FormControlLabel value="large_family" control={<Radio />} label="Variant segregate as expected in a large family* (over 5 individuals)"/>
+                                            <FormControlLabel value="trio" control={<Radio />} label="Variant segregate as expected in a trio ** (parents and proband)"/>
+                                            <FormControlLabel value="small_family" control={<Radio />} label="Variant segregate as expected in a small family ** (trio and 1 or 2 siblings)"/>
+                                            <FormControlLabel value="large_family" control={<Radio />} label="Variant segregate as expected in a large family ** (over 5 individuals)"/>
                                         </RadioGroup>
-                                        <FormHelperText>*Both parental samples were shown through identity testing to be the biological parents of the patient</FormHelperText>
+                                        <FormHelperText>** Both parental samples were shown through identity testing to be the biological parents of the patient</FormHelperText>
                                     </FormControl>
                                 </Grid>
                             </Grid>
                         </div>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Variant observed in multiple, unrelated families with the same disease phenotype?</FormLabel>
+                                <FormLabel>Variant observed in multiple, unrelated families with the same disease phenotype</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
@@ -190,26 +332,23 @@ export default function StepOneForm(props) {
                                 </FormControl>
                             </Grid>
                         </Grid>
-                        <Grid justify="center" container spacing={3}>
+                        <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Target Gene</FormLabel>
-                            </Grid>
-                            <Grid item xs={5}>
-                                <TextField fullWidth id="target_gene" label="" helperText="(required)" variant="outlined"/>
-                            </Grid>
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={5}>
-                                <FormLabel>Variant genotype in the patient</FormLabel>
+                                <FormLabel>Variant or locus previously statistically associated with the same or a similar phenotype</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
-                                    <Select id="new_c" value={props.query["new_c"] ? props.query["new_c"] : ""} onChange={(e) => handleChange('new_c', e)} variant="outlined">
-                                        <MenuItem value={"heterozygous"}>Heterozygous</MenuItem>
-                                        <MenuItem value={"homozygous"}>Homozygous</MenuItem>
-                                        <MenuItem value={"compound_het"}>Compound Het</MenuItem>
+                                    <Select fullWidth id="c_1_3" value={props.query["c_1_3"] ? props.query["c_1_3"] : " "} onChange={(e) => handleChange('c_1_3', e)} variant="outlined">
+                                        <MenuItem value={"yes"}>Yes</MenuItem>
+                                        <MenuItem value={"no"}>No</MenuItem>
+                                        <MenuItem value={"unknown"}>Unknown</MenuItem>
                                     </Select>
                                 </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={10}>
+                                <FormHelperText>* Indicates the field is required</FormHelperText>
                             </Grid>
                         </Grid>
                     </Paper>
@@ -226,7 +365,6 @@ export default function StepOneForm(props) {
                     Next
                 </Button>
             </div>
-            
             
         </React.Fragment>
     )

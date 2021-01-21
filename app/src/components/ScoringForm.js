@@ -152,7 +152,7 @@ export default function ScoringForm(props) {
 
                     <div>
                         {activeStep === steps.length ? (
-                            <div>
+                            <div>{/*
                                 <Grid className={classes.grid} container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
                                     <Paper className={classes.formPaper}>
                                         <Grid justify="center" container spacing={3}>
@@ -171,8 +171,14 @@ export default function ScoringForm(props) {
                                                 <Button variant="contained" color="primary">View Results</Button>
                                             </Grid>
                                         </Grid>
+                                        <Grid justify="center" container spacing={3}>
+                                            <Grid item xs={6}>
+                                                {props.finalScores["rve"]}
+                                            </Grid>
+                                        </Grid>
                                     </Paper>
                                 </Grid>
+                            */}
                             </div>
                             ) : (
                             <div>

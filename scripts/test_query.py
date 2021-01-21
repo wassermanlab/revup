@@ -96,11 +96,12 @@ def gnomad_allele(**kwargs):
 @query.command()
 @click.argument("chr", nargs=1)
 @click.argument("pos", nargs=1)
-@click.argument("alt", nargs=1)
 @click.argument("ref", nargs=1)
+@click.argument("alt", nargs=1)
 @click.option("--version", default="GRCh38-v1.6", type=click.Choice(CADD_VERSION_CHOICES))
 # Example command:
 # python3 test_query.py cadd-score 21 27107251 C G --version GRCh38-v1.6
+# python3 test_query.py cadd-score 8 101493333 G T --version GRCh38-v1.6
 def cadd_score(chr, pos, alt, ref, version):
     """
     """
@@ -109,7 +110,7 @@ def cadd_score(chr, pos, alt, ref, version):
 
     if response.status_code != 200:
         raise Exception("Error: {}".format(response.status_code))
-    
+    print(response.json())
     results = response.json()
     for result in results:
         if result["Alt"] == alt and result["Ref"] == ref:

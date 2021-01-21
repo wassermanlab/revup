@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import theme from '../styles/theme';
 import NavBar from '../components/NavBar';
 import ScoringForm from '../components/ScoringForm';
+import Results from '../components/Results';
 //import getCsrfToken from '../components/csrftoken';
 
 const drawerWidth = 240;
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Home() {
+    const config = require("../templates.json");
     var defaultScoresDict = {
         "c_1_1": "0",
         "c_1_2": "0",
@@ -115,13 +117,15 @@ export default function Home() {
     const [initialScores, setInitialScores] = useState(defaultScoresDict);
     const [modifiedScores, setModifiedScores] = useState(defaultScoresDict);
     const [additionalInfo, setAdditionalInfo] = useState(defaultScoresDict);
-    const [finalScores, setFinalScores] = useState(defaultResultsDict);
+    const [finalScores, setFinalScores] = useState(defaultScoresDict);
+    const [finalResults, setFinalResults] = useState(defaultResultsDict);
     const [open, setOpen] = useState(false);
+    const [status, setStatus] = useState("unfilled");
     const classes = useStyles();
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            const response = await fetch('http://127.0.0.1:5000' + '/initial_scores', {
+            const response = await fetch(config.backend_url + '/initial_scores', {
                 method: 'POST',
                 body: JSON.stringify(query),
                 headers: {
@@ -147,7 +151,7 @@ export default function Home() {
 
     useEffect(() => {
         const fetchFinalData = async () => {
-            const response = await fetch('http://127.0.0.1:5000' + '/calc_scores', {
+            const response = await fetch(config.backend_url + '/calc_scores', {
                 method: 'POST',
                 body: JSON.stringify(modifiedScores),
                 headers: {
@@ -158,11 +162,9 @@ export default function Home() {
                 //credentials: 'include'
             });
             const json = await response.json();
-            //console.log(json);
-            setFinalScores(json);
-            console.log(finalScores);
+            setFinalResults(json);
+            setStatus("filled");
         }
-        console.log("2")
         if (modifiedScores["calc_scores"] === true) {
             fetchFinalData();
             setModifiedScores({...modifiedScores, "calc_scores": false});
@@ -206,6 +208,7 @@ export default function Home() {
                             </Typography>
                         </Container>
                         <Container maxWidth="lg">
+                            { status === "unfilled" ? 
                             <ScoringForm 
                                 setQuery={setQuery} 
                                 setModifiedScores={setModifiedScores}
@@ -214,8 +217,12 @@ export default function Home() {
                                 modifiedScores={modifiedScores}
                                 initialScores={initialScores}
                                 additionalInfo={additionalInfo}
-                            >
-                            </ScoringForm>
+                            />
+                            : <Results 
+                                finalResults={finalResults}
+                                modifiedScores={modifiedScores}
+                                additionalInfo={additionalInfo}
+                            />}
                         </Container>
                     </main>
                 </ThemeProvider>

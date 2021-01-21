@@ -74,14 +74,31 @@ def calculate_initial_scores():
 
         # Check cCRE info
         snv.set_ccre_info()
-        response["additional_info"]["f_1_2"] = "temp"
         if len(snv.ccre_info) > 0:
             response["scores"]["f_1_2"] = "1"
+            ccre_string = ""
+            for ccre in snv.ccre_info:
+                ccre_string += "cCRE: {}, description: {};\n".format(ccre["ccre"], ccre["description"])
+            out_string = "cCREs:\n\n{}".format(ccre_string)
+            response["additional_info"]["f_1_2"] = out_string
         else:
             response["scores"]["f_1_2"] = "0"
+            response["additional_info"]["f_1_2"] = "No cCREs found"
 
         # Check CRM
-        response["additional_info"]["f_1_1"] = "temp"
+        snv.set_remap_score()
+        if len(snv.crms) > 0:
+            response["scores"]["f_1_1"] = "1"
+
+            # TODO: Check for string error???
+            crm_string = ", ".join(snv.crms[0:3])
+            out_string = "CRMs: {}".format(crm_string)
+            if len(snv.crms) > 2:
+                out_string += ", and more"
+            response["additional_info"]["f_1_1"] = out_string
+        else:
+            response["scores"]["f_1_1"] = "0"
+            response["additional_info"]["f_1_1"] = "No CRMs found"
 
         # Check Hi-C
         response["additional_info"]["f_1_3"] = "temp"

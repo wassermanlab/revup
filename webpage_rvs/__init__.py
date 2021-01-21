@@ -20,7 +20,7 @@ except OSError:
     pass
 
 cors = CORS(app, resources={
-    r"/*": {"origins": ["http://localhost:3000"]}
+    r"/*": {"origins": ["http://localhost:3000", "https://regulatory-variants.netlify.app"]}
 })
 
 import webpage_rvs.src.routes
