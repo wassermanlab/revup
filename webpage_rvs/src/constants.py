@@ -57,6 +57,7 @@ UCSC_API_URL = "https://api.genome.ucsc.edu"
 CADD_API_URL = "https://cadd.gs.washington.edu.api/v1.0"
 CADD_API_URL_TEMPLATE = "https://cadd.gs.washington.edu/api/v1.0/{version}/{chro}:{pos}"
 GNOMAD_API_URL = "https://gnomad.broadinstitute.org/api"
+SCREEN_URL = "https://api.wenglab.org/screen_graphql/graphql"
 
 GNOMAD_ALLELE_QUERY = """
 query getVariant($variantId: String!) {
@@ -73,6 +74,23 @@ query getVariant($variantId: String!) {
     }
 }
 """
+SCREEN_CCRE_QUERY = """{{
+    ccres(
+        assembly: GRCh38
+        range: {{chrom: \"{0}\", start: {1}, end: {2}}}
+    ) {{
+        total,
+        ccres {{
+            accession,
+            details {{
+                linkedGenes {{
+                    gene,
+                    method
+                }}
+            }}
+        }}
+    }}
+}}"""
 
 PHYLOP_CUTOFF = 1.5
 PHASTCONS_CUTOFF = 0.5
@@ -84,3 +102,7 @@ GNOMAD_ASSEMBLY = "hg19"
 CADD_ASSEMBLY = "hg38"
 REMAP_ASSEMBLY = "hg38"
 CADD_VERSION = "GRCh38-v1.6"
+SCREEN_ASSEMBLY = "hg38"
+
+RVE_SCORES_FILE = "RVE-score.txt"
+REMAP_VARIANT_FILE = "Remap_Variant_interest.tsv"

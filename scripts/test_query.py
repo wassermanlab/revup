@@ -69,6 +69,7 @@ def gnomad_allele(**kwargs):
         }
     }
     """
+    '''
     response = requests.post(
         "https://gnomad.broadinstitute.org/api",
         data=json.dumps({
@@ -78,6 +79,17 @@ def gnomad_allele(**kwargs):
         
         headers={
             "Content-Type": "application/json",
+        }
+    ).json()
+    '''
+    response = requests.post(
+        url="https://gnomad.broadinstitute.org/api",
+        json={
+            "query": QUERY,
+            "variables": {"variantId": variant_id}
+        },
+        headers={
+            "Content-Type": "application/json"
         }
     ).json()
     # print(response)
@@ -230,6 +242,81 @@ def ucsc_get_data(**kwargs):
 
     #ccre_score = ccre_results["encodeCcreCombined"][0]["score"]
     #print(ccre_score)
+
+
+@query.command()
+#@click.argument("accession")
+@click.argument("chro")
+@click.argument("pos")
+@click.argument("gene")
+@click.argument("assembly")
+# Example query: 
+# python3 test_query.py screen-graphql 8 101493333 GRHL2 GRCh38
+# python3 test_query.py screen-graphql 17 4890930 CAMTA2 hg19
+def screen_graphql(chro, pos, gene, assembly):
+    """
+    """
+
+    ASSEMBLY_MAP = {
+        "GRCh38": "hg38",
+        "GRCh37": "hg19",
+        "hg19": "hg19",
+        "hg38": "hg38"
+    }
+
+    chrom = "chr" + chro
+
+    try:
+        assembly = ASSEMBLY_MAP[assembly]
+    except KeyError:
+        raise Exception("{} not found as an assembly".format(assembly))
+
+    if assembly != "hg38":
+        position = int(pos) - 1
+        lo = LiftOver(assembly, 'hg38')
+        out = lo.convert_coordinate(chrom, position)
+        pos = out[0][1]
+
+    start = int(pos) - 1
+    end = int(pos)
+
+    #string = "{{ccre(accession: \"{0}\") {{accession, details {{linkedGenes {{gene, celltype, method, dccaccession}}}}}}}}".format(accession)
+    string = """{{
+        ccres(
+            assembly: GRCh38
+            range: {{chrom: \"{0}\", start: {1}, end: {2}}}
+        ) {{
+            total,
+            ccres {{
+                accession,
+                details {{
+                    linkedGenes {{
+                        gene,
+                        method
+                    }}
+                }}
+            }}
+        }}
+    }}""".format(chrom, start, end)
+    
+    json = {"query": string}
+    headers={
+            "Content-Type": "application/json",
+        }
+    url = "https://api.wenglab.org/screen_graphql/graphql"
+    
+    response = requests.post(url=url, json=json, headers=headers)
+    data = response.json()["data"]["ccres"]
+
+    if data and data["total"] > 0:
+        ccres = data["ccres"]
+        for ccre in ccres:
+            for linked_gene in ccre["details"]["linkedGenes"]:
+                if linked_gene["gene"] == gene:
+                    pprint(linked_gene)
+                    #print(linked_gene["method"])
+
+    #print(response.json())
 
 
 if __name__=='__main__':

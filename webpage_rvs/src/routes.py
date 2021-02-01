@@ -7,10 +7,13 @@ from webpage_rvs.src.constants import (
     PHYLOP_CUTOFF,
     PHASTCONS_CUTOFF,
     CADD_CUTOFF,
-    AF_CUTOFF
+    AF_CUTOFF,
 )
 from webpage_rvs.src.variant import (
     SNV
+)
+from webpage_rvs.src.helpers import (
+    get_rve_density
 )
 
 @app.route('/')
@@ -36,6 +39,7 @@ def calculate_initial_scores():
             chro=int(results["chro"]),
             pos=int(results["pos"]),
             alt=results["alt"].upper(),
+            target_gene=results["target_gene"],
             patient_id=results["patient_id"],
             variant_id=results["variant_id"],
         )
@@ -101,10 +105,22 @@ def calculate_initial_scores():
             response["additional_info"]["f_1_1"] = "No CRMs found"
 
         # Check Hi-C
-        response["additional_info"]["f_1_3"] = "temp"
+        snv.set_ccre_method()
+        if "Hi-C" in snv.ccre_methods:
+            response["scores"]["f_1_3"] = 1
+            response["additional_info"]["f_1_3"] = "Hi-C"
+        elif "RNAPII ChIA-PET" in snv.ccre_methods:
+            response["scores"]["f_1_3"] = 1
+            response["additional_info"]["f_1_3"] = "ChIA-PET"
+        else:
+            response["scores"]["f_1_3"] = 0
 
         # Check eQTL
-        response["additional_info"]["f_1_4"] = "temp"
+        if "eQTL" in snv.ccre_methods:
+            response["scores"]["f_1_4"] = 1
+            response["additional_info"]["f_1_4"] = "eQTL"
+        else:
+            response["scores"]["f_1_4"] = 0
 
         #except Exception as e:
         #    print(e)
@@ -137,6 +153,7 @@ def calculate_scores():
         #except Exception as e:
         #    response = jsonify({"error": str(e)})
         #    return response
+        response["standard_rve"] = get_rve_density()
     print(response)
     return jsonify(response)
 

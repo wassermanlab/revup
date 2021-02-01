@@ -82,7 +82,8 @@ export default function Home() {
     var defaultResultsDict = {
         "clinical": "0",
         "functional": "0",
-        "rve": "0"
+        "rve": "0",
+        "standard_scores": []
     }
     var defaultQueryDict = {
         "patient_id": "",
@@ -164,6 +165,7 @@ export default function Home() {
             const json = await response.json();
             setFinalResults(json);
             setStatus("filled");
+            console.log(json);
         }
         if (modifiedScores["calc_scores"] === true) {
             fetchFinalData();

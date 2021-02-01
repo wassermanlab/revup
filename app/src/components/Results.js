@@ -1,4 +1,5 @@
 import React, { /*useEffect,*/ useState } from 'react';
+import {Line} from 'react-chartjs-2';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     Button,
@@ -37,7 +38,67 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Results(props) {
+
     const classes = useStyles();
+
+    const data = {
+        //labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: props.finalResults["standard_rve"]["x"],
+        datasets: [
+          {
+            label: 'Known Rare Disease Regulatory Variants',
+            fill: false,
+            lineTension: 0.1,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: props.finalResults["standard_rve"]["y"]
+          }
+        ],
+    };
+
+    const options = {
+        scales: {
+            xAxes: [{
+                
+                ticks: {
+                    callback: function(value, index, values) {
+                        return parseFloat(value).toFixed(2);
+                    },
+                    //suggestedMin: -20,
+                    //autoSkip: true,
+                    //maxTicksLimit: 12,
+                    //stepSize: 20
+                    
+                    //min: -20,
+                    //max: 100,
+                    //stepSize: 20,
+                    //autoSkip: true,
+                    maxTicksLimit: 12,
+                }
+            }]
+        },
+        layout: {
+            padding: {
+                top: 5,
+                left: 15,
+                right: 15,
+                bottom: 15
+            }
+        }
+    }
 
     return (
         <React.Fragment>
@@ -56,6 +117,13 @@ export default function Results(props) {
                         <Typography variant="body1" align="center">
                             Clinical Score: {props.finalResults["clinical"]}
                         </Typography>
+                        <div>
+                            <h2>Line Chart</h2>
+                            <Line
+                                data={data}
+                                options={options}
+                             />
+                        </div>
 
                         <Grid container spacing={3}>
                         <Typography variant="h4">Results</Typography>

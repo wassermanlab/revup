@@ -12,6 +12,10 @@ from webpage_rvs.src.constants import (
     CADD_ASSEMBLY,
     CADD_VERSION,
     REMAP_ASSEMBLY,
+    SCREEN_URL,
+    SCREEN_CCRE_QUERY,
+    SCREEN_ASSEMBLY,
+    REMAP_VARIANT_FILE
 )
 
 from webpage_rvs.src.helpers import (
@@ -30,12 +34,12 @@ class Variant:
 
 
 class SNV(Variant):
-    def __init__(self, ref_genome, chro, pos, alt, patient_id=None, variant_id=None):
+    def __init__(self, ref_genome, chro, pos, alt, target_gene, patient_id=None, variant_id=None):
         """
         """
         super().__init__(patient_id, variant_id)
 
-        self.remap_file = "Remap_Variant_interest.tsv"
+        self.remap_file = REMAP_VARIANT_FILE
         self.remap_df = pd.read_csv(self.remap_file, sep='\t', header=None)
 
         self.ref_genome = ref_genome
@@ -43,12 +47,14 @@ class SNV(Variant):
         self.pos = pos
         self.alt = alt
         self.ref = ""
+        self.target_gene = target_gene
         self.cadd_score = 0
         self.phylop_score = 0
         self.phastcons_score = 0
         self.af = 0
         self.ccre_info = []
         self.crms = []
+        self.ccre_methods = set()
 
         hg19_pos = liftover(self.pos, self.chro, self.ref_genome, 'hg19')
         hg38_pos = liftover(self.pos, self.chro, self.ref_genome, 'hg38')
@@ -182,6 +188,7 @@ class SNV(Variant):
     def set_ccre_info(self):
         """
         """
+        
         # Convert coordinates
         chro = "chr" + str(self.chro)
         start = self.ref_assemblies[UCSC_ASSEMBLY] - 1
@@ -203,6 +210,26 @@ class SNV(Variant):
                     "description": ccre_result["description"],
                     "name": ccre_result["name"]
                 })
+    
+    def set_ccre_method(self):
+        """
+        """
+        pos = self.ref_assemblies[SCREEN_ASSEMBLY]
+        chro = "chr" + str(self.chro)
+        start = pos - 1
+        end = pos
+
+        query = SCREEN_CCRE_QUERY.format(chro, start, end)
+        results = graphql_query(SCREEN_URL, query)
+        data = results["data"]["ccres"]
+
+        if data and data["total"] > 0:
+            ccres = data["ccres"]
+            for ccre in ccres:
+                for linked_gene in ccre["details"]["linkedGenes"]:
+                    if linked_gene["gene"] == self.target_gene:
+                        #print(linked_gene["method"])
+                        self.ccre_methods.add(linked_gene["method"])
     
 
     def set_remap_score(self):

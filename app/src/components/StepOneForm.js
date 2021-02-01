@@ -79,12 +79,12 @@ export default function StepOneForm(props) {
     const handleExample = () => {
         props.setQuery({
             ...props.query,
-            "chro": "1",
-            "pos": "101493333",
+            "chro": "17",
+            "pos": "4890930",
             "alt": "T",
-            "target_gene": "GRHL2",
-            "ref_genome": "hg38",
-            "gnomad_coor": "1-101493333-G-T"
+            "target_gene": "CAMTA2",
+            "ref_genome": "hg19",
+            "gnomad_coor": "17-4890930-C-T"
         })
     }
    
@@ -140,7 +140,7 @@ export default function StepOneForm(props) {
                             </Grid>
                             <Grid item xs={8}>
                                 <Link href="#" onClick={handleExample}>
-                                    8-101493333-G-T
+                                    17-4890930-C-T
                                 </Link>
                             </Grid>
                         </Grid>
@@ -257,8 +257,9 @@ export default function StepOneForm(props) {
                                     label="" 
                                     helperText={targetGeneError["message"]}
                                     variant="outlined"
-                                    value={props.query["target_gene"]}
+                                    value={props.query["target_gene"] || ""}
                                     error={targetGeneError["error"]}
+                                    onChange={(e) => handleChange('target_gene', e)}
                                 />
                             </Grid>
                         </Grid>
