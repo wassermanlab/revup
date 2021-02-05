@@ -8,6 +8,10 @@ import {
     Typography, 
 } from '@material-ui/core';
 import clsx from 'clsx';
+import Dialog from "@material-ui/core/Dialog";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
 import theme from '../styles/theme';
 import NavBar from '../components/NavBar';
 import ScoringForm from '../components/ScoringForm';
@@ -52,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
     const config = require("../templates.json");
+
     var defaultScoresDict = {
         "c_1_1": "0",
         "c_1_2": "0",
@@ -77,13 +82,37 @@ export default function Home() {
         "f_2_2": "0",
         "f_3_1": "0",
         "f_4_1": "0",
+        "c_1_1_comments": "",
+        "c_1_2_comments": "",
+        "c_1_3_comments": "",
+        "c_2_1_comments": "",
+        "c_2_2_comments": "",
+        "c_2_3_comments": "",
+        "c_2_4_comments": "",
+        "c_2_5_comments": "",
+        "c_3_1_comments": "",
+        "c_4_1_comments": "",
+        "c_4_2_comments": "",
+        "c_5_1_comments": "",
+        "c_5_2_comments": "",
+        "f_0_1_comments": "",
+        "f_0_2_comments": "",
+        "f_1_1_comments": "",
+        "f_1_2_comments": "",
+        "f_1_3_comments": "",
+        "f_1_4_comments": "",
+        "f_1_5_comments": "",
+        "f_2_1_comments": "",
+        "f_2_2_comments": "",
+        "f_3_1_comments": "",
+        "f_4_1_comments": "",
         "calc_scores": false
     }
     var defaultResultsDict = {
         "clinical": "0",
         "functional": "0",
         "rve": "0",
-        "standard_scores": []
+        "standard_scores": {}
     }
     var defaultQueryDict = {
         "patient_id": "",
@@ -111,21 +140,23 @@ export default function Home() {
         "f_2_2": "unknown",
         "f_3_1": "unknown",
         "f_4_1": "unknown",
-        "new_c": "",
+        "new_c": "unknown",
         "calc_scores": false
     }
     const [query, setQuery] = useState(defaultQueryDict);
     const [initialScores, setInitialScores] = useState(defaultScoresDict);
     const [modifiedScores, setModifiedScores] = useState(defaultScoresDict);
     const [additionalInfo, setAdditionalInfo] = useState(defaultScoresDict);
-    const [finalScores, setFinalScores] = useState(defaultScoresDict);
+    //const [finalScores, setFinalScores] = useState(defaultScoresDict);
     const [finalResults, setFinalResults] = useState(defaultResultsDict);
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState("unfilled");
     const classes = useStyles();
 
     useEffect(() => {
         const fetchInitialData = async () => {
+            setLoading(true)
             const response = await fetch(config.backend_url + '/initial_scores', {
                 method: 'POST',
                 body: JSON.stringify(query),
@@ -140,9 +171,10 @@ export default function Home() {
             setInitialScores(json["scores"]);
             setModifiedScores(json["scores"]);
             setAdditionalInfo(json["additional_info"])
+            setLoading(false)
             console.log(json);
         }
-        console.log("1")
+        //console.log("1")
         if (query["calc_scores"] === true){
             fetchInitialData();
             setQuery({...query, "calc_scores": false});
@@ -165,7 +197,6 @@ export default function Home() {
             const json = await response.json();
             setFinalResults(json);
             setStatus("filled");
-            console.log(json);
         }
         if (modifiedScores["calc_scores"] === true) {
             fetchFinalData();
@@ -210,6 +241,18 @@ export default function Home() {
                             </Typography>
                         </Container>
                         <Container maxWidth="lg">
+                            <Dialog 
+                                aria-labelledby="LoadingBarDialog" 
+                                disableBackdropClick={true} 
+                                disableEscapeKeyDown={true} 
+                                open={loading}
+                                style={{textAlign: "center"}}
+                            >
+                                <DialogTitle id="LoadingBarTitle">Loading...</DialogTitle>
+                                <DialogContent>
+                                    <CircularProgress/>
+                                </DialogContent>
+                            </Dialog>
                             { status === "unfilled" ? 
                             <ScoringForm 
                                 setQuery={setQuery} 

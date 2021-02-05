@@ -1,5 +1,6 @@
 import React, { /*useEffect,*/ useState } from 'react';
 import {Line} from 'react-chartjs-2';
+import 'chartjs-plugin-annotation';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     Button,
@@ -70,9 +71,26 @@ export default function Results(props) {
     };
 
     const options = {
+        annotation: {
+            annotations: [
+              {
+                //drawTime: "afterDatasetsDraw",
+                type: "line",
+                mode: "vertical",
+                scaleID: "x-axis-0",
+                value: props.finalResults["standard_rve"]["nearest_val"],
+                borderWidth: 3,
+                borderColor: "red",
+                label: {
+                  content: "RVE Score",
+                  enabled: true,
+                  position: "top"
+                }
+              }
+            ]
+          },
         scales: {
             xAxes: [{
-                
                 ticks: {
                     callback: function(value, index, values) {
                         return parseFloat(value).toFixed(2);
@@ -87,7 +105,17 @@ export default function Results(props) {
                     //stepSize: 20,
                     //autoSkip: true,
                     maxTicksLimit: 12,
-                }
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'RVE Scores'
+                  }
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Density'
+                  }
             }]
         },
         layout: {
@@ -130,15 +158,17 @@ export default function Results(props) {
                         <TableContainer>
                             <Table aria-label="simple table">
                                 <colgroup>
-                                    <col style={{width:'50%'}}/>
+                                    <col style={{width:'30%'}}/>
                                     <col style={{width:'10%'}}/>
-                                    <col style={{width:'40%'}}/>
+                                    <col style={{width:'30%'}}/>
+                                    <col style={{width:'30%'}}/>
                                 </colgroup>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Evidence Description</TableCell>
                                         <TableCell>Score</TableCell>
                                         <TableCell>Additional Information</TableCell>
+                                        <TableCell>Comments</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -152,6 +182,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_5_2_comments"] ? props.modifiedScores["c_5_2_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_5_1_row"}>
                                         <TableCell>
@@ -162,6 +195,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             -
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_5_1_comments"] ? props.modifiedScores["c_5_1_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_4_2_row"}>
@@ -174,6 +210,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_4_2_comments"] ? props.modifiedScores["c_4_2_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_4_1_row"}>
                                         <TableCell>
@@ -184,6 +223,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             -
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_4_1_comments"] ? props.modifiedScores["c_4_1_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_3_1_row"}>
@@ -196,6 +238,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_3_1_comments"] ? props.modifiedScores["c_3_1_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_5_row"}>
                                         <TableCell>
@@ -206,6 +251,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             -
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_2_5_comments"] ? props.modifiedScores["c_2_5_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_4_row"}>
@@ -218,6 +266,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_2_4_comments"] ? props.modifiedScores["c_2_4_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_3_row"}>
                                         <TableCell>
@@ -228,6 +279,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             {props.additionalInfo["c_2_3"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_2_3_comments"] ? props.modifiedScores["c_2_3_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_2_row"}>
@@ -240,6 +294,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_2_2_comments"] ? props.modifiedScores["c_2_2_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_2_1_row"}>
                                         <TableCell>
@@ -250,6 +307,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             -
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_2_1_comments"] ? props.modifiedScores["c_2_1_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_1_3_row"}>
@@ -262,6 +322,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_1_3_comments"] ? props.modifiedScores["c_1_3_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_1_2_row"}>
                                         <TableCell>
@@ -273,6 +336,9 @@ export default function Results(props) {
                                         <TableCell>
                                             {props.additionalInfo["c_1_2"]}
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_1_2_comments"] ? props.modifiedScores["c_1_2_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_1_1_row"}>
                                         <TableCell>
@@ -283,6 +349,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             {props.additionalInfo["c_1_1"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["c_1_1_comments"] ? props.modifiedScores["c_1_1_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_4_1_row"}>
@@ -297,6 +366,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_4_1_comments"] ? props.modifiedScores["f_4_1_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_3_1_row"}>
                                         <TableCell>
@@ -308,6 +380,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_3_1_comments"] ? props.modifiedScores["f_3_1_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_2_2_row"}>
                                         <TableCell>
@@ -318,6 +393,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             -
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_2_2_comments"] ? props.modifiedScores["f_2_2_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_2_1_row"}>
@@ -331,6 +409,9 @@ export default function Results(props) {
                                         <TableCell>
                                             -
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_2_1_comments"] ? props.modifiedScores["f_2_1_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_5_row"}>
                                         <TableCell>
@@ -341,6 +422,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             -
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_1_5_comments"] ? props.modifiedScores["f_1_5_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_4_row"}>
@@ -353,6 +437,9 @@ export default function Results(props) {
                                         <TableCell>
                                             {props.additionalInfo["f_1_4"]}
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_1_4_comments"] ? props.modifiedScores["f_1_4_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_3_row"}>
                                         <TableCell>
@@ -363,6 +450,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             {props.additionalInfo["f_1_3"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_1_3_comments"] ? props.modifiedScores["f_1_3_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_2_row"}>
@@ -375,6 +465,9 @@ export default function Results(props) {
                                         <TableCell>
                                             {props.additionalInfo["f_1_2"]}
                                         </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_1_2_comments"] ? props.modifiedScores["f_1_2_comments"]: "-"}
+                                        </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_1_row"}>
                                         <TableCell>
@@ -385,6 +478,9 @@ export default function Results(props) {
                                         </TableCell>
                                         <TableCell>
                                             {props.additionalInfo["f_1_1"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.modifiedScores["f_1_1_comments"] ? props.modifiedScores["f_1_1_comments"]: "-"}
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>

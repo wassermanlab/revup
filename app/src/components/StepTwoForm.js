@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     Button,
+    Divider,
     FormControl,
     FormLabel,
     Grid,
@@ -85,22 +86,16 @@ export default function StepTwoForm(props) {
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
-                            <Grid item xs={5}>
-                                <FormLabel>{props.query["target_gene"]} has been implicated in the same or a similar disease phenotype, or is otherwise relevant</FormLabel>
-                            </Grid>
-                            <Grid item xs={5}>
-                                <FormControl fullWidth className={classes.formControl}>
-                                    <Select fullWidth id="c_2_1" value={props.query["c_2_1"] ? props.query["c_2_1"] : "unknown"} onChange={(e) => handleChange('c_2_1', e)} variant="outlined">
-                                        <MenuItem value={"yes"}>Yes</MenuItem>
-                                        <MenuItem value={"no"}>No</MenuItem>
-                                        <MenuItem value={"unknown"}>Unknown</MenuItem>
-                                    </Select>
-                                </FormControl>
+                            <Grid item xs={10}>
+                                <Divider />
+                                <Typography variant="h4" align="left" gutterBottom>
+                                    Gene Details
+                                </Typography>
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>{props.query["target_gene"]} does not contain coding variants in the same individual</FormLabel>
+                                <FormLabel><i>{props.query["target_gene"]}</i> does not contain coding variants in the same individual</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
@@ -114,7 +109,21 @@ export default function StepTwoForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Variant is similar to another regulatory variant associated to {props.query["target_gene"]} and implicated in the same or a similar disease phenotype</FormLabel>
+                                <FormLabel><i>{props.query["target_gene"]}</i> has been implicated in the same or a similar disease phenotype, or is otherwise relevant</FormLabel>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <FormControl fullWidth className={classes.formControl}>
+                                    <Select fullWidth id="c_2_1" value={props.query["c_2_1"] ? props.query["c_2_1"] : "unknown"} onChange={(e) => handleChange('c_2_1', e)} variant="outlined">
+                                        <MenuItem value={"yes"}>Yes</MenuItem>
+                                        <MenuItem value={"no"}>No</MenuItem>
+                                        <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={5}>
+                                <FormLabel>Variant is similar to another regulatory variant associated to <i>{props.query["target_gene"]}</i> and implicated in the same or a similar disease phenotype</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
@@ -127,8 +136,16 @@ export default function StepTwoForm(props) {
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
+                            <Grid item xs={10}>
+                                <Divider />
+                                <Typography variant="h4" align="left" gutterBottom>
+                                    Functionaly Analyses
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Any functional analyses were performed to study the variant defect?</FormLabel>
+                                <FormLabel>Functional analyses were performed to study the variant defect </FormLabel>
                                 <Tooltip title={"If yes is selected, detailed questions concerning the functional analysis will be asked"}>
                                     <InfoOutlinedIcon fontSize="small"/>
                                 </Tooltip>
@@ -147,52 +164,11 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant results (in a cellular phenotype) consistent with the disease phenotype</FormLabel>
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <FormControl fullWidth className={classes.formControl}>
-                                        <Select id="c_4_2" value={props.query["c_4_2"] ? props.query["c_4_2"] : "unknown"} onChange={(e) => handleChange('c_4_2', e)} variant="outlined">
-                                            <MenuItem value={"yes"}>Yes</MenuItem>
-                                            <MenuItem value={"no"}>No</MenuItem>
-                                            <MenuItem value={"unknown"}>Unknown</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                            <Grid container justify="center" spacing={3}>
-                                <Grid item xs={1}/>
-                                <Grid item xs={4}>
-                                    <FormLabel>Variant neutralization (in a model organism or cell line) rescues or reverses phenotype</FormLabel>
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <FormControl fullWidth className={classes.formControl}>
-                                        <Select id="c_5_1" value={props.query["c_5_1"] ? props.query["c_5_1"] : "unknown"} onChange={(e) => handleChange('c_5_1', e)} variant="outlined">
-                                            <MenuItem value={"yes"}>Yes</MenuItem>
-                                            <MenuItem value={"no"}>No</MenuItem>
-                                            <MenuItem value={"unknown"}>Unknown</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                            <Grid container justify="center" spacing={3}>
-                                <Grid item xs={1}/>
-                                <Grid item xs={4}>
-                                    <FormLabel>Variant introduction (in a model organism or cell line) results in a phenotype that is consistent with the human disease</FormLabel>
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <FormControl fullWidth className={classes.formControl}>
-                                        <Select id="c_5_2" value={props.query["c_5_2"] ? props.query["c_5_2"] : "unknown"} onChange={(e) => handleChange('c_5_2', e)} variant="outlined">
-                                            <MenuItem value={"yes"}>Yes</MenuItem>
-                                            <MenuItem value={"no"}>No</MenuItem>
-                                            <MenuItem value={"unknown"}>Unknown</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                            <Grid container justify="center" spacing={3}>
-                                <Grid item xs={1}/>
-                                <Grid item xs={4}>
-                                    <FormLabel>Variant position is implicated in TF binding based on experimental data</FormLabel>
+                                    <FormLabel>Variant position is implicated in TF 
+                                        <Tooltip title={"Transcription Factor"}>
+                                            <InfoOutlinedIcon fontSize="small"/>
+                                        </Tooltip>
+                                     binding based on experimental data</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -207,22 +183,11 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Regulatory region is shown to regulate gene expression of {props.query["target_gene"]}. Typically involves characterization of a newly identified enhancer</FormLabel>
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <FormControl fullWidth className={classes.formControl}>
-                                        <Select id="f_1_5" value={props.query["f_1_5"] ? props.query["f_1_5"] : "unknown"} onChange={(e) => handleChange('f_1_5', e)} variant="outlined">
-                                            <MenuItem value={"yes"}>Yes</MenuItem>
-                                            <MenuItem value={"no"}>No</MenuItem>
-                                            <MenuItem value={"unknown"}>Unknown</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                            <Grid container justify="center" spacing={3}>
-                                <Grid item xs={1}/>
-                                <Grid item xs={4}>
-                                    <FormLabel>Variant causes a change in TF binding and/or chromatin environment</FormLabel>
+                                    <FormLabel>Variant causes a change in TF 
+                                        <Tooltip title={"Transcription Factor"}>
+                                            <InfoOutlinedIcon fontSize="small"/>
+                                        </Tooltip>
+                                     binding and/or chromatin environment</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -237,7 +202,22 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant leads to changes in expression of {props.query["target_gene"]} (in patient tissue)</FormLabel>
+                                    <FormLabel>Regulatory region is shown to regulate gene expression of <i>{props.query["target_gene"]}</i></FormLabel>
+                                </Grid>
+                                <Grid item xs={5}>
+                                    <FormControl fullWidth className={classes.formControl}>
+                                        <Select id="f_1_5" value={props.query["f_1_5"] ? props.query["f_1_5"] : "unknown"} onChange={(e) => handleChange('f_1_5', e)} variant="outlined">
+                                            <MenuItem value={"yes"}>Yes</MenuItem>
+                                            <MenuItem value={"no"}>No</MenuItem>
+                                            <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                            <Grid container justify="center" spacing={3}>
+                                <Grid item xs={1}/>
+                                <Grid item xs={4}>
+                                    <FormLabel>Variant leads to changes in expression of <i>{props.query["target_gene"]}</i> in patient tissue</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -252,7 +232,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant introduction (in a cell line) leads to changes in expression of {props.query["target_gene"]} or a reported gene or chromatin environment</FormLabel>
+                                    <FormLabel>Variant introduction in a cell line leads to changes in expression of <i>{props.query["target_gene"]}</i>, a reported gene or chromatin environment</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -267,7 +247,52 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant introduction (in a model organism) leads to changes in expression of {props.query["target_gene"]} or a reported gene or chromatin environment</FormLabel>
+                                    <FormLabel>Variant introduction in a cell line leads to a cellular phenotype consistent with the disease phenotype</FormLabel>
+                                </Grid>
+                                <Grid item xs={5}>
+                                    <FormControl fullWidth className={classes.formControl}>
+                                        <Select id="c_5_2" value={props.query["c_5_2"] ? props.query["c_5_2"] : "unknown"} onChange={(e) => handleChange('c_5_2', e)} variant="outlined">
+                                            <MenuItem value={"yes"}>Yes</MenuItem>
+                                            <MenuItem value={"no"}>No</MenuItem>
+                                            <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                            <Grid container justify="center" spacing={3}>
+                                <Grid item xs={1}/>
+                                <Grid item xs={4}>
+                                    <FormLabel>Variant neutralization, in a model organism or cell line, rescues or reverses the phenotype</FormLabel>
+                                </Grid>
+                                <Grid item xs={5}>
+                                    <FormControl fullWidth className={classes.formControl}>
+                                        <Select id="c_5_1" value={props.query["c_5_1"] ? props.query["c_5_1"] : "unknown"} onChange={(e) => handleChange('c_5_1', e)} variant="outlined">
+                                            <MenuItem value={"yes"}>Yes</MenuItem>
+                                            <MenuItem value={"no"}>No</MenuItem>
+                                            <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                            <Grid container justify="center" spacing={3}>
+                                <Grid item xs={1}/>
+                                <Grid item xs={4}>
+                                    <FormLabel>Variant introduction, in a model organism or a cell line, results phenotype that is consistent with the human disease</FormLabel>
+                                </Grid>
+                                <Grid item xs={5}>
+                                    <FormControl fullWidth className={classes.formControl}>
+                                        <Select id="c_4_2" value={props.query["c_4_2"] ? props.query["c_4_2"] : "unknown"} onChange={(e) => handleChange('c_4_2', e)} variant="outlined">
+                                            <MenuItem value={"yes"}>Yes</MenuItem>
+                                            <MenuItem value={"no"}>No</MenuItem>
+                                            <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                            <Grid container justify="center" spacing={3}>
+                                <Grid item xs={1}/>
+                                <Grid item xs={4}>
+                                    <FormLabel>Variant introduction, in a model organism, leads to changes in expression of <i>{props.query["target_gene"]}</i> or a reported gene or chromatin environment</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -283,10 +308,7 @@ export default function StepTwoForm(props) {
                     </Paper>
                 </Grid>
             </form>
-
-
             <div>
-                
                 <Button onClick={handleBack} className={classes.backButton}>
                     Back
                 </Button>

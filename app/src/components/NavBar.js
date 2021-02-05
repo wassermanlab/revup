@@ -6,6 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import InfoIcon from '@material-ui/icons/Info';
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import HomeIcon from '@material-ui/icons/Home';
+import PhoneIcon from '@material-ui/icons/Phone';
 import {
     AppBar,
     Divider,
@@ -142,6 +143,12 @@ export default function NavBar(props) {
                         <ListItem button key="faq">
                             <ListItemIcon><LiveHelpIcon /></ListItemIcon>
                                 <ListItemText primary="FAQ"/>
+                        </ListItem>
+                    </Link>
+                    <Link href="/contact" color="inherit" underline="none">
+                        <ListItem button key="contact">
+                            <ListItemIcon><PhoneIcon /></ListItemIcon>
+                                <ListItemText primary="Contact Us"/>
                         </ListItem>
                     </Link>
                 </List>

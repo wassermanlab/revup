@@ -6,6 +6,8 @@ import requests
 import matplotlib
 
 import seaborn as sns
+import statsmodels.api as sm
+import numpy as np
 
 from pyliftover import LiftOver
 
@@ -61,6 +63,15 @@ def liftover(pos, chro, from_assembly, to_assembly):
         return out[0][1]
 
 
+def get_nearest(arr, val):
+    """
+    """
+    new_arr = np.asarray(arr)
+    idx = (np.abs(new_arr-val)).argmin()
+    #return arr[idx]
+    return idx
+
+
 def get_standard_rve_scores():
     """
     """
@@ -76,15 +87,16 @@ def get_standard_rve_scores():
 def get_rve_density():
     """
     """
-    matplotlib.use('agg')
     rve_scores = get_standard_rve_scores()
-    kde = sns.kdeplot(rve_scores)
-    line = kde.lines[0]
-    x, y = line.get_data()
+    dens = sm.nonparametric.KDEUnivariate(rve_scores)
+    dens.fit()
+
+    x = np.linspace(-20, 120, 150)
+    y = dens.evaluate(x)
+
     rve_density = {
         "x": list(x),
         "y": list(y)
     }
-    print(rve_density)
 
     return rve_density

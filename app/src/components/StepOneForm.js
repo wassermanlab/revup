@@ -79,6 +79,8 @@ export default function StepOneForm(props) {
     const handleExample = () => {
         props.setQuery({
             ...props.query,
+            "patient_id": "Test patient",
+            "variant_id": "Test variant",
             "chro": "17",
             "pos": "4890930",
             "alt": "T",
@@ -281,13 +283,14 @@ export default function StepOneForm(props) {
                                         <MenuItem value={"heterozygous"}>Heterozygous</MenuItem>
                                         <MenuItem value={"homozygous"}>Homozygous</MenuItem>
                                         <MenuItem value={"compound_het"}>Compound Het</MenuItem>
+                                        <MenuItem value={"unknown"}>Unknown</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Variant shows familiar segregation in the family</FormLabel>
+                                <FormLabel>Variant shows familiar segregation in the family </FormLabel>
                                 <Tooltip title={"If yes is selected, detailed questions concerning the variant segregation in the family will be asked"}>
                                     <InfoOutlinedIcon fontSize="small"/>
                                 </Tooltip>

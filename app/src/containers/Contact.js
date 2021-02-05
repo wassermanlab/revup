@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core/styles';
 import { 
     Container,
+    Divider,
     Typography, 
 } from '@material-ui/core';
 import clsx from 'clsx';
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Results() {
+export default function Contact() {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     return (
@@ -66,9 +67,17 @@ export default function Results() {
                     >
                         <div className={classes.drawerHeader} />
                         <Container maxWidth="lg">
-                            <Typography className={classes.pageHeader} variant="h2" align="center" gutterBottom>
-                                Results Page
+                            <Typography className={classes.pageHeader} variant="h4" align="left" gutterBottom>
+                                Contact Us
                             </Typography>
+                            <Divider />
+                            <Typography  variant="body1"  align="left" gutterBottom>
+                                Found a bug? Have a question? Want to offer ideas to include in a future update? Contact us!
+                            </Typography>
+                            <Typography variant="body1" align="left" gutterBottom>
+                                Found this work interesting? The Wasserman lab developed other tools and databases, go and check our website [link to the WWW lab website]!
+                            </Typography>
+                           
                         </Container>
                     </main>
                 </ThemeProvider>

@@ -12,6 +12,7 @@ MarkupSafe==1.1.1
 matplotlib==3.3.3
 numpy
 pandas
+patsy
 Pillow==8.1.0
 pyliftover==0.4
 pyparsing==2.4.7
@@ -21,5 +22,6 @@ requests==2.24.0
 scipy
 seaborn==0.11.1
 six
+statsmodels
 urllib3==1.25.11
 Werkzeug==1.0.1

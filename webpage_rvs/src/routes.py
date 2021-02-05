@@ -13,7 +13,8 @@ from webpage_rvs.src.variant import (
     SNV
 )
 from webpage_rvs.src.helpers import (
-    get_rve_density
+    get_rve_density,
+    get_nearest
 )
 
 @app.route('/')
@@ -70,7 +71,7 @@ def calculate_initial_scores():
 
         # Check gnomAD AF
         snv.set_af()
-        response["additional_info"]["c_1_2"] = "Allele Frequency: {}".format(snv.af)
+        response["additional_info"]["c_1_2"] = "gnomAD Allele Frequency: {}".format(snv.af)
         if snv.af < AF_CUTOFF:
             response["scores"]["c_1_2"] = "1"
         else:
@@ -82,7 +83,7 @@ def calculate_initial_scores():
             response["scores"]["f_1_2"] = "1"
             ccre_string = ""
             for ccre in snv.ccre_info:
-                ccre_string += "cCRE: {}, description: {};\n".format(ccre["ccre"], ccre["description"])
+                ccre_string += " {}\n".format(ccre["ccre"], ccre["description"])
             out_string = "cCREs:\n\n{}".format(ccre_string)
             response["additional_info"]["f_1_2"] = out_string
         else:
@@ -96,13 +97,13 @@ def calculate_initial_scores():
 
             # TODO: Check for string error???
             crm_string = ", ".join(snv.crms[0:3])
-            out_string = "CRMs: {}".format(crm_string)
+            out_string = "ReMap 2020 Peaks: {}".format(crm_string)
             if len(snv.crms) > 2:
                 out_string += ", and more"
             response["additional_info"]["f_1_1"] = out_string
         else:
             response["scores"]["f_1_1"] = "0"
-            response["additional_info"]["f_1_1"] = "No CRMs found"
+            response["additional_info"]["f_1_1"] = "No ReMap 2020 peaks found"
 
         # Check Hi-C
         snv.set_ccre_method()
@@ -143,6 +144,7 @@ def calculate_scores():
             #    print(key)
             #    print(val)
         scores = calc_all_scores(request.json)
+        print(request.json)
         
         rve = scores[0] + scores[1]
         response = {
@@ -153,8 +155,10 @@ def calculate_scores():
         #except Exception as e:
         #    response = jsonify({"error": str(e)})
         #    return response
-        response["standard_rve"] = get_rve_density()
-    print(response)
+        rve_density = get_rve_density()
+        rve_density["nearest_val"] = str(get_nearest(rve_density["x"], rve))
+        response["standard_rve"] = rve_density
+
     return jsonify(response)
 
 
@@ -164,12 +168,12 @@ def calc_all_scores(data):
     clinical = 0
     functional = 0
     for key, val in data.items():
-        if key.startswith("c_"):
+        if key.startswith("c_") and not key.endswith("_comments"):
             base = key.split("_")[1]
             new_score = int(val)*(int(base)**2)
             clinical += int(val)*(int(base)**2)
             print("KEY: {}, INITIAL: {}, SCORE: {}".format(key, val, new_score))
-        elif key.startswith("f_"):
+        elif key.startswith("f_") and not key.endswith("_comments"):
             base = key.split("_")[1]
             new_score = int(val)*(int(base)**2)
             functional += int(val)*(int(base)**2)

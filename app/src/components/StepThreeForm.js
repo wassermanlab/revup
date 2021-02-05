@@ -94,224 +94,26 @@ export default function StepThreeForm(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    <TableRow key={"c_5_2_row"}>
+                                <TableRow key={"c_1_1_row"}>
                                         <TableCell>
-                                            {props.initialScores["c_5_2"] ? props.initialScores["c_5_2"]: "-"}
+                                            {props.initialScores["c_1_1"] ? props.initialScores["c_1_1"]: "-"}
                                         </TableCell>
                                         <TableCell>
-                                            C5.2 - Variant introduction (in a model organism) results in a phenotype that is consistent with the human disease
+                                            C1.1 - Variant position is evolutionarily conserved
                                         </TableCell>
                                         <TableCell>
                                             <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_5_2" value={props.modifiedScores["c_5_2"] ? props.modifiedScores["c_5_2"] : " "} onChange={(e) => handleChange('c_5_2', e)} variant="outlined">
+                                                <Select fullWidth id="c_1_1" value={props.modifiedScores["c_1_1"] ? props.modifiedScores["c_1_1"] : " "} onChange={(e) => handleChange('c_1_1', e)} variant="outlined">
                                                     <MenuItem value={"1"}>1</MenuItem>
                                                     <MenuItem value={"0"}>0</MenuItem>
                                                 </Select>
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            -
+                                            {props.additionalInfo["c_1_1"]}
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="c_5_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_5_1_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_5_1"] ? props.initialScores["c_5_1"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C5.1 - Variant neutralization (in a model organism or cell line) rescues or reverses phenotype
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_5_1" value={props.modifiedScores["c_5_1"] ? props.modifiedScores["c_5_1"] : " "} onChange={(e) => handleChange('c_5_1', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            -
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_5_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_4_2_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_4_2"] ? props.initialScores["c_4_2"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C4.2 - Variant results (in a cellular phenotype) consistent with the disease phenotype - Insights are only relevant if the endophenotype assayed is consistent with the disease phenotype
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_4_2" value={props.modifiedScores["c_4_2"] ? props.modifiedScores["c_4_2"] : " "} onChange={(e) => handleChange('c_4_2', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            -
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_4_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_4_1_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_4_1"] ? props.initialScores["c_4_1"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C4.1 - Variant observed in multiple, unrelated families with the same disease phenotype - Typically only relevant when multiple well-described pedigrees are available, and in which the variant segregates with disease
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_4_1" value={props.modifiedScores["c_4_1"] ? props.modifiedScores["c_4_1"] : " "} onChange={(e) => handleChange('c_4_1', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            -
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_4_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_3_1_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_3_1"] ? props.initialScores["c_3_1"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C3.1 - Variant shows familial segregation with the disease
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_3_1" value={props.modifiedScores["c_3_1"] ? props.modifiedScores["c_3_1"] : " "} onChange={(e) => handleChange('c_3_1', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            -
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_3_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_2_4_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_2_4"] ? props.initialScores["c_2_4"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C2.4 - Variant is similar to another regulatory variant associated to the same suspected target gene and implicated in the same or a similar disease phenotype - Variants are often not the exact same, but should be justifiably similar: for example, strong overlap, affect the same TFBS.
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_2_4" value={props.modifiedScores["c_2_4"] ? props.modifiedScores["c_2_4"] : " "} onChange={(e) => handleChange('c_2_4', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            -
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_2_4_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_2_3_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_2_3"] ? props.initialScores["c_2_3"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C2.3 - Variant is considered deleterious by computational prediction methods
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_2_3" value={props.modifiedScores["c_2_3"] ? props.modifiedScores["c_2_3"] : " "} onChange={(e) => handleChange('c_2_3', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            {props.additionalInfo["c_2_3"]}
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_2_3_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_2_2_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_2_2"] ? props.initialScores["c_2_2"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C2.2 - Suspected target gene does not contain coding variants in the same individual - In the gene targeted by the regulatory variant or in other key genes for the phenotype under study - Assess accordance with expected inheritance of the phenotype; that is, present in one or both alleles
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_2_2" value={props.modifiedScores["c_2_2"] ? props.modifiedScores["c_2_2"] : " "} onChange={(e) => handleChange('c_2_2', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            -
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_2_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_2_1_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_2_1"] ? props.initialScores["c_2_1"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C2.1 - Suspected target gene has been implicated in the same or a similar disease phenotype, or is otherwise relevant - OMIM disease genes, literature, and gene function can provide insight - Dosage sensitive and haploinsufficient genes may be of increased interest
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_2_1" value={props.modifiedScores["c_2_1"] ? props.modifiedScores["c_2_1"] : " "} onChange={(e) => handleChange('c_2_1', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            -
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_2_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow key={"c_1_3_row"}>
-                                        <TableCell>
-                                            {props.initialScores["c_1_3"] ? props.initialScores["c_1_3"]: "-"}
-                                        </TableCell>
-                                        <TableCell>
-                                            C1.3 - Variant or locus previously statistically associated with the same or a similar disease phenotype
-                                        </TableCell>
-                                        <TableCell>
-                                            <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_1_3" value={props.modifiedScores["c_1_3"] ? props.modifiedScores["c_1_3"] : " "} onChange={(e) => handleChange('c_1_3', e)} variant="outlined">
-                                                    <MenuItem value={"1"}>1</MenuItem>
-                                                    <MenuItem value={"0"}>0</MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </TableCell>
-                                        <TableCell>
-                                            -
-                                        </TableCell>
-                                        <TableCell>
-                                            <TextField fullWidth id="c_1_3_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="c_1_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_1_1_comments"]} onChange={(e) => handleChange('c_1_1_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"c_1_2_row"}>
@@ -333,31 +135,229 @@ export default function StepThreeForm(props) {
                                             {props.additionalInfo["c_1_2"]}
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="c_1_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="c_1_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_1_2_comments"]} onChange={(e) => handleChange('c_1_2_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
-                                    <TableRow key={"c_1_1_row"}>
+                                    <TableRow key={"c_1_3_row"}>
                                         <TableCell>
-                                            {props.initialScores["c_1_1"] ? props.initialScores["c_1_1"]: "-"}
+                                            {props.initialScores["c_1_3"] ? props.initialScores["c_1_3"]: "-"}
                                         </TableCell>
                                         <TableCell>
-                                            C1.1 - Variant position is evolutionarily conserved
+                                            C1.3 - Variant or locus previously statistically associated with the same or a similar disease phenotype
                                         </TableCell>
                                         <TableCell>
                                             <FormControl fullWidth className={classes.formControl}>
-                                                <Select fullWidth id="c_1_1" value={props.modifiedScores["c_1_1"] ? props.modifiedScores["c_1_1"] : " "} onChange={(e) => handleChange('c_1_1', e)} variant="outlined">
+                                                <Select fullWidth id="c_1_3" value={props.modifiedScores["c_1_3"] ? props.modifiedScores["c_1_3"] : " "} onChange={(e) => handleChange('c_1_3', e)} variant="outlined">
                                                     <MenuItem value={"1"}>1</MenuItem>
                                                     <MenuItem value={"0"}>0</MenuItem>
                                                 </Select>
                                             </FormControl>
                                         </TableCell>
                                         <TableCell>
-                                            {props.additionalInfo["c_1_1"]}
+                                            -
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="c_1_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="c_1_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_1_3_comments"]} onChange={(e) => handleChange('c_1_3_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
+                                    <TableRow key={"c_2_1_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_2_1"] ? props.initialScores["c_2_1"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C2.1 - Suspected target gene has been implicated in the same or a similar disease phenotype, or is otherwise relevant - OMIM disease genes, literature, and gene function can provide insight - Dosage sensitive and haploinsufficient genes may be of increased interest
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_2_1" value={props.modifiedScores["c_2_1"] ? props.modifiedScores["c_2_1"] : " "} onChange={(e) => handleChange('c_2_1', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_2_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_1_comments"]} onChange={(e) => handleChange('c_2_1_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow key={"c_2_2_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_2_2"] ? props.initialScores["c_2_2"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C2.2 - Suspected target gene does not contain coding variants in the same individual - In the gene targeted by the regulatory variant or in other key genes for the phenotype under study - Assess accordance with expected inheritance of the phenotype; that is, present in one or both alleles
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_2_2" value={props.modifiedScores["c_2_2"] ? props.modifiedScores["c_2_2"] : " "} onChange={(e) => handleChange('c_2_2', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_2_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_2_comments"]} onChange={(e) => handleChange('c_2_2_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow key={"c_2_3_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_2_3"] ? props.initialScores["c_2_3"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C2.3 - Variant is considered deleterious by computational prediction methods
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_2_3" value={props.modifiedScores["c_2_3"] ? props.modifiedScores["c_2_3"] : " "} onChange={(e) => handleChange('c_2_3', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            {props.additionalInfo["c_2_3"]}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_2_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_3_comments"]} onChange={(e) => handleChange('c_2_3_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow key={"c_2_4_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_2_4"] ? props.initialScores["c_2_4"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C2.4 - Variant is similar to another regulatory variant associated to the same suspected target gene and implicated in the same or a similar disease phenotype - Variants are often not the exact same, but should be justifiably similar: for example, strong overlap, affect the same TFBS.
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_2_4" value={props.modifiedScores["c_2_4"] ? props.modifiedScores["c_2_4"] : " "} onChange={(e) => handleChange('c_2_4', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_2_4_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_4_comments"]} onChange={(e) => handleChange('c_2_4_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow key={"c_3_1_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_3_1"] ? props.initialScores["c_3_1"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C3.1 - Variant shows familial segregation with the disease
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_3_1" value={props.modifiedScores["c_3_1"] ? props.modifiedScores["c_3_1"] : " "} onChange={(e) => handleChange('c_3_1', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_3_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_3_1_comments"]} onChange={(e) => handleChange('c_3_1_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow key={"c_4_1_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_4_1"] ? props.initialScores["c_4_1"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C4.1 - Variant observed in multiple, unrelated families with the same disease phenotype - Typically only relevant when multiple well-described pedigrees are available, and in which the variant segregates with disease
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_4_1" value={props.modifiedScores["c_4_1"] ? props.modifiedScores["c_4_1"] : " "} onChange={(e) => handleChange('c_4_1', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_4_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_4_1_comments"]} onChange={(e) => handleChange('c_4_1_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow key={"c_4_2_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_4_2"] ? props.initialScores["c_4_2"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C4.2 - Variant results (in a cellular phenotype) consistent with the disease phenotype - Insights are only relevant if the endophenotype assayed is consistent with the disease phenotype
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_4_2" value={props.modifiedScores["c_4_2"] ? props.modifiedScores["c_4_2"] : " "} onChange={(e) => handleChange('c_4_2', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_4_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_4_2_comments"]} onChange={(e) => handleChange('c_4_2_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow key={"c_5_1_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_5_1"] ? props.initialScores["c_5_1"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C5.1 - Variant neutralization (in a model organism or cell line) rescues or reverses phenotype
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_5_1" value={props.modifiedScores["c_5_1"] ? props.modifiedScores["c_5_1"] : " "} onChange={(e) => handleChange('c_5_1', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_5_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_5_1_comments"]} onChange={(e) => handleChange('c_5_1_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow key={"c_5_2_row"}>
+                                        <TableCell>
+                                            {props.initialScores["c_5_2"] ? props.initialScores["c_5_2"]: "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            C5.2 - Variant introduction (in a model organism) results in a phenotype that is consistent with the human disease
+                                        </TableCell>
+                                        <TableCell>
+                                            <FormControl fullWidth className={classes.formControl}>
+                                                <Select fullWidth id="c_5_2" value={props.modifiedScores["c_5_2"] ? props.modifiedScores["c_5_2"] : " "} onChange={(e) => handleChange('c_5_2', e)} variant="outlined">
+                                                    <MenuItem value={"1"}>1</MenuItem>
+                                                    <MenuItem value={"0"}>0</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
+                                        <TableCell>
+                                            -
+                                        </TableCell>
+                                        <TableCell>
+                                            <TextField fullWidth id="c_5_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_5_2_comments"]} onChange={(e) => handleChange('c_5_2_comments', e)}/>
+                                        </TableCell>
+                                    </TableRow>                        
                                 </TableBody>
                             </Table>
                         </TableContainer>
@@ -400,7 +400,7 @@ export default function StepThreeForm(props) {
                                             {props.additionalInfo["f_1_1"]}
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_1_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_1_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_1_comments"]} onChange={(e) => handleChange('f_1_1_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_2_row"}>
@@ -422,7 +422,7 @@ export default function StepThreeForm(props) {
                                             {props.additionalInfo["f_1_2"]}
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_1_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_1_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_2_comments"]} onChange={(e) => handleChange('f_1_2_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_3_row"}>
@@ -444,7 +444,7 @@ export default function StepThreeForm(props) {
                                             {props.additionalInfo["f_1_3"]}
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_1_3_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_1_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_3_comments"]} onChange={(e) => handleChange('f_1_3_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_4_row"}>
@@ -466,7 +466,7 @@ export default function StepThreeForm(props) {
                                             {props.additionalInfo["f_1_4"]}
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_1_4_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_1_4_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_4_comments"]} onChange={(e) => handleChange('f_1_4_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_1_5_row"}>
@@ -488,7 +488,7 @@ export default function StepThreeForm(props) {
                                             -
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_1_5_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_1_5_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_5_comments"]} onChange={(e) => handleChange('f_1_5_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_2_1_row"}>
@@ -511,7 +511,7 @@ export default function StepThreeForm(props) {
                                             -
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_2_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_2_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_2_1_comments"]} onChange={(e) => handleChange('f_2_1_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_2_2_row"}>
@@ -533,7 +533,7 @@ export default function StepThreeForm(props) {
                                             -
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_2_2_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_2_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_2_2_comments"]} onChange={(e) => handleChange('f_2_2_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_3_1_row"}>
@@ -555,7 +555,7 @@ export default function StepThreeForm(props) {
                                             -
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_3_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_3_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_3_1_comments"]} onChange={(e) => handleChange('f_3_1_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                     <TableRow key={"f_4_1_row"}>
@@ -579,7 +579,7 @@ export default function StepThreeForm(props) {
                                             -
                                         </TableCell>
                                         <TableCell>
-                                            <TextField fullWidth id="f_4_1_comments" label="Comments" multiline rows={2} variant="outlined"/>
+                                            <TextField fullWidth id="f_4_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_4_1_comments"]} onChange={(e) => handleChange('f_4_1_comments', e)}/>
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
