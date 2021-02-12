@@ -29,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
             display: "flex",
             height: "100%"
           },
+        alignContent: "center",
+        justify: "center",
     }, 
     paper: {
         width: "100%",
@@ -111,16 +113,18 @@ export default function StepOneForm(props) {
         var chro = document.getElementById("chro").value
         var pos = document.getElementById("pos").value
         var alt = document.getElementById("alt").value
-        var gnomad = document.getElementById("gnomad_coor")
+        var gnomad = document.getElementById("gnomad_coor").value
         if ((chro === "" && pos === "" && alt === "") && (gnomad === "")) {
             setVariantCoordError({...variantCoordError, "error": true, "message": "One of these fields must be filled"})
             isError = true;
         } else if ((chro === "" && pos === "" && alt === "") && (gnomad !== "")) {
-            setVariantCoordError({...variantCoordError, "error": true, "message": "One of these fields must be filled"})
-            isError = true;
+            setVariantCoordError({...variantCoordError, "error": false, "message": ""})
+            //isError = false;
+            console.log("HELLO")
+            console.log(gnomad)
         } else if ((chro !== "" && pos !== "" && alt !== "") && (gnomad === "")) {
-            setVariantCoordError({...variantCoordError, "error": true, "message": "One of these fields must be filled"})
-            isError = true;
+            setVariantCoordError({...variantCoordError, "error": false, "message": ""})
+            //isError = false;
         } else {
             setVariantCoordError({...variantCoordError, "error": false, "message": ""})
         }
@@ -136,16 +140,6 @@ export default function StepOneForm(props) {
             <form className={classes.root} autoComplete="off">
                 <Grid className={classes.grid} container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
                     <Paper className={classes.paper}>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={2}>
-                                Example Variant:  
-                            </Grid>
-                            <Grid item xs={8}>
-                                <Link href="#" onClick={handleExample}>
-                                    17-4890930-C-T
-                                </Link>
-                            </Grid>
-                        </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={5}>
                                 <TextField 
@@ -265,10 +259,20 @@ export default function StepOneForm(props) {
                                 />
                             </Grid>
                         </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={2}>
+                                <FormLabel>Example Variant:  </FormLabel>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Link href="#" onClick={handleExample}>
+                                    17-4890930-C-T
+                                </Link>
+                            </Grid>
+                        </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
                                 <Divider />
-                                <Typography variant="h4" align="left" gutterBottom>
+                                <Typography variant="h5" align="left" gutterBottom>
                                     Variant Information
                                 </Typography>
                             </Grid>

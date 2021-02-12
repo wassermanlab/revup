@@ -91,7 +91,7 @@ def get_rve_density():
     dens = sm.nonparametric.KDEUnivariate(rve_scores)
     dens.fit()
 
-    x = np.linspace(-20, 120, 150)
+    x = np.linspace(-20, 152, 150)
     y = dens.evaluate(x)
 
     rve_density = {

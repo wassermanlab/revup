@@ -58,12 +58,11 @@ export default function ScoringForm(props) {
     const classes = useStyles();
     const steps = getSteps();
     const [activeStep, setActiveStep] = useState(0);
-    //const [results, setResults] = useState(defaultDict)
+    /*
     const handleReset = () => {
         setActiveStep(0);
-        //setResults(defaultDict)
         props.setQuery(props.defaultQueryDict)
-    }
+    }*/
 
     function NewlineText(props) {
         const text = props.text;
@@ -81,8 +80,6 @@ export default function ScoringForm(props) {
             case 0:
                 return (
                     <StepOneForm 
-                        //results={results}
-                        //setResults={setResults} 
                         query={props.query}
                         setQuery={props.setQuery}
                         setActiveStep={setActiveStep}>
@@ -91,8 +88,6 @@ export default function ScoringForm(props) {
             case 1:
                 return (
                     <StepTwoForm 
-                        //results={results}
-                        //setResults={setResults} 
                         query={props.query}
                         setQuery={props.setQuery}
                         setActiveStep={setActiveStep}>
@@ -101,37 +96,16 @@ export default function ScoringForm(props) {
             case 2:
                 return (
                     <StepThreeForm 
-                        //results={results}
                         query={props.query}
                         setQuery={props.setQuery}
                         initialScores={props.initialScores}
                         modifiedScores={props.modifiedScores}
                         additionalInfo={props.additionalInfo}
                         setModifiedScores={props.setModifiedScores}
+                        variantInfo={props.variantInfo}
                         setActiveStep={setActiveStep}>
                     </StepThreeForm>
                 )
-            /*
-            case 3:
-                return (
-                    <Grid className={classes.grid} container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
-                        <Paper className={classes.formPaper}>
-                            <Grid justify="center" container spacing={3}>
-                                <Grid item xs={6}>
-                                    <Typography>All steps completed! Submit your results below or go back to make any changes.</Typography>
-                                </Grid>
-                            </Grid>
-                            <Grid justify="center" container spacing={3}>
-                                <Grid item xs={6}>
-                                    <Button onClick={handleBack} className={classes.backButton}>Back</Button>
-                                    <Button onClick={submit} variant="contained" color="primary">Submit</Button>
-                                    
-                                </Grid>
-                            </Grid>
-                        </Paper>
-                    </Grid>
-                )
-            */
             default:
                 return 'Unknown stepIndex';
         }
@@ -152,33 +126,7 @@ export default function ScoringForm(props) {
 
                     <div>
                         {activeStep === steps.length ? (
-                            <div>{/*
-                                <Grid className={classes.grid} container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
-                                    <Paper className={classes.formPaper}>
-                                        <Grid justify="center" container spacing={3}>
-                                            <Grid item xs={6}>
-                                                <Typography component={'span'} className={classes.instructions}>Successfully submitted! View results below or restart.</Typography>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid justify="center" container spacing={3}>
-                                            <Grid item xs={6}>
-                                                <CheckCircleIcon fontSize="large" style={{fill: "green"}}/>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid justify="center" container spacing={3}>
-                                            <Grid item xs={6}>
-                                                <Button onClick={handleReset} endIcon={<ReplayIcon/>}>Restart</Button>
-                                                <Button variant="contained" color="primary">View Results</Button>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid justify="center" container spacing={3}>
-                                            <Grid item xs={6}>
-                                                {props.finalScores["rve"]}
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
-                                </Grid>
-                            */}
+                            <div>
                             </div>
                             ) : (
                             <div>

@@ -47,21 +47,13 @@ export default function StepTwoForm(props) {
 
     const handleNext = () => {
         props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        /*
-        var query = {
-            "results": props.results
-        }
-        props.setQuery(query)
-        */
-       //props.setCalcInitialScores(true);
-       props.setQuery({...props.query, "calc_scores": true});
+        props.setQuery({...props.query, "calc_scores": true});
 
     };
     const handleBack = () => {
         props.setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
    const handleChange = (key, event) => {
-        //props.setResults({...props.results, [key]: event.target.value});
         props.setQuery({...props.query, [key]: event.target.value});
 
         if (key === "func_analysis") {
@@ -69,6 +61,7 @@ export default function StepTwoForm(props) {
                 document.getElementById("func_analysis_questions").style.display="block"
             } else {
                 document.getElementById("func_analysis_questions").style.display="none"
+                // TODO: Set all func analysis question answers to "unknown" or "no"
             }
         }
     }
@@ -80,15 +73,36 @@ export default function StepTwoForm(props) {
                     <Paper className={classes.paper}>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
-                                <Typography variant="h4" align="left" gutterBottom>
-                                    {props.query["variant_id"] ? "Variant " + props.query["variant_id"] : ""}
+                                <Typography variant="h5" align="left" gutterBottom>
+                                    {props.query["variant_id"] ? props.query["variant_id"] : ""}
                                 </Typography>
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
+                                <FormLabel>
+                                    {props.query["patient_id"] ? "Patient ID: " + props.query["patient_id"] : ""}
+                                </FormLabel>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={10}>
+                                <FormLabel>
+                                    {props.query["gnomad_coord"] !== "" ? "Variant Description: " + props.query["gnomad_coord"] : "chr: " + props.query["chro"] + " pos: " + props.query["pos"] + " alt: " + props.query["alt"]}
+                                </FormLabel>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={10}>
+                                <FormLabel>
+                                    {props.query["target_gene"] ? "Target Gene: " + props.query["target_gene"] : ""}
+                                </FormLabel>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={10}>
                                 <Divider />
-                                <Typography variant="h4" align="left" gutterBottom>
+                                <Typography variant="h5" align="left" gutterBottom>
                                     Gene Details
                                 </Typography>
                             </Grid>
@@ -138,8 +152,8 @@ export default function StepTwoForm(props) {
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
                                 <Divider />
-                                <Typography variant="h4" align="left" gutterBottom>
-                                    Functionaly Analyses
+                                <Typography variant="h5" align="left" gutterBottom>
+                                    Functional Analyses
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -164,11 +178,11 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant position is implicated in TF 
+                                    <FormLabel>Variant position is implicated in TF{" "}
                                         <Tooltip title={"Transcription Factor"}>
                                             <InfoOutlinedIcon fontSize="small"/>
                                         </Tooltip>
-                                     binding based on experimental data</FormLabel>
+                                    {" "}binding based on experimental data</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -187,7 +201,7 @@ export default function StepTwoForm(props) {
                                         <Tooltip title={"Transcription Factor"}>
                                             <InfoOutlinedIcon fontSize="small"/>
                                         </Tooltip>
-                                     binding and/or chromatin environment</FormLabel>
+                                    {" "}binding and/or chromatin environment</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -277,7 +291,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant introduction, in a model organism or a cell line, results phenotype that is consistent with the human disease</FormLabel>
+                                    <FormLabel>Variant introduction, in a model organism or a cell line, results in a phenotype that is consistent with the human diseases</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>

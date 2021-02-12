@@ -27,6 +27,7 @@ def index():
 def calculate_initial_scores():
     """
     """
+    response = {}
     if request.method == "POST":
         response = {
             "scores": {},
@@ -97,7 +98,7 @@ def calculate_initial_scores():
 
             # TODO: Check for string error???
             crm_string = ", ".join(snv.crms[0:3])
-            out_string = "ReMap 2020 Peaks: {}".format(crm_string)
+            out_string = "ReMAP 2020 Peaks: {}".format(crm_string)
             if len(snv.crms) > 2:
                 out_string += ", and more"
             response["additional_info"]["f_1_1"] = out_string
@@ -108,26 +109,38 @@ def calculate_initial_scores():
         # Check Hi-C
         snv.set_ccre_method()
         if "Hi-C" in snv.ccre_methods:
-            response["scores"]["f_1_3"] = 1
+            response["scores"]["f_1_3"] = "1"
             response["additional_info"]["f_1_3"] = "Hi-C"
         elif "RNAPII ChIA-PET" in snv.ccre_methods:
-            response["scores"]["f_1_3"] = 1
+            response["scores"]["f_1_3"] = "1"
             response["additional_info"]["f_1_3"] = "ChIA-PET"
         else:
-            response["scores"]["f_1_3"] = 0
+            response["scores"]["f_1_3"] = "0"
 
         # Check eQTL
         if "eQTL" in snv.ccre_methods:
-            response["scores"]["f_1_4"] = 1
+            response["scores"]["f_1_4"] = "1"
             response["additional_info"]["f_1_4"] = "eQTL"
         else:
-            response["scores"]["f_1_4"] = 0
+            response["scores"]["f_1_4"] = "0"
+
+        # Ask about C2.5
+        response["scores"]["c_2_5"] = "0"
 
         #except Exception as e:
         #    print(e)
         #    response = jsonify({"error": str(e)})
         #    return response
-    print(response)
+        response["variant_info"] = {
+            "patient_id": snv.patient_id,
+            "variant_id": snv.variant_id,
+            "variant_name": "{}.chr{}:{}.{}>{}".format(snv.ref_genome, str(snv.chro), str(snv.pos), snv.ref, snv.alt),
+            "variant_pos": "{}.chr{}:{}".format(snv.ref_genome, str(snv.chro), str(snv.pos)),
+            "variant_description": "-".join([str(snv.chro), str(snv.pos), snv.ref, snv.alt]),
+            "ref_genome": snv.ref_genome,
+            "target_gene": snv.target_gene
+        }
+        print(response)
     return jsonify(response)
     #return response
 

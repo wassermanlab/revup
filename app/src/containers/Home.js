@@ -112,7 +112,8 @@ export default function Home() {
         "clinical": "0",
         "functional": "0",
         "rve": "0",
-        "standard_scores": {}
+        "standard_scores": {},
+        "variant_info": {},
     }
     var defaultQueryDict = {
         "patient_id": "",
@@ -143,10 +144,20 @@ export default function Home() {
         "new_c": "unknown",
         "calc_scores": false
     }
+    var defaultInfo = {
+        "patient_id": "",
+        "variant_id": "",
+        "variant_name": "", 
+        "variant_pos": "",
+        "variant_description": "",
+        "ref_genome": "",
+        "target_gene": ""
+    }
     const [query, setQuery] = useState(defaultQueryDict);
     const [initialScores, setInitialScores] = useState(defaultScoresDict);
     const [modifiedScores, setModifiedScores] = useState(defaultScoresDict);
     const [additionalInfo, setAdditionalInfo] = useState(defaultScoresDict);
+    const [variantInfo, setVariantInfo] = useState(defaultInfo);
     //const [finalScores, setFinalScores] = useState(defaultScoresDict);
     const [finalResults, setFinalResults] = useState(defaultResultsDict);
     const [open, setOpen] = useState(false);
@@ -170,7 +181,8 @@ export default function Home() {
             const json = await response.json();
             setInitialScores(json["scores"]);
             setModifiedScores(json["scores"]);
-            setAdditionalInfo(json["additional_info"])
+            setAdditionalInfo(json["additional_info"]);
+            setVariantInfo(json["variant_info"]);
             setLoading(false)
             console.log(json);
         }
@@ -262,11 +274,13 @@ export default function Home() {
                                 modifiedScores={modifiedScores}
                                 initialScores={initialScores}
                                 additionalInfo={additionalInfo}
+                                variantInfo={variantInfo}
                             />
                             : <Results 
                                 finalResults={finalResults}
                                 modifiedScores={modifiedScores}
                                 additionalInfo={additionalInfo}
+                                variantInfo={variantInfo}
                             />}
                         </Container>
                     </main>
