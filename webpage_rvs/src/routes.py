@@ -1,7 +1,10 @@
+import sys
+import logging
 from webpage_rvs import app
 
 from flask import request, jsonify
 from webpage_rvs.src.constants import (
+    LOGGING_FORMAT,
     CLINICAL_QUESTIONS,
     FUNCTIONAL_QUESTIONS,
     PHYLOP_CUTOFF,
@@ -17,6 +20,9 @@ from webpage_rvs.src.helpers import (
     get_nearest
 )
 
+# Set up logging
+logging.basicConfig(format=LOGGING_FORMAT, stream=sys.stderr, level=logging.INFO)
+
 @app.route('/')
 def index():
     output = "{}".format(request.method)
@@ -31,7 +37,27 @@ def calculate_initial_scores():
     if request.method == "POST":
         response = {
             "scores": {},
-            "additional_info": {}
+            "additional_info": {
+                "c_1_1": {
+                    "phylop": "",
+                    "phastcons": "",
+                },
+                "c_1_2": {
+                    "af": "",
+                },
+                "c_2_3": {
+                    "cadd_score": "",
+                },
+                "f_1_1": {
+                    "crms": "None",
+                },
+                "f_1_2": {
+                    "ccres": [],
+                    "ccre_descriptions": [],
+                },
+                "f_1_3": "",
+                "f_1_4": ""
+            }
         }
         #try:
         #print(request.json)
@@ -55,7 +81,8 @@ def calculate_initial_scores():
         # Check CADD and FATHMM scores
         snv.set_cadd_score()
         # TODO: FATHMM
-        response["additional_info"]["c_2_3"] = "CADD score: {}".format(snv.cadd_score)
+        #response["additional_info"]["c_2_3"] = "CADD score: {}".format(snv.cadd_score)
+        response["additional_info"]["c_2_3"]["cadd_score"] = str(snv.cadd_score)
         if snv.cadd_score > CADD_CUTOFF:
             response["scores"]["c_2_3"] = "1"
         else:
@@ -64,7 +91,9 @@ def calculate_initial_scores():
         # Check PhyloP and PhastCons scores
         snv.set_phylop_score()
         snv.set_phastcons_score()
-        response["additional_info"]["c_1_1"] = "PhyloP score: {}\nPhastCons score: {}".format(snv.phylop_score, snv.phastcons_score)
+        #response["additional_info"]["c_1_1"] = "PhyloP {{\n}}score: {0}{{\n}}PhastCons score: {1}".format(snv.phylop_score, snv.phastcons_score)
+        response["additional_info"]["c_1_1"]["phylop"] = str(snv.phylop_score)
+        response["additional_info"]["c_1_1"]["phastcons"] = str(snv.phastcons_score)
         if snv.phylop_score > PHASTCONS_CUTOFF or snv.phastcons_score > PHASTCONS_CUTOFF:
             response["scores"]["c_1_1"] = "1"
         else:
@@ -72,7 +101,8 @@ def calculate_initial_scores():
 
         # Check gnomAD AF
         snv.set_af()
-        response["additional_info"]["c_1_2"] = "gnomAD Allele Frequency: {}".format(snv.af)
+        #response["additional_info"]["c_1_2"] = "gnomAD Allele Frequency: {}".format(snv.af)
+        response["additional_info"]["c_1_2"]["af"] = str(snv.af)
         if snv.af < AF_CUTOFF:
             response["scores"]["c_1_2"] = "1"
         else:
@@ -82,29 +112,37 @@ def calculate_initial_scores():
         snv.set_ccre_info()
         if len(snv.ccre_info) > 0:
             response["scores"]["f_1_2"] = "1"
-            ccre_string = ""
+            # ccre_string = ""
+            # for ccre in snv.ccre_info:
+            #     ccre_string += " {}\n".format(ccre["ccre"], ccre["description"])
+            # out_string = "cCREs:\n\n{}".format(ccre_string)
+            # response["additional_info"]["f_1_2"] = out_string
+            ccres, ccre_descriptions = [], []
             for ccre in snv.ccre_info:
-                ccre_string += " {}\n".format(ccre["ccre"], ccre["description"])
-            out_string = "cCREs:\n\n{}".format(ccre_string)
-            response["additional_info"]["f_1_2"] = out_string
+                ccres.append(ccre["ccre"])
+                ccre_descriptions.append(ccre["description"])
+            response["additional_info"]["f_1_2"]["ccres"] = ccres
+            response["additional_info"]["f_1_2"]["ccre_descriptions"] = ccre_descriptions
         else:
             response["scores"]["f_1_2"] = "0"
-            response["additional_info"]["f_1_2"] = "No cCREs found"
+            response["additional_info"]["f_1_2"]["ccres"] = "None"
+            response["additional_info"]["f_1_2"]["ccre_descriptions"] = "None"
 
         # Check CRM
         snv.set_remap_score()
         if len(snv.crms) > 0:
+            #print(snv.crms)
             response["scores"]["f_1_1"] = "1"
 
             # TODO: Check for string error???
             crm_string = ", ".join(snv.crms[0:3])
-            out_string = "ReMAP 2020 Peaks: {}".format(crm_string)
             if len(snv.crms) > 2:
-                out_string += ", and more"
-            response["additional_info"]["f_1_1"] = out_string
+                crm_string += ", and more"
+            response["additional_info"]["f_1_1"]["crms"] = crm_string
+            #response["additional_info"]["f_1_1"]["crms"] = list(snv.crms)
         else:
             response["scores"]["f_1_1"] = "0"
-            response["additional_info"]["f_1_1"] = "No ReMap 2020 peaks found"
+            # response["additional_info"]["f_1_1"] = "No ReMap 2020 peaks found"\
 
         # Check Hi-C
         snv.set_ccre_method()
@@ -116,6 +154,7 @@ def calculate_initial_scores():
             response["additional_info"]["f_1_3"] = "ChIA-PET"
         else:
             response["scores"]["f_1_3"] = "0"
+            response["additional_info"]["f_1_3"] = "None"
 
         # Check eQTL
         if "eQTL" in snv.ccre_methods:
@@ -123,6 +162,7 @@ def calculate_initial_scores():
             response["additional_info"]["f_1_4"] = "eQTL"
         else:
             response["scores"]["f_1_4"] = "0"
+            response["additional_info"]["f_1_4"] = "None"
 
         # Ask about C2.5
         response["scores"]["c_2_5"] = "0"
@@ -131,15 +171,16 @@ def calculate_initial_scores():
         #    print(e)
         #    response = jsonify({"error": str(e)})
         #    return response
-        response["variant_info"] = {
-            "patient_id": snv.patient_id,
-            "variant_id": snv.variant_id,
-            "variant_name": "{}.chr{}:{}.{}>{}".format(snv.ref_genome, str(snv.chro), str(snv.pos), snv.ref, snv.alt),
-            "variant_pos": "{}.chr{}:{}".format(snv.ref_genome, str(snv.chro), str(snv.pos)),
-            "variant_description": "-".join([str(snv.chro), str(snv.pos), snv.ref, snv.alt]),
-            "ref_genome": snv.ref_genome,
-            "target_gene": snv.target_gene
-        }
+        
+        # response["variant_info"] = {
+        #     "patient_id": snv.patient_id,
+        #     "variant_id": snv.variant_id,
+        #     "variant_name": "{}.chr{}:{}.{}>{}".format(snv.ref_genome, str(snv.chro), str(snv.pos), snv.ref, snv.alt),
+        #     "variant_pos": "{}.chr{}:{}".format(snv.ref_genome, str(snv.chro), str(snv.pos)),
+        #     "variant_description": "-".join([str(snv.chro), str(snv.pos), snv.ref, snv.alt]),
+        #     "ref_genome": snv.ref_genome,
+        #     "target_gene": snv.target_gene
+        # }
         print(response)
     return jsonify(response)
     #return response

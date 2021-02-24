@@ -16,8 +16,10 @@ import {
     TableHead,
     TableRow,
     TextField,
+    Tooltip,
     Typography,
 } from '@material-ui/core';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -54,6 +56,10 @@ export default function StepThreeForm(props) {
         props.setModifiedScores({...props.modifiedScores, [key]: event.target.value});
     }
 
+    const handleCommentChange = (key, event) => {
+        props.setComments({...props.comments, [key]: event.target.value});
+    }
+
     const handleNext = () => {
         props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
         props.setModifiedScores({...props.modifiedScores, "calc_scores": true});
@@ -67,27 +73,47 @@ export default function StepThreeForm(props) {
             <form className={classes.root} autoComplete="off">
             <Grid className={classes.grid} container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
                 <Paper className={classes.paper}>
-                    <Grid justify="center" container spacing={3}>
+                    <Grid container justify="center" spacing={3}>
                         <Grid item xs={10}>
-                            <Typography variant="h5">Variant Info</Typography>
+                            <Typography variant="h5" align="left" gutterBottom>
+                                Variant Details
+                            </Typography>
                         </Grid>
                     </Grid>
-                    <Grid justify="center" container spacing={3}>
-                        <Grid item xs={3}>
-                            <FormLabel>Patient ID: </FormLabel>
+                    <Grid container justify="center" spacing={3}>
+                            {(function () {
+                                if(props.variantInfo["variant_id"]) {
+                                return (
+                                <React.Fragment>
+                                    <Grid item xs={3}>
+                                        <FormLabel>
+                                            Variant ID:
+                                        </FormLabel>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
+                                    </Grid>
+                                </React.Fragment>)
+                                } else {return ("")}
+                            })()}
                         </Grid>
-                        <Grid item xs={7}>
-                            <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
+                        <Grid container justify="center" spacing={3}>
+                            {(function () {
+                                if(props.variantInfo["patient_id"]) {
+                                return (
+                                <React.Fragment>
+                                    <Grid item xs={3}>
+                                        <FormLabel>
+                                            Patient ID:
+                                        </FormLabel>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
+                                    </Grid>
+                                </React.Fragment>)
+                                } else {return ("")}
+                            })()}
                         </Grid>
-                    </Grid>
-                    <Grid justify="center" container spacing={3}>
-                        <Grid item xs={3}>
-                            <FormLabel>Variant ID: </FormLabel>
-                        </Grid>
-                        <Grid item xs={7}>
-                            <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
-                        </Grid>
-                    </Grid>
                     <Grid justify="center" container spacing={3}>
                         <Grid item xs={3}>
                             <FormLabel>Variant Description: </FormLabel>
@@ -155,10 +181,12 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                {props.additionalInfo["c_1_1"]}
+                                                <b>phyloP Score:</b> {props.additionalInfo["c_1_1"]["phylop"]}
+                                                <br></br>
+                                                <b>phastCons Score:</b> {props.additionalInfo["c_1_1"]["phastcons"]}
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_1_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_1_1_comments"]} onChange={(e) => handleChange('c_1_1_comments', e)}/>
+                                                <TextField fullWidth id="c_1_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_1_1"]} onChange={(e) => handleCommentChange('c_1_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_1_2_row"}>
@@ -177,10 +205,13 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                {props.additionalInfo["c_1_2"]}
+                                                gnomAD AF
+                                                <Tooltip title={"gnomAD Allele Frequency"}>
+                                                    <InfoOutlinedIcon fontSize="small"/>
+                                                </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_1_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_1_2_comments"]} onChange={(e) => handleChange('c_1_2_comments', e)}/>
+                                                <TextField fullWidth id="c_1_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_1_2"]} onChange={(e) => handleCommentChange('c_1_2', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_1_3_row"}>
@@ -202,7 +233,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_1_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_1_3_comments"]} onChange={(e) => handleChange('c_1_3_comments', e)}/>
+                                                <TextField fullWidth id="c_1_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_1_3"]} onChange={(e) => handleCommentChange('c_1_3', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_2_1_row"}>
@@ -210,7 +241,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["c_2_1"] ? props.initialScores["c_2_1"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                C2.1 - {props.variantInfo["target_gene"]} has been implicated in the same or a similar disease phenotype, or is otherwise relevant
+                                                C2.1 - <i>{props.variantInfo["target_gene"]}</i> has been implicated in the same or a similar disease phenotype, or is otherwise relevant
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -224,7 +255,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_2_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_1_comments"]} onChange={(e) => handleChange('c_2_1_comments', e)}/>
+                                                <TextField fullWidth id="c_2_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_2_1"]} onChange={(e) => handleCommentChange('c_2_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_2_2_row"}>
@@ -232,7 +263,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["c_2_2"] ? props.initialScores["c_2_2"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                C2.2 - {props.variantInfo["target_gene"]} does not contain coding variants in the same individual
+                                                C2.2 - <i>{props.variantInfo["target_gene"]}</i> does not contain coding variants in the same individual
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -246,7 +277,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_2_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_2_comments"]} onChange={(e) => handleChange('c_2_2_comments', e)}/>
+                                                <TextField fullWidth id="c_2_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_2_2"]} onChange={(e) => handleCommentChange('c_2_2', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_2_3_row"}>
@@ -265,10 +296,10 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                {props.additionalInfo["c_2_3"]}
+                                                CADD Score: {props.additionalInfo["c_2_3"]["cadd_score"]}    
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_2_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_3_comments"]} onChange={(e) => handleChange('c_2_3_comments', e)}/>
+                                                <TextField fullWidth id="c_2_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_2_3"]} onChange={(e) => handleCommentChange('c_2_3', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_2_4_row"}>
@@ -276,7 +307,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["c_2_4"] ? props.initialScores["c_2_4"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                C2.4 - {props.variantInfo["variant_name"]} is similar to another regulatory variant associated to {props.variantInfo["target_gene"]} and implicated in the same or a similar disease phenotype
+                                                C2.4 - {props.variantInfo["variant_name"]} is similar to another regulatory variant associated to <i>{props.variantInfo["target_gene"]}</i> and implicated in the same or a similar disease phenotype
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -290,7 +321,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_2_4_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_4_comments"]} onChange={(e) => handleChange('c_2_4_comments', e)}/>
+                                                <TextField fullWidth id="c_2_4_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_2_4"]} onChange={(e) => handleCommentChange('c_2_4', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_2_5_row"}>
@@ -312,7 +343,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_2_5_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_2_5_comments"]} onChange={(e) => handleChange('c_2_5_comments', e)}/>
+                                                <TextField fullWidth id="c_2_5_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_2_5"]} onChange={(e) => handleCommentChange('c_2_5', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_3_1_row"}>
@@ -334,7 +365,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_3_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_3_1_comments"]} onChange={(e) => handleChange('c_3_1_comments', e)}/>
+                                                <TextField fullWidth id="c_3_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_3_1"]} onChange={(e) => handleCommentChange('c_3_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_4_1_row"}>
@@ -356,7 +387,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_4_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_4_1_comments"]} onChange={(e) => handleChange('c_4_1_comments', e)}/>
+                                                <TextField fullWidth id="c_4_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_4_1"]} onChange={(e) => handleCommentChange('c_4_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_4_2_row"}>
@@ -378,7 +409,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_4_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_4_2_comments"]} onChange={(e) => handleChange('c_4_2_comments', e)}/>
+                                                <TextField fullWidth id="c_4_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_4_2"]} onChange={(e) => handleCommentChange('c_4_2', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_5_1_row"}>
@@ -400,7 +431,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_5_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_5_1_comments"]} onChange={(e) => handleChange('c_5_1_comments', e)}/>
+                                                <TextField fullWidth id="c_5_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_5_1"]} onChange={(e) => handleCommentChange('c_5_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"c_5_2_row"}>
@@ -422,7 +453,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="c_5_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["c_5_2_comments"]} onChange={(e) => handleChange('c_5_2_comments', e)}/>
+                                                <TextField fullWidth id="c_5_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_5_2"]} onChange={(e) => handleCommentChange('c_5_2', e)}/>
                                             </TableCell>
                                         </TableRow>                        
                                     </TableBody>
@@ -470,10 +501,13 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                {props.additionalInfo["f_1_1"]}
+                                                ReMap 2020 Peaks 
+                                                <Tooltip title={"ReMap is a database of transcriptional regulators peaks derived from curated ChIP-seq, ChIP-exo, DAP-seq experiments in Human"}>
+                                                    <InfoOutlinedIcon fontSize="small"/>
+                                                </Tooltip> : {props.additionalInfo["f_1_1"]["crms"]}
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_1_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_1_comments"]} onChange={(e) => handleChange('f_1_1_comments', e)}/>
+                                                <TextField fullWidth id="f_1_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_1"]} onChange={(e) => handleCommentChange('f_1_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"f_1_2_row"}>
@@ -492,10 +526,13 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                {props.additionalInfo["f_1_2"]}
+                                                cCREs
+                                                <Tooltip title={"Candidate cis-Regulatory Elements by ENCODE / SCREEN"}>
+                                                    <InfoOutlinedIcon fontSize="small"/>
+                                                </Tooltip> : {props.additionalInfo["f_1_2"]["ccre_descriptions"]}
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_1_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_2_comments"]} onChange={(e) => handleChange('f_1_2_comments', e)}/>
+                                                <TextField fullWidth id="f_1_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_2"]} onChange={(e) => handleCommentChange('f_1_2', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"f_1_3_row"}>
@@ -503,7 +540,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["f_1_3"] ? props.initialScores["f_1_3"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                F1.3 - Regulatory region and {props.variantInfo["target_gene"]} are directly linked based on annotation or experimental data
+                                                F1.3 - Regulatory region and <i>{props.variantInfo["target_gene"]}</i> are directly linked based on annotation or experimental data
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -514,10 +551,13 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                {props.additionalInfo["f_1_3"]}
+                                                Supporting Experiment
+                                                <Tooltip title={"Information by ENCODE / SCREEN"}>
+                                                    <InfoOutlinedIcon fontSize="small"/>
+                                                </Tooltip> : {props.additionalInfo["f_1_3"]}
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_1_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_3_comments"]} onChange={(e) => handleChange('f_1_3_comments', e)}/>
+                                                <TextField fullWidth id="f_1_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_3"]} onChange={(e) => handleCommentChange('f_1_3', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"f_1_4_row"}>
@@ -525,7 +565,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["f_1_4"] ? props.initialScores["f_1_4"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                F1.4 - {props.variantInfo["variant_name"]} is statistically associated with expression levels of {props.variantInfo["target_gene"]}
+                                                F1.4 - {props.variantInfo["variant_name"]} is statistically associated with expression levels of <i>{props.variantInfo["target_gene"]}</i>
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -536,10 +576,13 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                {props.additionalInfo["f_1_4"]}
+                                                Supporting Experiment
+                                                <Tooltip title={"Information by ENCODE / SCREEN"}>
+                                                    <InfoOutlinedIcon fontSize="small"/>
+                                                </Tooltip> : {props.additionalInfo["f_1_4"]}
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_1_4_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_4_comments"]} onChange={(e) => handleChange('f_1_4_comments', e)}/>
+                                                <TextField fullWidth id="f_1_4_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_4"]} onChange={(e) => handleCommentChange('f_1_4', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"f_1_5_row"}>
@@ -547,7 +590,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["f_1_5"] ? props.initialScores["f_1_5"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                F1.5 - Regulatory region is shown to regulate gene expression of {props.variantInfo["target_gene"]}
+                                                F1.5 - Regulatory region is shown to regulate gene expression of <i>{props.variantInfo["target_gene"]}</i>
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -561,7 +604,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_1_5_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_1_5_comments"]} onChange={(e) => handleChange('f_1_5_comments', e)}/>
+                                                <TextField fullWidth id="f_1_5_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_5"]} onChange={(e) => handleCommentChange('f_1_5', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"f_2_1_row"}>
@@ -583,7 +626,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_2_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_2_1_comments"]} onChange={(e) => handleChange('f_2_1_comments', e)}/>
+                                                <TextField fullWidth id="f_2_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_2_1"]} onChange={(e) => handleCommentChange('f_2_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"f_2_2_row"}>
@@ -591,7 +634,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["f_2_2"] ? props.initialScores["f_2_2"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                F2.2 - {props.variantInfo["variant_name"]} leads to changes in expression of {props.variantInfo["target_gene"]} in patient tissue
+                                                F2.2 - {props.variantInfo["variant_name"]} leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i> in patient tissue
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -605,7 +648,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_2_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_2_2_comments"]} onChange={(e) => handleChange('f_2_2_comments', e)}/>
+                                                <TextField fullWidth id="f_2_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_2_2"]} onChange={(e) => handleCommentChange('f_2_2', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"f_3_1_row"}>
@@ -613,7 +656,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["f_3_1"] ? props.initialScores["f_3_1"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                F3.1 - {props.variantInfo["variant_name"]} introduction, in a cell line, leads to changes in expression of {props.variantInfo["target_gene"]}, a reported gene or chromatin environment
+                                                F3.1 - {props.variantInfo["variant_name"]} introduction, in a cell line, leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i>, a reported gene or chromatin environment
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -627,7 +670,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_3_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_3_1_comments"]} onChange={(e) => handleChange('f_3_1_comments', e)}/>
+                                                <TextField fullWidth id="f_3_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_3_1"]} onChange={(e) => handleCommentChange('f_3_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                         <TableRow key={"f_4_1_row"}>
@@ -635,7 +678,7 @@ export default function StepThreeForm(props) {
                                                 {props.initialScores["f_4_1"] ? props.initialScores["f_4_1"]: "-"}
                                             </TableCell>
                                             <TableCell>
-                                                F4.1 - {props.variantInfo["variant_name"]} introduction, in a model organism, leads to changes in expression of {props.variantInfo["target_gene"]} or a reported gene or chromatin environment
+                                                F4.1 - {props.variantInfo["variant_name"]} introduction, in a model organism, leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i> or a reported gene or chromatin environment
                                             </TableCell>
                                             <TableCell>
                                                 <FormControl fullWidth className={classes.formControl}>
@@ -649,7 +692,7 @@ export default function StepThreeForm(props) {
                                                 -
                                             </TableCell>
                                             <TableCell>
-                                                <TextField fullWidth id="f_4_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.query["f_4_1_comments"]} onChange={(e) => handleChange('f_4_1_comments', e)}/>
+                                                <TextField fullWidth id="f_4_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_4_1"]} onChange={(e) => handleCommentChange('f_4_1', e)}/>
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>
@@ -676,13 +719,7 @@ export default function StepThreeForm(props) {
                     </Grid>
                 </Grid>
             </Grid>
-            </form>
-            
-                {/*
-                
-                */}
-            
-            
+            </form>  
         </React.Fragment>
     )
 }

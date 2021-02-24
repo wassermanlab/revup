@@ -17,6 +17,13 @@ import NavBar from '../components/NavBar';
 import ScoringForm from '../components/ScoringForm';
 import Results from '../components/Results';
 //import getCsrfToken from '../components/csrftoken';
+import {
+    defaultQueryDict,
+    defaultInfo,
+    defaultScoresDict,
+    defaultValsDict,
+    defaultResultsDict,
+} from '../constants'
 
 const drawerWidth = 240;
 
@@ -55,115 +62,59 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Home() {
+    // TODO: Change this import method!!
     const config = require("../templates.json");
-
-    var defaultScoresDict = {
-        "c_1_1": "0",
-        "c_1_2": "0",
-        "c_1_3": "0",
-        "c_2_1": "0",
-        "c_2_2": "0",
-        "c_2_3": "0",
-        "c_2_4": "0",
-        "c_2_5": "0",
-        "c_3_1": "0",
-        "c_4_1": "0",
-        "c_4_2": "0",
-        "c_5_1": "0",
-        "c_5_2": "0",
-        "f_0_1": "0",
-        "f_0_2": "0",
-        "f_1_1": "0",
-        "f_1_2": "0",
-        "f_1_3": "0",
-        "f_1_4": "0",
-        "f_1_5": "0",
-        "f_2_1": "0",
-        "f_2_2": "0",
-        "f_3_1": "0",
-        "f_4_1": "0",
-        "c_1_1_comments": "",
-        "c_1_2_comments": "",
-        "c_1_3_comments": "",
-        "c_2_1_comments": "",
-        "c_2_2_comments": "",
-        "c_2_3_comments": "",
-        "c_2_4_comments": "",
-        "c_2_5_comments": "",
-        "c_3_1_comments": "",
-        "c_4_1_comments": "",
-        "c_4_2_comments": "",
-        "c_5_1_comments": "",
-        "c_5_2_comments": "",
-        "f_0_1_comments": "",
-        "f_0_2_comments": "",
-        "f_1_1_comments": "",
-        "f_1_2_comments": "",
-        "f_1_3_comments": "",
-        "f_1_4_comments": "",
-        "f_1_5_comments": "",
-        "f_2_1_comments": "",
-        "f_2_2_comments": "",
-        "f_3_1_comments": "",
-        "f_4_1_comments": "",
-        "calc_scores": false
-    }
-    var defaultResultsDict = {
-        "clinical": "0",
-        "functional": "0",
-        "rve": "0",
-        "standard_scores": {},
-        "variant_info": {},
-    }
-    var defaultQueryDict = {
-        "patient_id": "",
-        "variant_id": "",
-        "target_gene": "",
-        "ref_genome": "",
-        "chro": "",
-        "pos": "",
-        "alt": "",
-        "gnomad_coord": "",
-        "c_1_3": "unknown",
-        "c_3_1": "unknown",
-        "c_3_1_additional": "trio",
-        "c_4_1": "unknown",
-        "c_2_1": "unknown",
-        "c_2_2": "unknown",
-        "c_2_4": "unknown",
-        "func_analysis": "no",
-        "c_4_2": "unknown",
-        "c_5_1": "unknown",
-        "c_5_2": "unknown",
-        "f_1_1": "unknown",
-        "f_1_5": "unknown",
-        "f_2_1": "unknown",
-        "f_2_2": "unknown",
-        "f_3_1": "unknown",
-        "f_4_1": "unknown",
-        "new_c": "unknown",
-        "calc_scores": false
-    }
-    var defaultInfo = {
-        "patient_id": "",
-        "variant_id": "",
-        "variant_name": "", 
-        "variant_pos": "",
-        "variant_description": "",
-        "ref_genome": "",
-        "target_gene": ""
-    }
     const [query, setQuery] = useState(defaultQueryDict);
     const [initialScores, setInitialScores] = useState(defaultScoresDict);
     const [modifiedScores, setModifiedScores] = useState(defaultScoresDict);
     const [additionalInfo, setAdditionalInfo] = useState(defaultScoresDict);
+    const [comments, setComments] = useState(defaultValsDict);
     const [variantInfo, setVariantInfo] = useState(defaultInfo);
-    //const [finalScores, setFinalScores] = useState(defaultScoresDict);
     const [finalResults, setFinalResults] = useState(defaultResultsDict);
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState("unfilled");
     const classes = useStyles();
+
+    useEffect(() => {
+        const fetchRefData = async () => {
+            //setLoading(true)
+            const response = await fetch(`https://api.genome.ucsc.edu/getData/sequence?genome=${query["ref_genome"]};chrom=chr${query["chro"]};start=${(parseFloat(query["pos"])-1).toString()};end=${query["pos"]}`);
+            const json = await response.json();
+            var variant = [query["chro"], query["pos"], json["dna"].toUpperCase(), query["alt"]];
+            setVariantInfo({
+                ...variantInfo,
+                "patient_id": query["patient_id"],
+                "variant_id": query["patient_id"],
+                "variant_name": `${query["ref_genome"]}.chr${query["chro"]}:${query["pos"]}.${json["dna"].toUpperCase()}>${query["alt"]}`, 
+                "variant_pos": `${query["ref_genome"]}.chr${query["chro"]}:${query["pos"]}`,
+                "variant_description": variant.join("-"),
+                "ref_genome": query["ref_genome"],
+                "target_gene": query["target_gene"]
+            });
+            //console.log(json);
+        }
+        if (query["query_ref"] === true){
+            if (query["gnomad_coord"] !== "") {
+                // gnomAD coord format is chro-pos-ref-alt
+                var variant = query["gnomad_coord"].split("-");
+                setVariantInfo({
+                    ...variantInfo,
+                    "patient_id": query["patient_id"],
+                    "variant_id": query["patient_id"],
+                    "variant_name": `${query["ref_genome"]}.chr${variant[0]}:${variant[1]}.${variant[2]}>${variant[3]}`, 
+                    "variant_pos": `${query["ref_genome"]}.chr${variant[0]}:${variant[1]}`,
+                    "variant_description": variant.join("-"),
+                    "ref_genome": query["ref_genome"],
+                    "target_gene": query["target_gene"]
+                });
+            } else {
+                fetchRefData();
+            }
+            setQuery({...query, "query_ref": false});
+        } 
+    }, [query]);
+
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -182,16 +133,14 @@ export default function Home() {
             setInitialScores(json["scores"]);
             setModifiedScores(json["scores"]);
             setAdditionalInfo(json["additional_info"]);
-            setVariantInfo(json["variant_info"]);
+            //setVariantInfo(json["variant_info"]);
             setLoading(false)
             console.log(json);
         }
-        //console.log("1")
         if (query["calc_scores"] === true){
             fetchInitialData();
             setQuery({...query, "calc_scores": false});
         }
-        
     }, [query]);
 
     useEffect(() => {
@@ -214,8 +163,6 @@ export default function Home() {
             fetchFinalData();
             setModifiedScores({...modifiedScores, "calc_scores": false});
         }
-
-
     }, [modifiedScores]);
 
     return (
@@ -269,17 +216,20 @@ export default function Home() {
                             <ScoringForm 
                                 setQuery={setQuery} 
                                 setModifiedScores={setModifiedScores}
+                                setComments={setComments}
                                 query={query}
                                 defaultQueryDict={defaultQueryDict}
                                 modifiedScores={modifiedScores}
                                 initialScores={initialScores}
                                 additionalInfo={additionalInfo}
+                                comments={comments}
                                 variantInfo={variantInfo}
                             />
                             : <Results 
                                 finalResults={finalResults}
                                 modifiedScores={modifiedScores}
                                 additionalInfo={additionalInfo}
+                                comments={comments}
                                 variantInfo={variantInfo}
                             />}
                         </Container>

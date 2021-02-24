@@ -1,24 +1,28 @@
-import React, { /*useEffect,*/ useState } from 'react';
+import React from 'react';
 import {Line} from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
 import GaugeChart from 'react-gauge-chart'
 import { makeStyles } from '@material-ui/core/styles';
 import { 
-    Button,
     Container,
     Divider,
     FormLabel,
     Grid,
     Paper,
-    Slider,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
+    Tooltip,
     Typography, 
 } from '@material-ui/core';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import {
+    MAX_FUNCTIONAL_SCORE,
+    MAX_CLINICAL_SCORE
+} from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,25 +47,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Results(props) {
-    const functionalPercentage = parseFloat(props.finalResults["functional"])/38.0;
-    const clinicalPercentage = parseFloat(props.finalResults["clinical"])/114.0;
+    const functionalPercentage = parseFloat(props.finalResults["functional"])/MAX_FUNCTIONAL_SCORE;
+    const clinicalPercentage = parseFloat(props.finalResults["clinical"])/MAX_CLINICAL_SCORE;
     const classes = useStyles();
 
-    const handleText = (score, type, event) => {
-        /*if(val >= 0.50) {
-            return "Likely"
-        } else {
-            return "Unlikely"
-        }*/
-        if(type === "clinical") {
-            return score + "/114"
-        } else {
-            return score + "/38"
-        }
-    }
-
     const data = {
-        //labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         labels: props.finalResults["standard_rve"]["x"],
         datasets: [
           {
@@ -218,12 +208,6 @@ export default function Results(props) {
                             </Grid>
                             <Grid justify="center" container spacing={3}>
                                 <Grid item xs={7}>
-                                    {/*
-                                    <Grid justify="center" container spacing={3}>
-                                        <Grid item xs={12}>
-                                            <FormLabel>RVE Score: {props.finalResults["rve"]}</FormLabel>
-                                        </Grid>
-                                    </Grid>*/}
                                     <Grid justify="center" container spacing={3}>
                                         <Grid item xs={12}>
                                             <Line
@@ -285,8 +269,6 @@ export default function Results(props) {
                                                 textColor={"#464A4F"}
                                                 needleColor={"#D1D5D5"}
                                                 needleBaseColor={"#D1D5D5"}
-                                                //style={{width: '75%'}}
-                                                //style={{fontSize: '15%'}}
                                             />
                                         </Grid>
                                     </Grid>
@@ -303,17 +285,15 @@ export default function Results(props) {
                                 <TableContainer>
                                     <Table aria-label="simple table">
                                         <colgroup>
-                                            <col style={{width:'40%'}}/>
+                                            <col style={{width:'45%'}}/>
                                             <col style={{width:'10%'}}/>
-                                            <col style={{width:'30%'}}/>
-                                            <col style={{width:'20%'}}/>
+                                            <col style={{width:'45%'}}/>
                                         </colgroup>
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell>Evidence Description</TableCell>
                                                 <TableCell>Score</TableCell>
-                                                <TableCell>Additional Information</TableCell>
-                                                <TableCell>Comments</TableCell>
+                                                <TableCell>Additional Information/Comments</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -325,10 +305,11 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_1_1"] ? props.modifiedScores["c_1_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {props.additionalInfo["c_1_1"]}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_1_1_comments"] ? props.modifiedScores["c_1_1_comments"]: "-"}
+                                                    {props.comments["c_1_1"] ? props.comments["c_1_1"]: ""}
+                                                    <br></br>
+                                                    <b>phyloP Score:</b> {props.additionalInfo["c_1_1"]["phylop"]}
+                                                    <br></br>
+                                                    <b>phastCons Score:</b> {props.additionalInfo["c_1_1"]["phastcons"]}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_1_2_row"}>
@@ -339,10 +320,12 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_1_2"] ? props.modifiedScores["c_1_2"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {props.additionalInfo["c_1_2"]}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_1_2_comments"] ? props.modifiedScores["c_1_2_comments"]: "-"}
+                                                    {props.comments["c_1_2"] ? props.comments["c_1_2"]: ""}
+                                                    <br></br>
+                                                    gnomAD AF
+                                                    <Tooltip title={"gnomAD Allele Frequency"}>
+                                                        <InfoOutlinedIcon fontSize="small"/>
+                                                    </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_1_3_row"}>
@@ -353,38 +336,29 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_1_3"] ? props.modifiedScores["c_1_3"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_1_3_comments"] ? props.modifiedScores["c_1_3_comments"]: "-"}
+                                                    {props.comments["c_1_3"] ? props.comments["c_1_3"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_2_1_row"}>
                                                 <TableCell>
-                                                    C2.1 - {props.variantInfo["target_gene"]} has been implicated in the same or a similar disease phenotype, or is otherwise relevant
+                                                    C2.1 - <i>{props.variantInfo["target_gene"]}</i> has been implicated in the same or a similar disease phenotype, or is otherwise relevant
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["c_2_1"] ? props.modifiedScores["c_2_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_2_1_comments"] ? props.modifiedScores["c_2_1_comments"]: "-"}
+                                                    {props.comments["c_2_1"] ? props.comments["c_2_1"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_2_2_row"}>
                                                 <TableCell>
-                                                    C2.2 - {props.variantInfo["target_gene"]} does not contain coding variants in the same individual
+                                                    C2.2 - <i>{props.variantInfo["target_gene"]}</i> does not contain coding variants in the same individual
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["c_2_2"] ? props.modifiedScores["c_2_2"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_2_2_comments"] ? props.modifiedScores["c_2_2_comments"]: "-"}
+                                                    {props.comments["c_2_2"] ? props.comments["c_2_2"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_2_3_row"}>
@@ -395,24 +369,20 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_2_3"] ? props.modifiedScores["c_2_3"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {props.additionalInfo["c_2_3"]}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_2_3_comments"] ? props.modifiedScores["c_2_3_comments"]: "-"}
+                                                    {props.comments["c_2_3"] ? props.comments["c_2_3"]: ""}
+                                                    <br></br>
+                                                    CADD Score: {props.additionalInfo["c_2_3"]["cadd_score"]}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_2_4_row"}>
                                                 <TableCell>
-                                                    C2.4 - {props.variantInfo["variant_name"]} is similar to another regulatory variant associated to {props.variantInfo["target_gene"]} and implicated in the same or a similar disease phenotype
+                                                    C2.4 - {props.variantInfo["variant_name"]} is similar to another regulatory variant associated to <i>{props.variantInfo["target_gene"]}</i> and implicated in the same or a similar disease phenotype
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["c_2_4"] ? props.modifiedScores["c_2_4"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_2_4_comments"] ? props.modifiedScores["c_2_4_comments"]: "-"}
+                                                    {props.comments["c_2_4"] ? props.comments["c_2_4"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_2_5_row"}>
@@ -423,10 +393,7 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_2_5"] ? props.modifiedScores["c_2_5"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_2_5_comments"] ? props.modifiedScores["c_2_5_comments"]: "-"}
+                                                    {props.comments["c_2_5"] ? props.comments["c_2_5"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_3_1_row"}>
@@ -437,10 +404,7 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_3_1"] ? props.modifiedScores["c_3_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_3_1_comments"] ? props.modifiedScores["c_3_1_comments"]: "-"}
+                                                    {props.comments["c_3_1"] ? props.comments["c_3_1"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_4_1_row"}>
@@ -451,10 +415,7 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_4_1"] ? props.modifiedScores["c_4_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_4_1_comments"] ? props.modifiedScores["c_4_1_comments"]: "-"}
+                                                    {props.comments["c_4_1"] ? props.comments["c_4_1"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_4_2_row"}>
@@ -465,10 +426,7 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_4_2"] ? props.modifiedScores["c_4_2"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_4_2_comments"] ? props.modifiedScores["c_4_2_comments"]: "-"}
+                                                    {props.comments["c_4_2"] ? props.comments["c_4_2"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_5_1_row"}>
@@ -479,10 +437,7 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_5_1"] ? props.modifiedScores["c_5_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_5_1_comments"] ? props.modifiedScores["c_5_1_comments"]: "-"}
+                                                    {props.comments["c_5_1"] ? props.comments["c_5_1"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"c_5_2_row"}>
@@ -493,10 +448,7 @@ export default function Results(props) {
                                                     {props.modifiedScores["c_5_2"] ? props.modifiedScores["c_5_2"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["c_5_2_comments"] ? props.modifiedScores["c_5_2_comments"]: "-"}
+                                                    {props.comments["c_5_2"] ? props.comments["c_5_2"]: "-"}
                                                 </TableCell>
                                             </TableRow>   
                                         </TableBody>
@@ -511,17 +463,15 @@ export default function Results(props) {
                                 <TableContainer>
                                     <Table aria-label="simple table">
                                         <colgroup>
-                                            <col style={{width:'40%'}}/>
+                                            <col style={{width:'45%'}}/>
                                             <col style={{width:'10%'}}/>
-                                            <col style={{width:'30%'}}/>
-                                            <col style={{width:'20%'}}/>
+                                            <col style={{width:'45%'}}/>
                                         </colgroup>
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell>Evidence Description</TableCell>
                                                 <TableCell>Score</TableCell>
-                                                <TableCell>Additional Information</TableCell>
-                                                <TableCell>Comments</TableCell>
+                                                <TableCell>Additional Information/Comments</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -533,10 +483,12 @@ export default function Results(props) {
                                                     {props.modifiedScores["f_1_1"] ? props.modifiedScores["f_1_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {props.additionalInfo["f_1_1"]}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_1_1_comments"] ? props.modifiedScores["f_1_1_comments"]: "-"}
+                                                    {props.comments["f_1_1"] ? props.comments["f_1_1"]: ""}
+                                                    <br></br>
+                                                    ReMap 2020 Peaks 
+                                                    <Tooltip title={"ReMap is a database of transcriptional regulators peaks derived from curated ChIP-seq, ChIP-exo, DAP-seq experiments in Human"}>
+                                                        <InfoOutlinedIcon fontSize="small"/>
+                                                    </Tooltip> : {props.additionalInfo["f_1_1"]["crms"]}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"f_1_2_row"}>
@@ -547,52 +499,55 @@ export default function Results(props) {
                                                     {props.modifiedScores["f_1_2"] ? props.modifiedScores["f_1_2"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {props.additionalInfo["f_1_2"]}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_1_2_comments"] ? props.modifiedScores["f_1_2_comments"]: "-"}
+                                                    {props.comments["f_1_2"] ? props.comments["f_1_2"]: ""}
+                                                    <br></br>
+                                                    cCREs
+                                                    <Tooltip title={"Candidate cis-Regulatory Elements by ENCODE / SCREEN"}>
+                                                        <InfoOutlinedIcon fontSize="small"/>
+                                                    </Tooltip> : {props.additionalInfo["f_1_2"]["ccre_descriptions"]}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"f_1_3_row"}>
                                                 <TableCell>
-                                                    F1.3 - Regulatory region and {props.variantInfo["target_gene"]} are directly linked based on annotation or experimental data
+                                                    F1.3 - Regulatory region and <i>{props.variantInfo["target_gene"]}</i> are directly linked based on annotation or experimental data
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["f_1_3"] ? props.modifiedScores["f_1_3"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {props.additionalInfo["f_1_3"]}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_1_3_comments"] ? props.modifiedScores["f_1_3_comments"]: "-"}
+                                                    {props.comments["f_1_3"] ? props.comments["f_1_3"]: ""}
+                                                    <br></br>
+                                                    Supporting Experiment
+                                                    <Tooltip title={"Information by ENCODE / SCREEN"}>
+                                                        <InfoOutlinedIcon fontSize="small"/>
+                                                    </Tooltip> : {props.additionalInfo["f_1_3"]}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"f_1_4_row"}>
                                                 <TableCell>
-                                                    F1.4 - {props.variantInfo["variant_name"]} is statistically associated with expression levels of {props.variantInfo["target_gene"]}
+                                                    F1.4 - {props.variantInfo["variant_name"]} is statistically associated with expression levels of <i>{props.variantInfo["target_gene"]}</i>
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["f_1_4"] ? props.modifiedScores["f_1_4"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {props.additionalInfo["f_1_4"]}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_1_4_comments"] ? props.modifiedScores["f_1_4_comments"]: "-"}
+                                                    {props.comments["f_1_4"] ? props.comments["f_1_4"]: ""}
+                                                    <br></br>
+                                                    Supporting Experiment
+                                                    <Tooltip title={"Information by ENCODE / SCREEN"}>
+                                                        <InfoOutlinedIcon fontSize="small"/>
+                                                    </Tooltip> : {props.additionalInfo["f_1_4"]}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"f_1_5_row"}>
                                                 <TableCell>
-                                                    F1.5 - Regulatory region is shown to regulate gene expression of {props.variantInfo["target_gene"]}
+                                                    F1.5 - Regulatory region is shown to regulate gene expression of <i>{props.variantInfo["target_gene"]}</i>
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["f_1_5"] ? props.modifiedScores["f_1_5"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_1_5_comments"] ? props.modifiedScores["f_1_5_comments"]: "-"}
+                                                    {props.comments["f_1_5"] ? props.comments["f_1_5"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"f_2_1_row"}>
@@ -603,52 +558,40 @@ export default function Results(props) {
                                                     {props.modifiedScores["f_2_1"] ? props.modifiedScores["f_2_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_2_1_comments"] ? props.modifiedScores["f_2_1_comments"]: "-"}
+                                                    {props.comments["f_2_1"] ? props.comments["f_2_1"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"f_2_2_row"}>
                                                 <TableCell>
-                                                    F2.2 - {props.variantInfo["variant_name"]} leads to changes in expression of {props.variantInfo["target_gene"]} in patient tissue
+                                                    F2.2 - {props.variantInfo["variant_name"]} leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i> in patient tissue
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["f_2_2"] ? props.modifiedScores["f_2_2"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_2_2_comments"] ? props.modifiedScores["f_2_2_comments"]: "-"}
+                                                    {props.comments["f_2_2"] ? props.comments["f_2_2"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"f_3_1_row"}>
                                                 <TableCell>
-                                                    F3.1 - {props.variantInfo["variant_name"]} introduction, in a cell line, leads to changes in expression of {props.variantInfo["target_gene"]}, a reported gene or chromatin environment
+                                                    F3.1 - {props.variantInfo["variant_name"]} introduction, in a cell line, leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i>, a reported gene or chromatin environment
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["f_3_1"] ? props.modifiedScores["f_3_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_3_1_comments"] ? props.modifiedScores["f_3_1_comments"]: "-"}
+                                                    {props.comments["f_3_1"] ? props.comments["f_3_1"]: "-"}
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key={"f_4_1_row"}>
                                                 <TableCell>
-                                                    F4.1 - {props.variantInfo["variant_name"]} introduction, in a model organism, leads to changes in expression of {props.variantInfo["target_gene"]} or a reported gene or chromatin environment
+                                                    F4.1 - {props.variantInfo["variant_name"]} introduction, in a model organism, leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i> or a reported gene or chromatin environment
                                                 </TableCell>
                                                 <TableCell>
                                                     {props.modifiedScores["f_4_1"] ? props.modifiedScores["f_4_1"]: "-"}
                                                 </TableCell>
                                                 <TableCell>
-                                                    -
-                                                </TableCell>
-                                                <TableCell>
-                                                    {props.modifiedScores["f_4_1_comments"] ? props.modifiedScores["f_4_1_comments"]: "-"}
+                                                    {props.comments["f_4_1"] ? props.comments["f_4_1"]: "-"}
                                                 </TableCell>
                                             </TableRow>   
                                         </TableBody>

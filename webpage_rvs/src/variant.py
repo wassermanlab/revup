@@ -1,4 +1,6 @@
 import os
+import sys
+import logging
 import pandas as pd
 
 from webpage_rvs.src.constants import (
@@ -24,6 +26,8 @@ from webpage_rvs.src.helpers import (
     liftover
 )
 
+# Setup logging
+logging.basicConfig(format=LOGGING_FORMAT, stream=sys.stderr, level=logging.INFO)
 
 class Variant:
     def __init__(self, patient_id=None, variant_id=None):
@@ -36,18 +40,23 @@ class Variant:
 class SNV(Variant):
     def __init__(self, ref_genome, chro, pos, alt, target_gene, patient_id=None, variant_id=None):
         """
+        Create an SNV object to hold all info from external databases
         """
         super().__init__(patient_id, variant_id)
 
+        # Read external files
         self.remap_file = REMAP_VARIANT_FILE
         self.remap_df = pd.read_csv(self.remap_file, sep='\t', header=None)
 
+        # Setup variant information
         self.ref_genome = ref_genome
         self.chro = chro
         self.pos = pos
         self.alt = alt
         self.ref = ""
         self.target_gene = target_gene
+
+        # Create default scores
         self.cadd_score = 0
         self.phylop_score = 0
         self.phastcons_score = 0
@@ -56,6 +65,7 @@ class SNV(Variant):
         self.crms = []
         self.ccre_methods = set()
 
+        # Liftover multiple coordinate systems
         hg19_pos = liftover(self.pos, self.chro, self.ref_genome, 'hg19')
         hg38_pos = liftover(self.pos, self.chro, self.ref_genome, 'hg38')
         self.ref_assemblies = {
@@ -63,19 +73,21 @@ class SNV(Variant):
             "hg38": hg38_pos
         }
 
-        #self.ucsc_pos = liftover(self.pos, self.chro, self.ref_genome, UCSC_ASSEMBLY)
-        #self.cadd_pos = liftover(self.pos, self.chro, self.ref_genome, CADD_ASSEMBLY)
-        #self.gnomad_pos = liftover(self.pos, self.chro, self.ref_genome, GNOMAD_ASSEMBLY)
+        # Find reference allele
         self.set_ref_allele()
         
 
     def set_ref_allele(self):
         """
-        UCSC
+        Set the reference allele for this variant using UCSC Genome Browser
+
+
+        NOTE: UCSC is 0 based, so must subtract 1 from every position in order to obtain
+        the correct coordinates. i.e. start is actually start - 1
         """
         chro = "chr" + str(self.chro)
-        start = self.ref_assemblies[UCSC_ASSEMBLY]
-        end = start + 1
+        start = self.ref_assemblies[UCSC_ASSEMBLY] - 1
+        end = self.ref_assemblies[UCSC_ASSEMBLY]
 
         track_query = "sequence?genome={};chrom={};start={};end={}".format(
             UCSC_ASSEMBLY,
@@ -111,6 +123,9 @@ class SNV(Variant):
 
     def set_phylop_score(self):
         """
+
+        NOTE: UCSC is 0 based, so must subtract 1 from every position in order to obtain
+        the correct coordinates. i.e. start is actually start - 1
         """
         chro = "chr" + str(self.chro)
         start = self.ref_assemblies[UCSC_ASSEMBLY] - 1
@@ -134,6 +149,9 @@ class SNV(Variant):
 
     def set_phastcons_score(self):
         """
+
+        NOTE: UCSC is 0 based, so must subtract 1 from every position in order to obtain
+        the correct coordinates. i.e. start is actually start - 1
         """
         # Convert coordinates
         chro = "chr" + str(self.chro)
@@ -187,6 +205,9 @@ class SNV(Variant):
 
     def set_ccre_info(self):
         """
+
+        NOTE: UCSC is 0 based, so must subtract 1 from every position in order to obtain
+        the correct coordinates. i.e. start is actually start - 1
         """
         
         # Convert coordinates
@@ -234,6 +255,18 @@ class SNV(Variant):
 
     def set_remap_score(self):
         """
+        Finds the ReMAP peaks based on an input file ("Remap_Variant_interest).
+        Look for rows in the file for which the position of the variant intersects
+        with the position found in the row. 
+
+        Example of row in the file:
+        chr12	120977660	120979367	TEAD3:Hep-G2	1	.	120978512	120978513	229,252,207
+        - required columns are: chromosome (0), start position(1), end position(2), and ReMAP peak (3)
+        - strip the ReMAP peak and keep inforation before the colon
+        - save peaks for rows in which the position of the variant is located within the range of the 
+          start and end position columns
+
+        Returns a list of the CRM ReMAP peaks
         """
         pos = self.ref_assemblies[REMAP_ASSEMBLY]
         subset = self.remap_df[self.remap_df.loc[:, 0] == ('chr' + str(self.chro))]

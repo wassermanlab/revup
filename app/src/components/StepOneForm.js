@@ -119,19 +119,21 @@ export default function StepOneForm(props) {
             isError = true;
         } else if ((chro === "" && pos === "" && alt === "") && (gnomad !== "")) {
             setVariantCoordError({...variantCoordError, "error": false, "message": ""})
-            //isError = false;
-            console.log("HELLO")
-            console.log(gnomad)
+            //props.setQuery({...props.query, "variant_description": gnomad});
         } else if ((chro !== "" && pos !== "" && alt !== "") && (gnomad === "")) {
             setVariantCoordError({...variantCoordError, "error": false, "message": ""})
             //isError = false;
+            //const string_var = "chro: " + String(chro) + " pos: " + String(pos) + " alt: " + alt
+            //props.setQuery({...props.query, "variant_description": string_var})
         } else {
             setVariantCoordError({...variantCoordError, "error": false, "message": ""})
+            //props.setQuery({...props.query, "variant_description": gnomad})
         }
         
         // If there are no errors on the page
         if (isError === false) {
             props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            props.setQuery({...props.query, "query_ref": true});
         }  
     };
 

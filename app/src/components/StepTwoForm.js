@@ -74,29 +74,66 @@ export default function StepTwoForm(props) {
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
                                 <Typography variant="h5" align="left" gutterBottom>
-                                    {props.query["variant_id"] ? props.query["variant_id"] : ""}
+                                    Variant Details
                                 </Typography>
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
-                            <Grid item xs={10}>
-                                <FormLabel>
-                                    {props.query["patient_id"] ? "Patient ID: " + props.query["patient_id"] : ""}
-                                </FormLabel>
+                            {(function () {
+                                if(props.query["variant_id"]) {
+                                return (
+                                <React.Fragment>
+                                    <Grid item xs={3}>
+                                        <FormLabel>
+                                            Variant ID:
+                                        </FormLabel>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
+                                    </Grid>
+                                </React.Fragment>)
+                                } else {return ("")}
+                            })()}
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            {(function () {
+                                if(props.query["patient_id"]) {
+                                return (
+                                <React.Fragment>
+                                    <Grid item xs={3}>
+                                        <FormLabel>
+                                            Patient ID:
+                                        </FormLabel>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
+                                    </Grid>
+                                </React.Fragment>)
+                                } else {return ("")}
+                            })()}
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={3}>
+                                <FormLabel>Variant Description:</FormLabel>
+                            </Grid>
+                            <Grid item xs={7}>
+                                <FormLabel>{props.variantInfo["variant_description"]}</FormLabel>
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
-                            <Grid item xs={10}>
-                                <FormLabel>
-                                    {props.query["gnomad_coord"] !== "" ? "Variant Description: " + props.query["gnomad_coord"] : "chr: " + props.query["chro"] + " pos: " + props.query["pos"] + " alt: " + props.query["alt"]}
-                                </FormLabel>
+                            <Grid item xs={3}>
+                                <FormLabel>Reference Assembly:</FormLabel>
+                            </Grid>
+                            <Grid item xs={7}>
+                                <FormLabel>{props.variantInfo["ref_genome"]}</FormLabel>
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
-                            <Grid item xs={10}>
-                                <FormLabel>
-                                    {props.query["target_gene"] ? "Target Gene: " + props.query["target_gene"] : ""}
-                                </FormLabel>
+                            <Grid item xs={3}>
+                                <FormLabel>Target Gene:</FormLabel>
+                            </Grid>
+                            <Grid item xs={7}>
+                                <FormLabel><i>{props.variantInfo["target_gene"]}</i></FormLabel>
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
@@ -109,7 +146,7 @@ export default function StepTwoForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel><i>{props.query["target_gene"]}</i> does not contain coding variants in the same individual</FormLabel>
+                                <FormLabel><i>{props.variantInfo["target_gene"]}</i> does not contain coding variants in the same individual</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
@@ -123,7 +160,7 @@ export default function StepTwoForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel><i>{props.query["target_gene"]}</i> has been implicated in the same or a similar disease phenotype, or is otherwise relevant</FormLabel>
+                                <FormLabel><i>{props.variantInfo["target_gene"]}</i> has been implicated in the same or a similar disease phenotype, or is otherwise relevant</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
@@ -137,7 +174,7 @@ export default function StepTwoForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Variant is similar to another regulatory variant associated to <i>{props.query["target_gene"]}</i> and implicated in the same or a similar disease phenotype</FormLabel>
+                                <FormLabel>{props.variantInfo["variant_name"]} is similar to another regulatory variant associated to <i>{props.variantInfo["target_gene"]}</i> and implicated in the same or a similar disease phenotype</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
@@ -178,7 +215,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant position is implicated in TF{" "}
+                                    <FormLabel>{props.variantInfo["variant_pos"]} is implicated in TF
                                         <Tooltip title={"Transcription Factor"}>
                                             <InfoOutlinedIcon fontSize="small"/>
                                         </Tooltip>
@@ -197,7 +234,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant causes a change in TF 
+                                    <FormLabel>{props.variantInfo["variant_name"]} causes a change in TF 
                                         <Tooltip title={"Transcription Factor"}>
                                             <InfoOutlinedIcon fontSize="small"/>
                                         </Tooltip>
@@ -216,7 +253,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Regulatory region is shown to regulate gene expression of <i>{props.query["target_gene"]}</i></FormLabel>
+                                    <FormLabel>Regulatory region is shown to regulate gene expression of <i>{props.variantInfo["target_gene"]}</i></FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -231,7 +268,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant leads to changes in expression of <i>{props.query["target_gene"]}</i> in patient tissue</FormLabel>
+                                    <FormLabel>{props.variantInfo["variant_name"]} leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i> in patient tissue</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -246,7 +283,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant introduction in a cell line leads to changes in expression of <i>{props.query["target_gene"]}</i>, a reported gene or chromatin environment</FormLabel>
+                                    <FormLabel>{props.variantInfo["variant_name"]} introduction in a cell line leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i>, a reported gene or chromatin environment</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -261,7 +298,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant introduction in a cell line leads to a cellular phenotype consistent with the disease phenotype</FormLabel>
+                                    <FormLabel>{props.variantInfo["variant_name"]} introduction in a cell line leads to a cellular phenotype consistent with the disease phenotype</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -276,7 +313,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant neutralization, in a model organism or cell line, rescues or reverses the phenotype</FormLabel>
+                                    <FormLabel>{props.variantInfo["variant_name"]} neutralization, in a model organism or cell line, rescues or reverses the phenotype</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -291,7 +328,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant introduction, in a model organism or a cell line, results in a phenotype that is consistent with the human diseases</FormLabel>
+                                    <FormLabel>{props.variantInfo["variant_name"]} introduction, in a model organism or a cell line, results in a phenotype that is consistent with the human diseases</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>
@@ -306,7 +343,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>Variant introduction, in a model organism, leads to changes in expression of <i>{props.query["target_gene"]}</i> or a reported gene or chromatin environment</FormLabel>
+                                    <FormLabel>{props.variantInfo["variant_name"]} introduction, in a model organism, leads to changes in expression of <i>{props.variantInfo["target_gene"]}</i> or a reported gene or chromatin environment</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>

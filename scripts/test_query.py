@@ -199,7 +199,7 @@ def ucsc_query(**kwargs):
 @click.argument("chro")
 @click.argument("pos")
 # Example Query
-# python3 test_query ucsc-get-data 8 101493333
+# python3 test_query.py ucsc-get-data 8 101493333
 def ucsc_get_data(**kwargs):
     """
     """

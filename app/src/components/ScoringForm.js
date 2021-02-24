@@ -1,17 +1,12 @@
-import React, { /*useEffect,*/ useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
-    Button,
     Container,
-    Grid,
-    Paper,
     Step,
     StepLabel,
     Stepper,
     Typography, 
 } from '@material-ui/core';
-import ReplayIcon from '@material-ui/icons/Replay';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 import StepOneForm from './StepOneForm';
 import StepTwoForm from './StepTwoForm';
@@ -89,6 +84,7 @@ export default function ScoringForm(props) {
                 return (
                     <StepTwoForm 
                         query={props.query}
+                        variantInfo={props.variantInfo}
                         setQuery={props.setQuery}
                         setActiveStep={setActiveStep}>
                     </StepTwoForm>
@@ -103,6 +99,8 @@ export default function ScoringForm(props) {
                         additionalInfo={props.additionalInfo}
                         setModifiedScores={props.setModifiedScores}
                         variantInfo={props.variantInfo}
+                        comments={props.comments}
+                        setComments={props.setComments}
                         setActiveStep={setActiveStep}>
                     </StepThreeForm>
                 )
