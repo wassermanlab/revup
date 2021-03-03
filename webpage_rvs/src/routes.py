@@ -11,6 +11,7 @@ from webpage_rvs.src.constants import (
     PHASTCONS_CUTOFF,
     CADD_CUTOFF,
     AF_CUTOFF,
+    C_3_1_LABELS,
 )
 from webpage_rvs.src.variant import (
     SNV
@@ -48,6 +49,7 @@ def calculate_initial_scores():
                 "c_2_3": {
                     "cadd_score": "",
                 },
+                "c_3_1": "",
                 "f_1_1": {
                     "crms": "None",
                 },
@@ -102,7 +104,7 @@ def calculate_initial_scores():
         # Check gnomAD AF
         snv.set_af()
         #response["additional_info"]["c_1_2"] = "gnomAD Allele Frequency: {}".format(snv.af)
-        response["additional_info"]["c_1_2"]["af"] = str(snv.af)
+        response["additional_info"]["c_1_2"]["af"] = '%.4E' % snv.af #str(snv.af)
         if snv.af < AF_CUTOFF:
             response["scores"]["c_1_2"] = "1"
         else:
@@ -164,6 +166,13 @@ def calculate_initial_scores():
             response["scores"]["f_1_4"] = "0"
             response["additional_info"]["f_1_4"] = "None"
 
+        # Check c3.1
+        if results["c_3_1"] == "yes":
+            # Add additional info
+            response["additional_info"]["c_3_1"] = C_3_1_LABELS[results["c_3_1_additional"]]
+        else:
+            response["additional_info"]["c_3_1"] = ""
+
         # Ask about C2.5
         response["scores"]["c_2_5"] = "0"
 
@@ -171,17 +180,12 @@ def calculate_initial_scores():
         #    print(e)
         #    response = jsonify({"error": str(e)})
         #    return response
-        
-        # response["variant_info"] = {
-        #     "patient_id": snv.patient_id,
-        #     "variant_id": snv.variant_id,
-        #     "variant_name": "{}.chr{}:{}.{}>{}".format(snv.ref_genome, str(snv.chro), str(snv.pos), snv.ref, snv.alt),
-        #     "variant_pos": "{}.chr{}:{}".format(snv.ref_genome, str(snv.chro), str(snv.pos)),
-        #     "variant_description": "-".join([str(snv.chro), str(snv.pos), snv.ref, snv.alt]),
-        #     "ref_genome": snv.ref_genome,
-        #     "target_gene": snv.target_gene
-        # }
-        print(response)
+        response["positions"] = {
+            "hg19": "-".join([str(snv.chro), str(snv.ref_assemblies["hg19"]), snv.ref, snv.alt]),
+            "hg38": "-".join([str(snv.chro), str(snv.ref_assemblies["hg38"]), snv.ref, snv.alt]),
+        }
+
+        #print(response)
     return jsonify(response)
     #return response
 

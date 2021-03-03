@@ -182,18 +182,18 @@ class SNV(Variant):
             self.ref,
             self.alt
         ])
-
         results = graphql_query(
             GNOMAD_API_URL, 
             GNOMAD_ALLELE_QUERY, 
             {"variantId": variant_id}
         )
+        print(results)
 
         # TODO: Check if results is empty
         if results["data"]["variant"]:
             an = results["data"]["variant"]["genome"]["an"]
             ac = results["data"]["variant"]["genome"]["ac"]
-            self.af = int(an)/int(ac)
+            self.af = int(ac)/int(an)
         else:
             # TODO: What to do here....?
             

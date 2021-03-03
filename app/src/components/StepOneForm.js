@@ -113,27 +113,36 @@ export default function StepOneForm(props) {
         var chro = document.getElementById("chro").value
         var pos = document.getElementById("pos").value
         var alt = document.getElementById("alt").value
-        var gnomad = document.getElementById("gnomad_coor").value
+        var gnomad = document.getElementById("gnomad_coord").value
         if ((chro === "" && pos === "" && alt === "") && (gnomad === "")) {
             setVariantCoordError({...variantCoordError, "error": true, "message": "One of these fields must be filled"})
             isError = true;
-        } else if ((chro === "" && pos === "" && alt === "") && (gnomad !== "")) {
-            setVariantCoordError({...variantCoordError, "error": false, "message": ""})
-            //props.setQuery({...props.query, "variant_description": gnomad});
-        } else if ((chro !== "" && pos !== "" && alt !== "") && (gnomad === "")) {
-            setVariantCoordError({...variantCoordError, "error": false, "message": ""})
-            //isError = false;
-            //const string_var = "chro: " + String(chro) + " pos: " + String(pos) + " alt: " + alt
-            //props.setQuery({...props.query, "variant_description": string_var})
         } else {
             setVariantCoordError({...variantCoordError, "error": false, "message": ""})
-            //props.setQuery({...props.query, "variant_description": gnomad})
         }
         
         // If there are no errors on the page
         if (isError === false) {
             props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            props.setQuery({...props.query, "query_ref": true});
+
+            if ((chro === "" && pos === "" && alt === "") && (gnomad !== "")) {
+                var variant = gnomad.split("-")
+                props.setQuery({
+                    ...props.query, 
+                    "query_ref": true,
+                    "chro": variant[0],
+                    "pos": variant[1],
+                    "ref": variant[2],
+                    "alt": variant[3],
+                    "target_gene": props.query["target_gene"].toUpperCase()
+                });
+            } else {
+                props.setQuery({
+                    ...props.query, 
+                    "query_ref": true, 
+                    "target_gene": props.query["target_gene"].toUpperCase()
+                });
+            }
         }  
     };
 
@@ -231,12 +240,12 @@ export default function StepOneForm(props) {
                                         <Grid item xs={12}>
                                             <TextField 
                                                 fullWidth 
-                                                id="gnomad_coor" 
+                                                id="gnomad_coord" 
                                                 label="chr-pos-ref-alt" 
                                                 variant="outlined" 
-                                                value={props.query["gnomad_coor"] || ""}
+                                                value={props.query["gnomad_coord"] || ""}
                                                 error={variantCoordError["error"]}
-                                                onChange={(e) => handleChange('gnomad_coor', e)} 
+                                                onChange={(e) => handleChange('gnomad_coord', e)} 
                                             />
                                             <FormHelperText>{variantCoordError["message"]}</FormHelperText>
                                         </Grid>

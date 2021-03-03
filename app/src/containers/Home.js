@@ -62,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Home() {
+    const defaultAssembliesDict = {
+        "hg19": "",
+        "hg38": ""
+    }
     // TODO: Change this import method!!
     const config = require("../templates.json");
     const [query, setQuery] = useState(defaultQueryDict);
@@ -75,10 +79,11 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState("unfilled");
     const classes = useStyles();
+    const [assemblies, setAssemblies] = useState(defaultAssembliesDict);
 
     useEffect(() => {
         const fetchRefData = async () => {
-            //setLoading(true)
+            setLoading(true)
             const response = await fetch(`https://api.genome.ucsc.edu/getData/sequence?genome=${query["ref_genome"]};chrom=chr${query["chro"]};start=${(parseFloat(query["pos"])-1).toString()};end=${query["pos"]}`);
             const json = await response.json();
             var variant = [query["chro"], query["pos"], json["dna"].toUpperCase(), query["alt"]];
@@ -92,7 +97,7 @@ export default function Home() {
                 "ref_genome": query["ref_genome"],
                 "target_gene": query["target_gene"]
             });
-            //console.log(json);
+            setLoading(false);
         }
         if (query["query_ref"] === true){
             if (query["gnomad_coord"] !== "") {
@@ -112,6 +117,7 @@ export default function Home() {
                 fetchRefData();
             }
             setQuery({...query, "query_ref": false});
+            
         } 
     }, [query]);
 
@@ -133,7 +139,7 @@ export default function Home() {
             setInitialScores(json["scores"]);
             setModifiedScores(json["scores"]);
             setAdditionalInfo(json["additional_info"]);
-            //setVariantInfo(json["variant_info"]);
+            setAssemblies(json["positions"]);
             setLoading(false)
             console.log(json);
         }
@@ -224,6 +230,7 @@ export default function Home() {
                                 additionalInfo={additionalInfo}
                                 comments={comments}
                                 variantInfo={variantInfo}
+                                assemblies={assemblies}
                             />
                             : <Results 
                                 finalResults={finalResults}
@@ -231,6 +238,7 @@ export default function Home() {
                                 additionalInfo={additionalInfo}
                                 comments={comments}
                                 variantInfo={variantInfo}
+                                assemblies={assemblies}
                             />}
                         </Container>
                     </main>

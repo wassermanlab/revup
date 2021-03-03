@@ -55,7 +55,7 @@ def liftover(pos, chro, from_assembly, to_assembly):
             return pos
 
         chro = 'chr' + str(chro)
-        pos = int(pos) - 1
+        pos = int(pos)
 
         lo = LiftOver(from_assembly, to_assembly)
         out = lo.convert_coordinate(chro, pos)

@@ -7,7 +7,6 @@ export const defaultQueryDict = {
     "pos": "",
     "alt": "",
     "gnomad_coord": "",
-    "variant_description":"",
     "c_1_3": "unknown",
     "c_3_1": "unknown",
     "c_3_1_additional": "trio",

@@ -81,45 +81,63 @@ export default function StepThreeForm(props) {
                         </Grid>
                     </Grid>
                     <Grid container justify="center" spacing={3}>
-                            {(function () {
-                                if(props.variantInfo["variant_id"]) {
-                                return (
-                                <React.Fragment>
-                                    <Grid item xs={3}>
-                                        <FormLabel>
-                                            Variant ID:
-                                        </FormLabel>
-                                    </Grid>
-                                    <Grid item xs={7}>
-                                        <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
-                                    </Grid>
-                                </React.Fragment>)
-                                } else {return ("")}
-                            })()}
-                        </Grid>
-                        <Grid container justify="center" spacing={3}>
-                            {(function () {
-                                if(props.variantInfo["patient_id"]) {
-                                return (
-                                <React.Fragment>
-                                    <Grid item xs={3}>
-                                        <FormLabel>
-                                            Patient ID:
-                                        </FormLabel>
-                                    </Grid>
-                                    <Grid item xs={7}>
-                                        <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
-                                    </Grid>
-                                </React.Fragment>)
-                                } else {return ("")}
-                            })()}
-                        </Grid>
+                        {(function () {
+                            if(props.variantInfo["variant_id"]) {
+                            return (
+                            <React.Fragment>
+                                <Grid item xs={3}>
+                                    <FormLabel>
+                                        Variant ID:
+                                    </FormLabel>
+                                </Grid>
+                                <Grid item xs={7}>
+                                    <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
+                                </Grid>
+                            </React.Fragment>)
+                            } else {return ("")}
+                        })()}
+                    </Grid>
+                    <Grid container justify="center" spacing={3}>
+                        {(function () {
+                            if(props.variantInfo["patient_id"]) {
+                            return (
+                            <React.Fragment>
+                                <Grid item xs={3}>
+                                    <FormLabel>
+                                        Patient ID:
+                                    </FormLabel>
+                                </Grid>
+                                <Grid item xs={7}>
+                                    <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
+                                </Grid>
+                            </React.Fragment>)
+                            } else {return ("")}
+                        })()}
+                    </Grid>
+                    {/* 
                     <Grid justify="center" container spacing={3}>
                         <Grid item xs={3}>
                             <FormLabel>Variant Description: </FormLabel>
                         </Grid>
                         <Grid item xs={7}>
                             <FormLabel>{props.variantInfo["variant_description"]}</FormLabel>
+                        </Grid>
+                    </Grid>
+                    */}
+                    <Grid justify="center" container spacing={3}>
+                        <Grid item xs={3}>
+                            <FormLabel>hg19 position: </FormLabel>
+                        </Grid>
+                        <Grid item xs={7}>
+                            <FormLabel>{props.assemblies["hg19"]}</FormLabel>
+                        </Grid>
+                    </Grid>
+                    <Grid justify="center" container spacing={3}>
+                        <Grid item xs={3}>
+                            <FormLabel>hg38 position: </FormLabel>
+                        </Grid>
+                        <Grid item xs={7}>
+                            <FormLabel>{props.assemblies["hg38"]}</FormLabel>
                         </Grid>
                     </Grid>
                     <Grid justify="center" container spacing={3}>
@@ -205,7 +223,7 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                gnomAD AF
+                                                <b>gnomAD AF</b>
                                                 <Tooltip title={"gnomAD Allele Frequency"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
                                                 </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
@@ -296,7 +314,7 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                CADD Score: {props.additionalInfo["c_2_3"]["cadd_score"]}    
+                                                <b>CADD Score:</b> {props.additionalInfo["c_2_3"]["cadd_score"]}    
                                             </TableCell>
                                             <TableCell>
                                                 <TextField fullWidth id="c_2_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_2_3"]} onChange={(e) => handleCommentChange('c_2_3', e)}/>
@@ -362,7 +380,7 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                -
+                                                {props.additionalInfo["c_3_1"] ? props.additionalInfo["c_3_1"]: "-"}
                                             </TableCell>
                                             <TableCell>
                                                 <TextField fullWidth id="c_3_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_3_1"]} onChange={(e) => handleCommentChange('c_3_1', e)}/>
@@ -501,10 +519,10 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                ReMap 2020 Peaks 
+                                                <b>ReMap 2020 Peaks
                                                 <Tooltip title={"ReMap is a database of transcriptional regulators peaks derived from curated ChIP-seq, ChIP-exo, DAP-seq experiments in Human"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
-                                                </Tooltip> : {props.additionalInfo["f_1_1"]["crms"]}
+                                                </Tooltip> :</b> {props.additionalInfo["f_1_1"]["crms"]}
                                             </TableCell>
                                             <TableCell>
                                                 <TextField fullWidth id="f_1_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_1"]} onChange={(e) => handleCommentChange('f_1_1', e)}/>
@@ -526,10 +544,10 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                cCREs
+                                                <b>cCREs
                                                 <Tooltip title={"Candidate cis-Regulatory Elements by ENCODE / SCREEN"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
-                                                </Tooltip> : {props.additionalInfo["f_1_2"]["ccre_descriptions"]}
+                                                </Tooltip> :</b> {props.additionalInfo["f_1_2"]["ccre_descriptions"]}
                                             </TableCell>
                                             <TableCell>
                                                 <TextField fullWidth id="f_1_2_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_2"]} onChange={(e) => handleCommentChange('f_1_2', e)}/>
@@ -551,10 +569,10 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                Supporting Experiment
+                                                <b>Supporting Experiment
                                                 <Tooltip title={"Information by ENCODE / SCREEN"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
-                                                </Tooltip> : {props.additionalInfo["f_1_3"]}
+                                                </Tooltip> :</b> {props.additionalInfo["f_1_3"]}
                                             </TableCell>
                                             <TableCell>
                                                 <TextField fullWidth id="f_1_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_3"]} onChange={(e) => handleCommentChange('f_1_3', e)}/>
@@ -576,10 +594,10 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                Supporting Experiment
+                                                <b>Supporting Experiment
                                                 <Tooltip title={"Information by ENCODE / SCREEN"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
-                                                </Tooltip> : {props.additionalInfo["f_1_4"]}
+                                                </Tooltip> :</b> {props.additionalInfo["f_1_4"]}
                                             </TableCell>
                                             <TableCell>
                                                 <TextField fullWidth id="f_1_4_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["f_1_4"]} onChange={(e) => handleCommentChange('f_1_4', e)}/>
@@ -704,7 +722,7 @@ export default function StepThreeForm(props) {
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Typography variant="caption">
-                            Note: Once you click Next, you will obtain the final score as well as a document outlining the details you just provided
+                            Note: Once you click Submit, you will obtain the final score as well as a document outlining the details you just provided
                         </Typography>
                     </Grid>
                 </Grid>

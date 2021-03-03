@@ -142,10 +142,10 @@ def cadd_score(chr, pos, alt, ref, version):
 def liftover(from_assembly, to_assembly, chr, pos):
     """
     NOTE:   pyliftover uses base 0, whereas coordinate system uses base 1
-            therefore position 27107251 is actially 27107250 in pyliftover
+            therefore position 27107251 is actually 27107250 in pyliftover
     """
     chromosome = 'chr' + str(chr)
-    position = int(pos) - 1
+    position = int(pos)
 
     lo = LiftOver(from_assembly, to_assembly)
     out = lo.convert_coordinate(chromosome, position)
@@ -210,7 +210,8 @@ def ucsc_get_data(**kwargs):
     end = kwargs["pos"]
 
     # Get phyloP Score
-    track_query = "track?track=phyloP100way;genome=hg38;chrom={};start={};end={}".format(chro, start, end)
+    #track_query = "track?track=phyloP100way;genome=hg38;chrom={};start={};end={}".format(chro, start, end)
+    track_query = "track?track=phyloP100wayAll;genome=hg19;chrom={};start={};end={}".format(chro, start, end)
     phylop_query = os.path.join(ucsc_api_url, "getData", track_query)
 
     phylop_results = make_request(phylop_query)
@@ -218,11 +219,13 @@ def ucsc_get_data(**kwargs):
     print(phylop_score)
 
     # Get phastCons Score
-    track_query = "track?track=phastCons100way;genome=hg38;chrom={};start={};end={}".format(chro, start, end)
+    #track_query = "track?track=phastCons100way;genome=hg38;chrom={};start={};end={}".format(chro, start, end)
+    track_query = "track?track=phastCons100way;genome=hg19;chrom={};start={};end={}".format(chro, start, end)
     phastcons_query = os.path.join(ucsc_api_url, "getData", track_query)
 
     phastcons_results = make_request(phastcons_query)
     phastcons_score = phastcons_results[chro][0]["value"]
+    #print(phastcons_results)
     print(phastcons_score)
 
     # Get ENCODE cCRE 
@@ -242,6 +245,83 @@ def ucsc_get_data(**kwargs):
 
     #ccre_score = ccre_results["encodeCcreCombined"][0]["score"]
     #print(ccre_score)
+
+@query.command()
+def test_phastcons():
+    """
+    """
+    hg19_variants = [
+        "17-4890930",
+        "8-102505561",
+        "22-38412781",
+        "6-100040906",
+        "5-172672292",
+        "6-100046804",
+        "14-37130036",
+        "12-121416289"
+    ]
+    hg38_variants = [
+        "17-4987635",
+        "8-101493333",
+        "22-38016774",
+        "6-99593030",
+        "5-173245289",
+        "6-99598928",
+        "14-36660831",
+        "12-120978486"
+    ]
+
+    ucsc_api_url = "https://api.genome.ucsc.edu"
+
+    print("HG19 RESULTS")
+    for variant in hg19_variants:
+        info = variant.split("-")
+        chro = info[0]
+        pos = info[1]
+
+        chro = "chr" + chro
+        start = int(pos) - 1
+        end = pos
+
+        track_query = "track?track=phyloP100wayAll;genome=hg19;chrom={};start={};end={}".format(chro, start, end)
+        phylop_query = os.path.join(ucsc_api_url, "getData", track_query)
+        phylop_results = make_request(phylop_query)
+        phylop_score = phylop_results[chro][0]["value"]
+
+        track_query = "track?track=phastCons100way;genome=hg19;chrom={};start={};end={}".format(chro, start, end)
+        phastcons_query = os.path.join(ucsc_api_url, "getData", track_query)
+        phastcons_results = make_request(phastcons_query)
+        phastcons_score = phastcons_results[chro][0]["value"]
+
+        print("variant: {}".format(variant))
+        print("phastcons: {}".format(phastcons_score))
+        print("phylop: {}".format(phylop_score))
+        print("\n")
+
+    print("\n\n")
+    print("HG38 RESULTS")
+    for variant in hg38_variants:
+        info = variant.split("-")
+        chro = info[0]
+        pos = info[1]
+
+        chro = "chr" + chro
+        start = int(pos) - 1
+        end = pos
+        track_query = "track?track=phyloP100way;genome=hg38;chrom={};start={};end={}".format(chro, start, end)
+        phylop_query = os.path.join(ucsc_api_url, "getData", track_query)
+        phylop_results = make_request(phylop_query)
+        phylop_score = phylop_results[chro][0]["value"]
+
+        track_query = "track?track=phastCons100way;genome=hg38;chrom={};start={};end={}".format(chro, start, end)
+        phastcons_query = os.path.join(ucsc_api_url, "getData", track_query)
+        phastcons_results = make_request(phastcons_query)
+        phastcons_score = phastcons_results[chro][0]["value"]
+        print("variant: {}".format(variant))
+        print("phastcons: {}".format(phastcons_score))
+        print("phylop: {}".format(phylop_score))
+        print("\n")
+
 
 
 @query.command()

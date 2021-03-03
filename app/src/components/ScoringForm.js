@@ -53,11 +53,6 @@ export default function ScoringForm(props) {
     const classes = useStyles();
     const steps = getSteps();
     const [activeStep, setActiveStep] = useState(0);
-    /*
-    const handleReset = () => {
-        setActiveStep(0);
-        props.setQuery(props.defaultQueryDict)
-    }*/
 
     function NewlineText(props) {
         const text = props.text;
@@ -92,6 +87,7 @@ export default function ScoringForm(props) {
             case 2:
                 return (
                     <StepThreeForm 
+                        assemblies={props.assemblies}
                         query={props.query}
                         setQuery={props.setQuery}
                         initialScores={props.initialScores}
