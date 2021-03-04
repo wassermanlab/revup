@@ -109,7 +109,7 @@ REMAP_VARIANT_FILE = "Remap_Variant_interest.tsv"
 
 
 C_3_1_LABELS = {
-    "trio": "Variant segregate as expected in a trio (parents and proband)",
-    "small_family": "Variant segregate as expected in a small family (trio and 1 or 2 siblings)",
-    "large_family": "Variant segregate as expected in a large family ** (over 5 individuals)"
+    "trio": "Variant segregates as expected in a trio (parents and proband)",
+    "small_family": "Variant segregates as expected in a small family (trio and 1 or 2 siblings)",
+    "large_family": "Variant segregates as expected in a large family ** (over 5 individuals)"
 }
