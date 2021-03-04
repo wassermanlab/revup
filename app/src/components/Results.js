@@ -215,6 +215,7 @@ export default function Results(props) {
                                     <FormLabel>{props.assemblies["hg38"]}</FormLabel>
                                 </Grid>
                             </Grid>
+                            {/* 
                             <Grid justify="center" container spacing={3}>
                                 <Grid item xs={3}>
                                     <FormLabel>Reference Assembly:</FormLabel>
@@ -223,6 +224,7 @@ export default function Results(props) {
                                     <FormLabel>{props.variantInfo["ref_genome"]}</FormLabel>
                                 </Grid> 
                             </Grid>
+                            */}
                             <Grid justify="center" container spacing={3}>
                                 <Grid item xs={3}>
                                     <FormLabel>Target Gene:</FormLabel>
