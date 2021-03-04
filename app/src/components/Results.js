@@ -155,21 +155,39 @@ export default function Results(props) {
                                     </Typography>
                                 </Grid> 
                             </Grid>
-                            <Grid justify="center" container spacing={3}>
-                                <Grid item xs={3}>
-                                    <FormLabel>Patient ID:</FormLabel>
-                                </Grid> 
-                                <Grid item xs={7}>
-                                    <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
-                                </Grid> 
+                            <Grid container justify="center" spacing={3}>
+                                {(function () {
+                                    if(props.variantInfo["variant_id"]) {
+                                    return (
+                                    <React.Fragment>
+                                        <Grid item xs={3}>
+                                            <FormLabel>
+                                                Variant ID:
+                                            </FormLabel>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
+                                        </Grid>
+                                    </React.Fragment>)
+                                    } else {return ("")}
+                                })()}
                             </Grid>
-                            <Grid justify="center" container spacing={3}>
-                                <Grid item xs={3}>
-                                    <FormLabel>Variant ID:</FormLabel>
-                                </Grid> 
-                                <Grid item xs={7}>
-                                    <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
-                                </Grid> 
+                            <Grid container justify="center" spacing={3}>
+                                {(function () {
+                                    if(props.variantInfo["patient_id"]) {
+                                    return (
+                                    <React.Fragment>
+                                        <Grid item xs={3}>
+                                            <FormLabel>
+                                                Patient ID:
+                                            </FormLabel>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
+                                        </Grid>
+                                    </React.Fragment>)
+                                    } else {return ("")}
+                                })()}
                             </Grid>
                             {/* 
                             <Grid justify="center" container spacing={3}>

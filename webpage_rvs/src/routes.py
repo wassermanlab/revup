@@ -156,7 +156,7 @@ def calculate_initial_scores():
             response["additional_info"]["f_1_3"] = "ChIA-PET"
         else:
             response["scores"]["f_1_3"] = "0"
-            response["additional_info"]["f_1_3"] = "None"
+            response["additional_info"]["f_1_3"] = "-"
 
         # Check eQTL
         if "eQTL" in snv.ccre_methods:
@@ -164,7 +164,7 @@ def calculate_initial_scores():
             response["additional_info"]["f_1_4"] = "eQTL"
         else:
             response["scores"]["f_1_4"] = "0"
-            response["additional_info"]["f_1_4"] = "None"
+            response["additional_info"]["f_1_4"] = "-"
 
         # Check c3.1
         if results["c_3_1"] == "yes":

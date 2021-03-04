@@ -61,7 +61,7 @@ SCREEN_URL = "https://api.wenglab.org/screen_graphql/graphql"
 
 GNOMAD_ALLELE_QUERY = """
 query getVariant($variantId: String!) {
-    variant(variantId: $variantId, dataset: gnomad_r2_1) {
+    variant(variantId: $variantId, dataset: gnomad_r3) {
         exome {
             ac
             an
@@ -98,7 +98,7 @@ CADD_CUTOFF = 15
 AF_CUTOFF = 0.05
 
 UCSC_ASSEMBLY = "hg38"
-GNOMAD_ASSEMBLY = "hg19"
+GNOMAD_ASSEMBLY = "hg38"
 CADD_ASSEMBLY = "hg38"
 REMAP_ASSEMBLY = "hg38"
 CADD_VERSION = "GRCh38-v1.6"

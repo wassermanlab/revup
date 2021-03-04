@@ -80,7 +80,7 @@ export default function StepTwoForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             {(function () {
-                                if(props.query["variant_id"]) {
+                                if(props.variantInfo["variant_id"]) {
                                 return (
                                 <React.Fragment>
                                     <Grid item xs={3}>
@@ -97,7 +97,7 @@ export default function StepTwoForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             {(function () {
-                                if(props.query["patient_id"]) {
+                                if(props.variantInfo["patient_id"]) {
                                 return (
                                 <React.Fragment>
                                     <Grid item xs={3}>
@@ -328,7 +328,7 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>{props.variantInfo["variant_name"]} introduction, in a model organism or a cell line, results in a phenotype that is consistent with the human diseases</FormLabel>
+                                    <FormLabel>{props.variantInfo["variant_name"]} introduction, in a model organism, results in a phenotype that is consistent with the human diseases</FormLabel>
                                 </Grid>
                                 <Grid item xs={5}>
                                     <FormControl fullWidth className={classes.formControl}>

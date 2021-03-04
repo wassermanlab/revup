@@ -90,7 +90,7 @@ export default function Home() {
             setVariantInfo({
                 ...variantInfo,
                 "patient_id": query["patient_id"],
-                "variant_id": query["patient_id"],
+                "variant_id": query["variant_id"],
                 "variant_name": `${query["ref_genome"]}.chr${query["chro"]}:${query["pos"]}.${json["dna"].toUpperCase()}>${query["alt"]}`, 
                 "variant_pos": `${query["ref_genome"]}.chr${query["chro"]}:${query["pos"]}`,
                 "variant_description": variant.join("-"),
