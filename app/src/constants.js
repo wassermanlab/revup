@@ -24,7 +24,7 @@ export const defaultQueryDict = {
     "f_2_2": "unknown",
     "f_3_1": "unknown",
     "f_4_1": "unknown",
-    "new_c": "unknown",
+    "genotype": "unknown",
     "query_ref": false,
     "calc_scores": false
 }
@@ -36,7 +36,8 @@ export const defaultInfo = {
     "variant_pos": "",
     "variant_description": "",
     "ref_genome": "",
-    "target_gene": ""
+    "target_gene": "",
+    "genotype": "",
 }
 
 export const defaultScoresDict = {
@@ -126,5 +127,16 @@ export const defaultResultsDict = {
 
 export const MAX_CLINICAL_SCORE = 114.0;
 export const MAX_FUNCTIONAL_SCORE = 38.0;
+
+export const CLINICAL_RANGE_MAXIMUMS = {
+    "weak": 25.0,
+    "moderate": 55.0,
+    "strong": 114.0,
+}
+export const FUNCTIONAL_RANGE_MAXIMUMS = {
+    "weak": 9.0,
+    "moderate": 30.0,
+    "strong": 38.0
+}
 
 export const UCSC_API_URL = "https://api.genome.ucsc.edu/getData/sequence?"

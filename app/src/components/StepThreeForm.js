@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
             display: "flex",
             height: "100%"
           },
+        display: "flex",
+        alignContent: "center",
+        justify: "center",
     }, 
     paper: {
         width: "100%",
@@ -43,13 +46,11 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: "auto"
 
     },
-    full_width: {
-        width: "100%",
-    }
 }))
 
 
 export default function StepThreeForm(props) {
+    window.scrollTo(0, 0)
     const classes = useStyles();
 
     const handleChange = (key, event) => {
@@ -75,8 +76,8 @@ export default function StepThreeForm(props) {
                 <Paper className={classes.paper}>
                     <Grid container justify="center" spacing={3}>
                         <Grid item xs={10}>
-                            <Typography variant="h5" align="left" gutterBottom>
-                                Variant Details
+                            <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                <b>Variant Details</b>
                             </Typography>
                         </Grid>
                     </Grid>
@@ -150,6 +151,14 @@ export default function StepThreeForm(props) {
                         </Grid>
                     </Grid>
                     */}
+                    <Grid container justify="center" spacing={3}>
+                            <Grid item xs={3}>
+                                <FormLabel>Patient's Genotype:</FormLabel>
+                            </Grid>
+                            <Grid item xs={7}>
+                                <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
+                            </Grid>
+                        </Grid>
                     <Grid justify="center" container spacing={3}>
                         <Grid item xs={3}>
                             <FormLabel>Target Gene: </FormLabel>
@@ -158,11 +167,9 @@ export default function StepThreeForm(props) {
                             <FormLabel><i>{props.variantInfo["target_gene"]}</i></FormLabel>
                         </Grid>
                     </Grid>
-                    <Grid justify="center" container spacing={3}>
-                        <Grid item xs={10}>
-                            <Divider />
-                        </Grid>
-                    </Grid>
+                    <br></br>
+                    <Divider />
+                    <br></br>
                     <Grid justify="center" container spacing={3}>
                         <Grid item xs={10}>
                             <Typography variant="h5">Clinical Table</Typography>
@@ -201,9 +208,15 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                <b>phyloP Score:</b> {props.additionalInfo["c_1_1"]["phylop"]}
+                                                <b>phyloP Score</b>
+                                                <Tooltip title={"phyloP score > 15 indicates variant is more conserved"}>
+                                                    <InfoOutlinedIcon fontSize="small"/>
+                                                </Tooltip> : {props.additionalInfo["c_1_1"]["phylop"]}
                                                 <br></br>
-                                                <b>phastCons Score:</b> {props.additionalInfo["c_1_1"]["phastcons"]}
+                                                <b>phastCons Score</b> 
+                                                <Tooltip title={"phastCons score > 0.5 indicates variant is more conserved"}>
+                                                    <InfoOutlinedIcon fontSize="small"/>
+                                                </Tooltip> : {props.additionalInfo["c_1_1"]["phastcons"]}
                                             </TableCell>
                                             <TableCell>
                                                 <TextField fullWidth id="c_1_1_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_1_1"]} onChange={(e) => handleCommentChange('c_1_1', e)}/>
@@ -226,7 +239,7 @@ export default function StepThreeForm(props) {
                                             </TableCell>
                                             <TableCell>
                                                 <b>gnomAD AF</b>
-                                                <Tooltip title={"gnomAD Allele Frequency"}>
+                                                <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
                                                 </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
                                             </TableCell>
@@ -316,7 +329,10 @@ export default function StepThreeForm(props) {
                                                 </FormControl>
                                             </TableCell>
                                             <TableCell>
-                                                <b>CADD Score:</b> {props.additionalInfo["c_2_3"]["cadd_score"]}    
+                                                <b>CADD Score</b> 
+                                                <Tooltip title={"CADD can quantitatively prioritize functional, deleterious, and disease causal variants across a wide range of functional categories, effect sizes and genetic architectures and can be used prioritize causal variation in both research and clinical settings. CADD score > 15 indicates variant is deleterious"}>
+                                                    <InfoOutlinedIcon fontSize="small"/>
+                                                </Tooltip> : {props.additionalInfo["c_2_3"]["cadd_score"]}    
                                             </TableCell>
                                             <TableCell>
                                                 <TextField fullWidth id="c_2_3_comments" label="Comments" multiline rows={2} variant="outlined" value={props.comments["c_2_3"]} onChange={(e) => handleCommentChange('c_2_3', e)}/>
@@ -522,7 +538,7 @@ export default function StepThreeForm(props) {
                                             </TableCell>
                                             <TableCell>
                                                 <b>ReMap 2020 Peaks
-                                                <Tooltip title={"ReMap is a database of transcriptional regulators peaks derived from curated ChIP-seq, ChIP-exo, DAP-seq experiments in Human"}>
+                                                <Tooltip title={"ReMap is a database of transcriptional regulators peaks derived from curated ChIP-seq, ChIP-exo, DAP-seq experiments in Human. Intersection with one or more ReMap 2020 peaks indicates variant is implicated in TF binding"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
                                                 </Tooltip> :</b> {props.additionalInfo["f_1_1"]["crms"]}
                                             </TableCell>
@@ -547,7 +563,7 @@ export default function StepThreeForm(props) {
                                             </TableCell>
                                             <TableCell>
                                                 <b>cCREs
-                                                <Tooltip title={"Candidate cis-Regulatory Elements by ENCODE / SCREEN"}>
+                                                <Tooltip title={"Candidate cis-Regulatory Elements by ENCODE / SCREEN. Intersection with a cCRE in SCREEN indicates variant localizes to a regulatory region"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
                                                 </Tooltip> :</b> {props.additionalInfo["f_1_2"]["ccre_descriptions"]}
                                             </TableCell>
@@ -572,7 +588,7 @@ export default function StepThreeForm(props) {
                                             </TableCell>
                                             <TableCell>
                                                 <b>Supporting Experiment
-                                                <Tooltip title={"Information by ENCODE / SCREEN"}>
+                                                <Tooltip title={"Information by ENCODE / SCREEN. cCRE and target genes linked based on Hi-C or CHIA-PET"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
                                                 </Tooltip> :</b> {props.additionalInfo["f_1_3"]}
                                             </TableCell>
@@ -597,7 +613,7 @@ export default function StepThreeForm(props) {
                                             </TableCell>
                                             <TableCell>
                                                 <b>Supporting Experiment
-                                                <Tooltip title={"Information by ENCODE / SCREEN"}>
+                                                <Tooltip title={"Information by ENCODE / SCREEN. cCRE and targete genes linked based on eQTL"}>
                                                     <InfoOutlinedIcon fontSize="small"/>
                                                 </Tooltip> :</b> {props.additionalInfo["f_1_4"]}
                                             </TableCell>

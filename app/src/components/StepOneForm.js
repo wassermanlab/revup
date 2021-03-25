@@ -27,8 +27,9 @@ const useStyles = makeStyles((theme) => ({
             //width: '20%',
             //width: '25ch',
             display: "flex",
-            height: "100%"
+            height: "100%",
           },
+        display: "flex",
         alignContent: "center",
         justify: "center",
     }, 
@@ -36,21 +37,19 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         height: "100%",
         padding: "2%",
+        //backgroundColor: '#EFEFEF',
         
     },
     grid: {
         padding: "0px",
         marginRight: "auto",
         marginLeft: "auto"
-
     },
-    full_width: {
-        width: "100%",
-    }
 }))
 
 
 export default function StepOneForm(props) {
+    window.scrollTo(0, 0)
     const classes = useStyles();
     const [targetGeneError, setTargetGeneError] = useState({
         "error": false,
@@ -84,11 +83,11 @@ export default function StepOneForm(props) {
             "patient_id": "Test patient",
             "variant_id": "Test variant",
             "chro": "17",
-            "pos": "4890930",
+            "pos": "4987635",
             "alt": "T",
             "target_gene": "CAMTA2",
-            "ref_genome": "hg19",
-            "gnomad_coor": "17-4890930-C-T"
+            "ref_genome": "hg38",
+            "gnomad_coor": "17-4987635-C-T"
         })
     }
    
@@ -150,7 +149,7 @@ export default function StepOneForm(props) {
         <React.Fragment>
             <form className={classes.root} autoComplete="off">
                 <Grid className={classes.grid} container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
-                    <Paper className={classes.paper}>
+                    <Paper className={classes.paper} elevation={0}>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={5}>
                                 <TextField 
@@ -182,8 +181,8 @@ export default function StepOneForm(props) {
                             <Grid item xs={5}>
                                 <FormControl component="fieldset" error={refGenomeError["error"]}>
                                     <RadioGroup aria-label="ref_genome" id="ref_genome" name="ref_genome" value={props.query["ref_genome"]} onChange={(e) => handleChange('ref_genome', e)} row>
-                                        <FormControlLabel value="hg19" control={<Radio />} label="GRCh37/hg19" row="True" />
                                         <FormControlLabel value="hg38" control={<Radio />} label="GRCh38/hg38" row="True" />
+                                        <FormControlLabel value="hg19" control={<Radio />} label="GRCh37/hg19" row="True" />
                                     </RadioGroup>
                                     <FormHelperText>{refGenomeError["message"]}</FormHelperText>
                                 </FormControl>
@@ -276,15 +275,17 @@ export default function StepOneForm(props) {
                             </Grid>
                             <Grid item xs={8}>
                                 <Link href="#" onClick={handleExample}>
-                                    17-4890930-C-T
+                                    17-4987635-C-T
                                 </Link>
                             </Grid>
                         </Grid>
+                        <br></br>
+                        <Divider />
+                        <br></br>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
-                                <Divider />
-                                <Typography variant="h5" align="left" gutterBottom>
-                                    Variant Information
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Variant Information</b>
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -294,7 +295,7 @@ export default function StepOneForm(props) {
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
-                                    <Select id="new_c" value={props.query["new_c"] ? props.query["new_c"] : ""} onChange={(e) => handleChange('new_c', e)} variant="outlined">
+                                    <Select id="genotype" value={props.query["genotype"] ? props.query["genotype"] : ""} onChange={(e) => handleChange('genotype', e)} variant="outlined">
                                         <MenuItem value={"heterozygous"}>Heterozygous</MenuItem>
                                         <MenuItem value={"homozygous"}>Homozygous</MenuItem>
                                         <MenuItem value={"compound_het"}>Compound Het</MenuItem>

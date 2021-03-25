@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
             display: "flex",
             height: "100%"
           },
+        display: "flex",
+        alignContent: "center",
+        justify: "center",
     },
     paper: {
         width: "100%",
@@ -36,13 +39,11 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: "auto"
 
     },
-    full_width: {
-        width: "100%",
-    }
 }))
 
 
 export default function StepTwoForm(props) {
+    window.scrollTo(0, 0)
     const classes = useStyles();
 
     const handleNext = () => {
@@ -66,6 +67,7 @@ export default function StepTwoForm(props) {
         }
     }
 
+
     return (
         <React.Fragment>
             <form className={classes.root} autoComplete="off">
@@ -73,8 +75,8 @@ export default function StepTwoForm(props) {
                     <Paper className={classes.paper}>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
-                                <Typography variant="h5" align="left" gutterBottom>
-                                    Variant Details
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Variant Details</b>
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -130,17 +132,27 @@ export default function StepTwoForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={3}>
+                                <FormLabel>Patient's Genotype:</FormLabel>
+                            </Grid>
+                            <Grid item xs={7}>
+                                <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={3}>
                                 <FormLabel>Target Gene:</FormLabel>
                             </Grid>
                             <Grid item xs={7}>
                                 <FormLabel><i>{props.variantInfo["target_gene"]}</i></FormLabel>
                             </Grid>
                         </Grid>
+                        <br></br>
+                        <Divider />
+                        <br></br>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
-                                <Divider />
-                                <Typography variant="h5" align="left" gutterBottom>
-                                    Gene Details
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Gene Details</b>
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -186,11 +198,13 @@ export default function StepTwoForm(props) {
                                 </FormControl>
                             </Grid>
                         </Grid>
+                        <br></br>
+                        <Divider />
+                        <br></br>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={10}>
-                                <Divider />
-                                <Typography variant="h5" align="left" gutterBottom>
-                                    Functional Analyses
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Functional Analyses</b>
                                 </Typography>
                             </Grid>
                         </Grid>
