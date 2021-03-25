@@ -25,11 +25,12 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(1),
     },
     greyBackground: {
-        backgroundColor: '#EFEFEF',
+        backgroundColor: '#F5F5F4',
         padding: '50px',
     },
     paper: {
         padding: theme.spacing(2),
+        backgroundColor: '#F5F5F4',
         color: theme.palette.text.secondary,
     },
     centered: {
@@ -59,10 +60,15 @@ export default function ScoringForm(props) {
         return text.split('\n').map(str => <p key={str}>{str}</p>);
     }
     function getSteps() {
-        return [
+        /*return [
             'Step 1\nIncludes questions about the variant', 
             'Step 2\nIncludes questions about the gene and the variant', 
             'Step 3\nAllows you to modify your answers and add comments / remarks'
+        ];*/
+        return [
+            'Includes questions about the variant', 
+            'Includes questions about the gene and the variant', 
+            'Allows you to modify your answers and add comments / remarks'
         ];
     }
     function getStepContent(stepIndex) {
@@ -109,7 +115,8 @@ export default function ScoringForm(props) {
     return (
         <React.Fragment>
             <div className={classes.root}>
-                <Container maxWidth="lg" className={classes.greyBackground}>
+                {/* <Container maxWidth="lg" className={classes.greyBackground}>*/}
+                 <Container maxWidth="lg">
                     <Stepper className={classes.greyBackground} activeStep={activeStep} alternativeLabel>
                         {steps.map((label) => (
                             <Step key={label}>

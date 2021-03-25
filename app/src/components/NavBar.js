@@ -7,6 +7,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import HomeIcon from '@material-ui/icons/Home';
 import PhoneIcon from '@material-ui/icons/Phone';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import {
     AppBar,
     Divider,
@@ -84,10 +85,8 @@ export default function NavBar(props) {
     return (
         <div className={classes.root}>
             <AppBar 
-            position="fixed"
-            className={clsx(classes.appBar, {
-                [classes.appBarShift]: props.open,
-                })}
+                position="fixed"
+                className={clsx(classes.appBar, {[classes.appBarShift]: props.open,})}
             >
                 <Toolbar>
                     <IconButton
@@ -96,19 +95,14 @@ export default function NavBar(props) {
                     onClick={handleDrawerOpen}
                     edge="start"
                     className={clsx(classes.menuButton, props.open && classes.hide)}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" className={classes.title}>
-                    <Link href="/home" color="inherit" underline="none">
-                        Regulatory Variant Scoring System
-                    </Link>
-                </Typography>
-                {/* 
-                <Link href="/about" color="inherit" underline="none">
-                    <Button color="inherit">About <InfoIcon/></Button>
-                </Link>
-                */}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link href="/home" color="inherit" underline="none">
+                            Rev<b>UP</b>
+                        </Link>
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -121,9 +115,9 @@ export default function NavBar(props) {
                 }}
             >
                 <div className={classes.drawerHeader}>
-                <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
-                </IconButton>
+                    <IconButton onClick={handleDrawerClose}>
+                        <ChevronLeftIcon />
+                    </IconButton>
                 </div>
                 <Divider />
                 <List>
@@ -131,6 +125,12 @@ export default function NavBar(props) {
                         <ListItem button key="home">
                             <ListItemIcon><HomeIcon /></ListItemIcon>
                             <ListItemText primary="Home"/>
+                        </ListItem>
+                    </Link>
+                    <Link href="/scoring" color="inherit" underline="none">
+                        <ListItem button key="scoring">
+                            <ListItemIcon><AssessmentIcon /></ListItemIcon>
+                            <ListItemText primary="Score Variants"/>
                         </ListItem>
                     </Link>
                     <Link href="/about" color="inherit" underline="none">
