@@ -373,7 +373,7 @@ export default function StepTwoForm(props) {
                     </Paper>
                 </Grid>
             </form>
-            <div>
+            <div style={{display:'flex', justifyContent:'flex-end', alignItems:'flex-end'}}>
                 <Button onClick={handleBack} className={classes.backButton}>
                     Back
                 </Button>

@@ -329,9 +329,9 @@ export default function StepOneForm(props) {
                                 <Grid item xs={5}>
                                     <FormControl component="fieldset">
                                         <RadioGroup aria-label="c_3_1_additional" name="c_3_1_additional" value={props.query["c_3_1_additional"] ? props.query["c_3_1_additional"] : " "} onChange={(e) => handleChange('c_3_1_additional', e)}>
-                                            <FormControlLabel value="trio" control={<Radio />} label="Variant segregate as expected in a trio ** (parents and proband)"/>
-                                            <FormControlLabel value="small_family" control={<Radio />} label="Variant segregate as expected in a small family ** (trio and 1 or 2 siblings)"/>
-                                            <FormControlLabel value="large_family" control={<Radio />} label="Variant segregate as expected in a large family ** (over 5 individuals)"/>
+                                            <FormControlLabel value="trio" control={<Radio />} label="Variant segregates as expected in a trio ** (parents and proband)"/>
+                                            <FormControlLabel value="small_family" control={<Radio />} label="Variant segregates as expected in a small family ** (trio and 1 or 2 siblings)"/>
+                                            <FormControlLabel value="large_family" control={<Radio />} label="Variant segregates as expected in a large family ** (over 5 individuals)"/>
                                         </RadioGroup>
                                         <FormHelperText>** Both parental samples were shown through identity testing to be the biological parents of the patient</FormHelperText>
                                     </FormControl>
@@ -375,7 +375,7 @@ export default function StepOneForm(props) {
                 </Grid>
             </form>
             
-            <div>
+            <div style={{display:'flex', justifyContent:'flex-end', alignItems:'flex-end'}}>
                 <Button variant="contained" color="primary" onClick={handleNext}>
                     Next
                 </Button>

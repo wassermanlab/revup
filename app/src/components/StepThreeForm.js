@@ -737,25 +737,22 @@ export default function StepThreeForm(props) {
                         </Grid>
                     </Grid>
                 </Paper>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Typography variant="caption">
-                            Note: Once you click Submit, you will obtain the final score as well as a document outlining the details you just provided
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Button onClick={handleBack} className={classes.backButton}>
-                            Back
-                        </Button>
-                        <Button variant="contained" color="primary" onClick={handleNext}>
-                            Submit
-                        </Button>
-                    </Grid>
-                </Grid>
             </Grid>
             </form>  
+
+            <div style={{display:'flex', justifyContent:'flex-end', alignItems:'flex-end'}}>
+                <Typography variant="caption">
+                    Note: Once you click Submit, you will obtain the final score as well as a document outlining the details you just provided
+                </Typography>
+            </div>
+            <div style={{display:'flex', justifyContent:'flex-end', alignItems:'flex-end'}}>
+                <Button onClick={handleBack} className={classes.backButton}>
+                    Back
+                </Button>
+                <Button variant="contained" color="primary" onClick={handleNext}>
+                    Submit
+                </Button>
+            </div>
         </React.Fragment>
     )
 }
