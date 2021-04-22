@@ -1,6 +1,7 @@
 import {Chart} from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
 import 'chartjs-plugin-datalabels';
+import ReactHtmlParser from 'react-html-parser';
 
 import {
     MAX_FUNCTIONAL_SCORE,
@@ -36,6 +37,7 @@ export function getLineData(finalResults) {
             data: finalResults["standard_rve"]["y"]
           }
         ],
+        backgroundColor: "#FFFFFF"
     };
     return lineData
 }
@@ -138,6 +140,10 @@ export function getDoughnutData(score, type) {
             backgroundColor: [
                 background_color,
                 "#D1D5D5",
+            ],
+            borderColor: [
+                background_color,
+                "#D1D5D5",
             ]
         }],
     }
@@ -145,7 +151,36 @@ export function getDoughnutData(score, type) {
 }
 
 
-export function getDoughnutOptions(score) {
+export function getDoughnutOptions(score, type) {
+    var weak_lim = 0;
+    var mod_lim = 0;
+    var evidence = "";
+    var titleText = "";
+    //var subtitleText = "";
+    //var subtitleText2 = "";
+
+    // Determine label
+    if (type === 'clinical') {
+        titleText = ["Clinical Score", "Is there a causal link between genotype and phenotype?"];
+        //subtitleText = "Is there a causal link between";
+        //subtitleText2 = "genotype and phenotype?";
+        weak_lim = CLINICAL_RANGE_MAXIMUMS["weak"]
+        mod_lim = CLINICAL_RANGE_MAXIMUMS["moderate"]
+    } else if (type === 'functional') {
+        titleText = ["Functional Score", "Does the variant have a damaging effect on the gene?"];
+        //subtitleText = "Does the variant have a damaging effect on the gene?";
+        weak_lim = FUNCTIONAL_RANGE_MAXIMUMS["weak"]
+        mod_lim = FUNCTIONAL_RANGE_MAXIMUMS["moderate"]
+    }
+
+    if(score <= weak_lim && score >= 0.0) {
+        evidence = "Weak Evidence";
+    } else if(score > weak_lim && score <= mod_lim) {
+        evidence = "Moderate Evidence";
+    } else if(score > mod_lim) {
+        evidence = "Strong Evidence";
+    }
+
     Chart.pluginService.register({
         beforeDraw: function (chart) {
           if (chart.config.options.elements.center) {
@@ -181,7 +216,7 @@ export function getDoughnutOptions(score) {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-            var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 1.3);
+            var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 1.5);
             ctx.font = fontSizeToUse+"px " + fontStyle;
             ctx.fillStyle = color;
       
@@ -195,12 +230,61 @@ export function getDoughnutOptions(score) {
     const doughnutOptions = {
         circumference: Math.PI,
         rotation : Math.PI,
-        cutoutPercentage : 60, // precent
+        cutoutPercentage : 60, // percent
         elements: {
             center: {
               text: score,
             }
         },
+        title: {
+            display: true,
+            text: titleText,
+            fontSize: 12,
+            fontStyle: 'normal'
+        },
+        layout: {
+            padding: 2
+        },
+        scales: {
+            xAxes: [
+                /*{
+                scaleLabel: {
+                    display: true,
+                    labelString: subtitleText,
+                    padding: 0 
+                },
+                gridLines: {
+                    drawBorder: false,
+                },
+            },{
+                scaleLabel: {
+                    display: true,
+                    labelString: subtitleText2,
+                    padding: 0
+                },
+                gridLines: {
+                    drawBorder: false,
+                },
+            },*/{
+                scaleLabel: {
+                    display: true,
+                    labelString: evidence,
+                    padding: 0
+                },
+                gridLines: {
+                    drawBorder: false,
+                },
+            }],
+            display : true,
+            gridLines : {
+                display : false,
+                color : 'transparent'
+            },
+            ticks : {
+                display : false
+            },
+        },
+        maintainAspectRatio: false,
         plugins: {
             datalabels: {
                 display: false,
@@ -228,14 +312,14 @@ export function getDoughnutOptions(score) {
                     }
                     return value;
                 }
-            }   
+            } 
         },
         legend: {
             display: false
         },
         tooltips: {
             enabled: false
-        }
+        },
     }
     return doughnutOptions;
 }

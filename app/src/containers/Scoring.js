@@ -69,17 +69,30 @@ export default function Scoring() {
     // TODO: Change this import method!!
     const config = require("../templates.json");
     const [query, setQuery] = useState(defaultQueryDict);
+    const [variantInfo, setVariantInfo] = useState(defaultInfo);
     const [initialScores, setInitialScores] = useState(defaultScoresDict);
     const [modifiedScores, setModifiedScores] = useState(defaultScoresDict);
     const [additionalInfo, setAdditionalInfo] = useState(defaultScoresDict);
+    const [assemblies, setAssemblies] = useState(defaultAssembliesDict);
+    const [clinicalEvidenceLabels, setClinicalEvidenceLabels] = useState(defaultValsDict);
+    const [functionalEvidenceLabels, setFunctionalEvidenceLabels] = useState(defaultValsDict);
+
+
+
+
+
+    //const [query, setQuery] = useState(defaultQueryDict);
+    //const [initialScores, setInitialScores] = useState(defaultScoresDict);
+    //const [modifiedScores, setModifiedScores] = useState(defaultScoresDict);
+    //const [additionalInfo, setAdditionalInfo] = useState(defaultScoresDict);
     const [comments, setComments] = useState(defaultValsDict);
-    const [variantInfo, setVariantInfo] = useState(defaultInfo);
+    //const [variantInfo, setVariantInfo] = useState(defaultInfo);
     const [finalResults, setFinalResults] = useState(defaultResultsDict);
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState("unfilled");
     const classes = useStyles();
-    const [assemblies, setAssemblies] = useState(defaultAssembliesDict);
+    //const [assemblies, setAssemblies] = useState(defaultAssembliesDict);
 
     useEffect(() => {
         const fetchRefData = async () => {
@@ -127,6 +140,11 @@ export default function Scoring() {
     useEffect(() => {
         const fetchInitialData = async () => {
             setLoading(true)
+            const data = {
+                "variant_info": variantInfo,
+                "query": query
+            }
+            /*
             const response = await fetch(config.backend_url + '/initial_scores', {
                 method: 'POST',
                 body: JSON.stringify(query),
@@ -142,6 +160,26 @@ export default function Scoring() {
             setModifiedScores(json["scores"]);
             setAdditionalInfo(json["additional_info"]);
             setAssemblies(json["positions"]);
+            setLoading(false)
+            console.log(json);
+            */
+            const response = await fetch(config.backend_url + '/initial_scores', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    //'X-CSRFToken': await getCsrfToken(),
+                },
+                //credentials: 'include'
+            });
+            const json = await response.json();
+            setInitialScores(json["initial_scores"]);
+            setModifiedScores(json["initial_scores"]);
+            setAdditionalInfo(json["additional_info"]);
+            setAssemblies(json["positions"]);
+            setClinicalEvidenceLabels(json["evidence_description"]["clinical"]);
+            setFunctionalEvidenceLabels(json["evidence_description"]["functional"]);
             setLoading(false)
             console.log(json);
         }
@@ -214,6 +252,8 @@ export default function Scoring() {
                                 comments={comments}
                                 variantInfo={variantInfo}
                                 assemblies={assemblies}
+                                clinicalEvidenceLabels={clinicalEvidenceLabels}
+                                functionalEvidenceLabels={functionalEvidenceLabels}
                             />
                             : <Results 
                                 finalResults={finalResults}
@@ -222,6 +262,8 @@ export default function Scoring() {
                                 comments={comments}
                                 variantInfo={variantInfo}
                                 assemblies={assemblies}
+                                clinicalEvidenceLabels={clinicalEvidenceLabels}
+                                functionalEvidenceLabels={functionalEvidenceLabels}
                             />}
                         </Container>
                     </main>

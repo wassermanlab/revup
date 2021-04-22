@@ -13,7 +13,9 @@ from pyliftover import LiftOver
 
 from webpage_rvs.src.constants import (
     LOGGING_FORMAT,
-    RVE_SCORES_FILE
+    RVE_SCORES_FILE,
+    CLINICAL_DESCRIPTIONS,
+    FUNCTIONAL_DESCRIPTIONS
 )
 
 logging.basicConfig(format=LOGGING_FORMAT, stream=sys.stderr, level=logging.INFO)
@@ -100,3 +102,28 @@ def get_rve_density():
     }
 
     return rve_density
+
+
+def get_evidence_labels(variant_pos, variant_name, target_gene):
+    """
+    """
+    clinical_descriptions = CLINICAL_DESCRIPTIONS
+    functional_descriptions = FUNCTIONAL_DESCRIPTIONS
+    for key, val in clinical_descriptions.items():
+        clinical_descriptions[key] = val.format(
+            variant_pos=variant_pos,
+            variant_name=variant_name,
+            target_gene=target_gene
+        )
+    for key, val in functional_descriptions.items():
+        functional_descriptions[key] = val.format(
+            variant_pos=variant_pos,
+            variant_name=variant_name,
+            target_gene=target_gene
+        )
+
+    evidence_labels = {
+        "clinical": clinical_descriptions,
+        "functional": functional_descriptions
+    }
+    return evidence_labels

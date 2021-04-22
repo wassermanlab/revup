@@ -45,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
         marginRight: "auto",
         marginLeft: "auto"
     },
+    infoIcon: {
+        fontSize: 15,
+        color: "#BCBCBC",
+    },
 }))
 
 
@@ -113,6 +117,13 @@ export default function StepOneForm(props) {
         var pos = document.getElementById("pos").value
         var alt = document.getElementById("alt").value
         var gnomad = document.getElementById("gnomad_coord").value
+
+        // Check if gnomad coordinate starts with "chr"
+        const startVal = gnomad.toLowerCase().startsWith("chr");
+        if (startVal === true) {
+            gnomad = gnomad.toLowerCase().replace("chr", "").toUpperCase();
+        }
+
         if ((chro === "" && pos === "" && alt === "") && (gnomad === "")) {
             setVariantCoordError({...variantCoordError, "error": true, "message": "One of these fields must be filled"})
             isError = true;
@@ -133,13 +144,15 @@ export default function StepOneForm(props) {
                     "pos": variant[1],
                     "ref": variant[2],
                     "alt": variant[3],
-                    "target_gene": props.query["target_gene"].toUpperCase()
+                    "target_gene": props.query["target_gene"].toUpperCase(),
+                    "gnomad_coord": gnomad,
                 });
             } else {
                 props.setQuery({
                     ...props.query, 
                     "query_ref": true, 
-                    "target_gene": props.query["target_gene"].toUpperCase()
+                    "target_gene": props.query["target_gene"].toUpperCase(),
+                    "gnomad_coord": gnomad
                 });
             }
         }  
@@ -308,7 +321,7 @@ export default function StepOneForm(props) {
                             <Grid item xs={5}>
                                 <FormLabel>Variant shows familiar segregation in the family </FormLabel>
                                 <Tooltip title={"If yes is selected, detailed questions concerning the variant segregation in the family will be asked"}>
-                                    <InfoOutlinedIcon fontSize="small"/>
+                                    <InfoOutlinedIcon className={classes.infoIcon}/>
                                 </Tooltip>
                             </Grid>
                             <Grid item xs={5}>

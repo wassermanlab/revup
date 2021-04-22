@@ -96,26 +96,26 @@ export const defaultValsDict = {
 }
 
 export const additionalInfoDict = {
-                "c_1_1": {
-                    "phylop": "",
-                    "phastcons": "",
-                },
-                "c_1_2": {
-                    "af": "",
-                },
-                "c_2_3": {
-                    "cadd_score": "",
-                },
-                "f_1_1": {
-                    "crms": [],
-                },
-                "f_1_2": {
-                    "ccres": [],
-                    "ccre_descriptions": [],
-                },
-                "f_1_3": "",
-                "f_1_4": ""
-            }
+    "c_1_1": {
+        "phylop": "",
+        "phastcons": "",
+    },
+    "c_1_2": {
+        "af": "",
+    },
+    "c_2_3": {
+        "cadd_score": "",
+    },
+    "f_1_1": {
+        "crms": [],
+    },
+    "f_1_2": {
+        "ccres": [],
+        "ccre_descriptions": [],
+    },
+    "f_1_3": "",
+    "f_1_4": ""
+}
 
 export const defaultResultsDict = {
     "clinical": "0",
@@ -140,3 +140,6 @@ export const FUNCTIONAL_RANGE_MAXIMUMS = {
 }
 
 export const UCSC_API_URL = "https://api.genome.ucsc.edu/getData/sequence?"
+
+export const CLINICAL_TITLE_TEXT = ["Clinical Score", "Is there a causal link between genotype and phenotype?"]
+export const FUNCTIONAL_TITLE_TEXT = ["Functional Score", "Does the variant have a damaging effect on the gene?"]

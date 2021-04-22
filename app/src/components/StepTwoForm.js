@@ -37,7 +37,10 @@ const useStyles = makeStyles((theme) => ({
         padding: "0px",
         marginRight: "auto",
         marginLeft: "auto"
-
+    },
+    infoIcon: {
+        fontSize: 15,
+        color: "#BCBCBC",
     },
 }))
 
@@ -212,7 +215,7 @@ export default function StepTwoForm(props) {
                             <Grid item xs={5}>
                                 <FormLabel>Functional analyses were performed to study the variant defect </FormLabel>
                                 <Tooltip title={"If yes is selected, detailed questions concerning the functional analysis will be asked"}>
-                                    <InfoOutlinedIcon fontSize="small"/>
+                                    <InfoOutlinedIcon className={classes.infoIcon}/>
                                 </Tooltip>
                             </Grid>
                             <Grid item xs={5}>
@@ -229,9 +232,9 @@ export default function StepTwoForm(props) {
                             <Grid container justify="center" spacing={3}>
                                 <Grid item xs={1}/>
                                 <Grid item xs={4}>
-                                    <FormLabel>{props.variantInfo["variant_pos"]} is implicated in TF
+                                    <FormLabel>{props.variantInfo["variant_pos"]} is implicated in TF 
                                         <Tooltip title={"Transcription Factor"}>
-                                            <InfoOutlinedIcon fontSize="small"/>
+                                            <InfoOutlinedIcon className={classes.infoIcon}/>
                                         </Tooltip>
                                     {" "}binding based on experimental data</FormLabel>
                                 </Grid>
@@ -250,7 +253,7 @@ export default function StepTwoForm(props) {
                                 <Grid item xs={4}>
                                     <FormLabel>{props.variantInfo["variant_name"]} causes a change in TF 
                                         <Tooltip title={"Transcription Factor"}>
-                                            <InfoOutlinedIcon fontSize="small"/>
+                                            <InfoOutlinedIcon className={classes.infoIcon}/>
                                         </Tooltip>
                                     {" "}binding and/or chromatin environment</FormLabel>
                                 </Grid>

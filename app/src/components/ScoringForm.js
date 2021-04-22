@@ -103,6 +103,8 @@ export default function ScoringForm(props) {
                         variantInfo={props.variantInfo}
                         comments={props.comments}
                         setComments={props.setComments}
+                        clinicalEvidenceLabels={props.clinicalEvidenceLabels}
+                        functionalEvidenceLabels={props.functionalEvidenceLabels}
                         setActiveStep={setActiveStep}>
                     </StepThreeForm>
                 )

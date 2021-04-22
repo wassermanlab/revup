@@ -4,9 +4,16 @@ import {
     makeStyles 
 } from '@material-ui/core/styles';
 import { 
+    Card,
+    CardContent,
     Container,
     Divider,
+    FormControl,
+    Grid,
     Link,
+    MenuItem,
+    Select,
+    TextField,
     Typography, 
 } from '@material-ui/core';
 import clsx from 'clsx';
@@ -21,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         display: 'flex',
+        width: '100%',
     },
     drawerHeader: {
         display: 'flex',
@@ -29,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
+    },
+    card: {
+        display: 'flex',
+        padding: "2%",
     },
     content: {
         flexGrow: 1,
@@ -46,10 +58,15 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
     },
+    grid: {
+        padding: "0px",
+        marginRight: "auto",
+        marginLeft: "auto"
+    }
 }));
 
 
-export default function Contact() {
+export default function About() {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     return (
@@ -68,17 +85,81 @@ export default function Contact() {
                     >
                         <div className={classes.drawerHeader} />
                         <Container maxWidth="lg">
-                            <Typography className={classes.pageHeader} variant="h4" align="left" gutterBottom>
-                                Contact Us
-                            </Typography>
-                            <Divider />
-                            <Typography  variant="body1"  align="left" gutterBottom>
-                                Found a bug? Have a question? Want to offer ideas to include in a future update? Contact us!
-                            </Typography>
-                            <Typography variant="body1" align="left" gutterBottom>
-                                Found this work interesting? The Wasserman lab developed other tools and databases, go and check our website [link to the WWW lab website]!
-                            </Typography>
-                           
+                            <Grid container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <Card className={classes.card}>
+                                            <CardContent>
+                                                <div style={{padding: "2%"}}>
+                                                <Grid container direction="row" justify="center" alignItems="flex-start" alignContent="flex-end" spacing={3}>
+                                                    <Grid justify="center" container spacing={3}>
+                                                        <Grid item xs={12}>
+                                                            <Typography variant="h4">
+                                                                Contact Us
+                                                            </Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid justify="center" container spacing={3}>
+                                                        <Grid item xs={12}>
+                                                            <Divider/>
+                                                        </Grid>
+                                                    </Grid> 
+                                                    <br></br>
+                                                    <Grid justify="center" container spacing={3}>
+                                                        <Grid item xs={12}>
+                                                            <Typography variant="body1" color="textSecondary" paragraph>
+                                                                Found a bug? Have a question? Want to offer ideas to include in a future version? Contact us!
+                                                            </Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid justify="center" container direction={"row"} spacing={6}>
+                                                        <Grid item xs={6}>
+                                                            <TextField
+                                                                fullWidth
+                                                                id="email"
+                                                                label="Email Address"
+                                                                helperText="(required)"
+                                                                variant="outlined"
+                                                            />
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid justify="center" container direction={"row"} spacing={6}>
+                                                        <Grid item xs={6}>
+                                                            <FormControl fullWidth className={classes.formControl}>
+                                                                <Select id="type" variant="outlined">
+                                                                    <MenuItem value={"bug"}>Report a bug</MenuItem>
+                                                                    <MenuItem value={"question_feedback"}>Ask a question or offer feedback</MenuItem>
+                                                                </Select>
+                                                            </FormControl>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid justify="center" container direction={"row"} spacing={6}>
+                                                        <Grid item xs={6}>
+                                                            <TextField
+                                                                fullWidth
+                                                                id="email_body"
+                                                                multiline
+                                                                rows={8}
+                                                                variant="outlined"
+                                                            />
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid justify="center" container spacing={3}>
+                                                        <Grid item xs={12}>
+                                                            <Typography variant="body1" color="textSecondary" paragraph>
+                                                                Found this work interesting? The Wasserman Lab develops other tools and databases, go and check 
+                                                                out <Link href="http://cisreg.ca/" color="secondary">our website</Link>!
+                                                            </Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                    
+                                </Grid>
+                            </Grid>
                         </Container>
                     </main>
                 </ThemeProvider>
