@@ -20,6 +20,15 @@ import {
 } from '@material-ui/core';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
+import {
+    testVarChro,
+    testVarPos,
+    testVarAlt,
+    testVarTargetGene,
+    testVarRefGenome,
+    testVarGnomadCoor
+} from '../constants'
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -55,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 export default function StepOneForm(props) {
     window.scrollTo(0, 0)
     const classes = useStyles();
+
     const [targetGeneError, setTargetGeneError] = useState({
         "error": false,
         "message": "",
@@ -86,12 +96,12 @@ export default function StepOneForm(props) {
             ...props.query,
             "patient_id": "Test patient",
             "variant_id": "Test variant",
-            "chro": "17",
-            "pos": "4987635",
-            "alt": "T",
-            "target_gene": "CAMTA2",
-            "ref_genome": "hg38",
-            "gnomad_coor": "17-4987635-C-T"
+            "chro": testVarChro,
+            "pos": testVarPos,
+            "alt": testVarAlt,
+            "target_gene": testVarTargetGene,
+            "ref_genome": testVarRefGenome,
+            "gnomad_coor": testVarGnomadCoor
         })
     }
    

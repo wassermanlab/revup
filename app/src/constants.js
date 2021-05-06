@@ -1,3 +1,10 @@
+export const testVarChro = "17";
+export const testVarPos = "4987635";
+export const testVarAlt = "T";
+export const testVarRefGenome = "hg38";
+export const testVarGnomadCoor = "17-4987635-C-T";
+export const testVarTargetGene = "CAMTA2";
+
 export const defaultQueryDict = {
     "patient_id": "",
     "variant_id": "",
@@ -38,6 +45,7 @@ export const defaultInfo = {
     "ref_genome": "",
     "target_gene": "",
     "genotype": "",
+    "test_variant": false,
 }
 
 export const defaultScoresDict = {
@@ -143,3 +151,5 @@ export const UCSC_API_URL = "https://api.genome.ucsc.edu/getData/sequence?"
 
 export const CLINICAL_TITLE_TEXT = ["Clinical Score", "Is there a causal link between genotype and phenotype?"]
 export const FUNCTIONAL_TITLE_TEXT = ["Functional Score", "Does the variant have a damaging effect on the gene?"]
+
+export const CITATION = "Van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. doi: 10.1016/j.tig.2020.04.006. Epub 2020 May 22."

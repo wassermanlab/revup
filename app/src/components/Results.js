@@ -7,6 +7,7 @@ import {
     Divider,
     FormLabel,
     Grid,
+    Link,
     Menu,
     MenuItem,
     Paper,
@@ -19,6 +20,8 @@ import {
     Tooltip,
     Typography, 
 } from '@material-ui/core';
+import ReplayIcon from '@material-ui/icons/Replay';
+import IconButton from '@material-ui/core/IconButton';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -26,14 +29,6 @@ import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import ReactHtmlParser from 'react-html-parser'; 
 
-import {
-    //MAX_FUNCTIONAL_SCORE,
-    //MAX_CLINICAL_SCORE,
-    FUNCTIONAL_RANGE_MAXIMUMS,
-    CLINICAL_RANGE_MAXIMUMS,
-    CLINICAL_TITLE_TEXT,
-    FUNCTIONAL_TITLE_TEXT
-} from '../constants'
 import {
     getLineData,
     getLineOptions,
@@ -49,6 +44,9 @@ import {
     ClinicalResultsTableCSV,
     FunctionalResultsTableCSV,
 } from './ResultsTablesCSV'
+import {
+    CITATION
+} from '../constants'
     
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -101,16 +99,9 @@ export default function Results(props) {
         const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         return [date, time]
     }
-    /*
-    async function generatePDF (doc) {
-        const asPdf = pdf();
-        asPdf.updateContainer(doc);
-        //const blob = await asPdf.toBlob();
-        const blob = null
-
-        //return blob;
-    } 
-    */
+    const copy = (event) => {
+        navigator.clipboard.writeText(CITATION).catch((error) => { alert(`Copy failed! ${error}`) });
+    }
 
     //const downloadPDF = () => {
     async function downloadPDF () {
@@ -470,7 +461,7 @@ export default function Results(props) {
                                 </TableContainer>
                             </Grid>
                         </Grid>
-
+                        <br></br>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
                                 <Typography variant="h5">Functional Table</Typography>
@@ -585,24 +576,38 @@ export default function Results(props) {
                                 </TableContainer>
                             </Grid>
                         </Grid>
+                        <br></br>
                         <Grid justify="center" container spacing={3}>
-                            <Grid item xs={10}>
+                            <Grid item xs={9}>
                                 <Typography variant="h5" align="left" gutterBottom>
                                     Citing RevUP
                                 </Typography>
                             </Grid> 
+                            <Grid item xs={1}>
+                                <IconButton aria-label="copy" onClick={copy}>
+                                    <Tooltip title={"Copy to Clipboard"}>
+                                        <FileCopyIcon fontSize="small" />
+                                    </Tooltip>
+                                </IconButton>
+                            </Grid>
                         </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
-                                <Typography fontWeight="fontWeightLight" variant="body1" align="left" gutterBottom>
-                                    Van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 
-                                    cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. 
-                                    doi: 10.1016/j.tig.2020.04.006. Epub 2020 May 22.
-                                </Typography>
+                                <FormLabel>
+                                    {CITATION}
+                                </FormLabel>
                             </Grid>
                         </Grid>
                     </Paper>
                 </Grid>
+            </div>
+
+            <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                <Link href="/scoring" color="secondary" underline="none">
+                    <Button variant="contained" color="secondary" size="large" startIcon={<ReplayIcon />}>
+                        Score another variant
+                    </Button>
+                </Link>
             </div>
         </React.Fragment>
     )

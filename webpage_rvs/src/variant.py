@@ -30,11 +30,14 @@ from webpage_rvs.src.helpers import (
 logging.basicConfig(format=LOGGING_FORMAT, stream=sys.stderr, level=logging.INFO)
 
 class Variant:
-    def __init__(self, patient_id=None, variant_id=None):
+    def __init__(self, ref_genome, target_gene, patient_id=None, variant_id=None):
         """
+        Base class for all types of variants
         """
         self.patient_id = patient_id
         self.variant_id = variant_id
+        self.ref_genome = ref_genome
+        self.target_gene = target_gene
 
 
 class SNV(Variant):
@@ -42,19 +45,17 @@ class SNV(Variant):
         """
         Create an SNV object to hold all info from external databases
         """
-        super().__init__(patient_id, variant_id)
+        super().__init__(ref_genome, target_gene, patient_id, variant_id)
 
         # Read external files
         self.remap_file = REMAP_VARIANT_FILE
         self.remap_df = pd.read_csv(self.remap_file, sep='\t', header=None)
 
         # Setup variant information
-        self.ref_genome = ref_genome
         self.chro = chro
         self.pos = pos
         self.alt = alt
         self.ref = ""
-        self.target_gene = target_gene
 
         # Create default scores
         self.cadd_score = 0
@@ -99,7 +100,7 @@ class SNV(Variant):
 
         ref_allele_results = make_request(ref_allele_query)
         self.ref = ref_allele_results["dna"].upper()
-        print(self.ref)
+        #print(self.ref)
 
         # TODO: Check if there are results or not
 
@@ -140,7 +141,7 @@ class SNV(Variant):
         phylop_query = os.path.join(UCSC_API_URL, "getData", track_query)
 
         phylop_results = make_request(phylop_query)
-        print(phylop_results)
+        #print(phylop_results)
         if len(phylop_results[chro]) > 0:
             self.phylop_score = float(phylop_results[chro][0]["value"])
 
@@ -187,7 +188,7 @@ class SNV(Variant):
             GNOMAD_ALLELE_QUERY, 
             {"variantId": variant_id}
         )
-        print(results)
+        #print(results)
 
         # TODO: Check if results is empty
         if results["data"]["variant"]:
