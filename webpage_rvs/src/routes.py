@@ -2,7 +2,7 @@ import sys
 import logging
 from webpage_rvs import (
     app,
-    db
+    #db
 )
 
 from flask import request, jsonify
@@ -200,6 +200,7 @@ def calculate_scores():
         response["standard_rve"] = rve_density
 
         # Save variant in database 
+        '''
         db.snvs.insert_one({
             "date_submitted": request.json["timeSubmitted"],
             "variant_id": variant_info["variant_id"],
@@ -243,6 +244,7 @@ def calculate_scores():
             "clinical": scores[0],
             "functional": scores[1]
         })
+        '''
 
     return jsonify(response)
 
