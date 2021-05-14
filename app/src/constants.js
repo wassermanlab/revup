@@ -5,6 +5,29 @@ export const testVarRefGenome = "hg38";
 export const testVarGnomadCoor = "17-4987635-C-T";
 export const testVarTargetGene = "CAMTA2";
 
+export const testVars = [
+    {
+        "patientId": "Test Patient",
+        "variantId": "Test Variant",
+        "chro": "17",
+        "pos": "4987635",
+        "alt": "T",
+        "refGenome": "hg38",
+        "gnomadCoor": "17-4987635-C-T",
+        "targetGene": "CAMTA2"
+    },
+    {
+        "patientId": "Proband 1",
+        "variantId": "test variant",
+        "chro": "9",
+        "pos": "139444949",
+        "alt": "A",
+        "refGenome": "hg19",
+        "gnomadCoor": "9-139444949-C-A",
+        "targetGene": "NOTCH1"
+    }
+]
+
 export const defaultQueryDict = {
     "patient_id": "",
     "variant_id": "",

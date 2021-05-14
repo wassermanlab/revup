@@ -166,9 +166,9 @@ export default function StepTwoForm(props) {
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>
                                     <Select id="c_2_2" value={props.query["c_2_2"] ? props.query["c_2_2"] : "unknown"} onChange={(e) => handleChange('c_2_2', e)} variant="outlined">
-                                        <MenuItem value={"yes"}>Yes</MenuItem>
-                                        <MenuItem value={"no"}>No</MenuItem>
-                                        <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                        <MenuItem value={"yes"}>Yes (i.e. {props.variantInfo["target_gene"]} contains coding variants)</MenuItem>
+                                        <MenuItem value={"no"}>No (i.e. {props.variantInfo["target_gene"]} does not contain coding variants)</MenuItem>
+                                        <MenuItem value={"unknown"}>Unknown (i.e. {props.variantInfo["target_gene"]} was not sequenced)</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>

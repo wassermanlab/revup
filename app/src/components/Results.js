@@ -105,6 +105,7 @@ export default function Results(props) {
 
     //const downloadPDF = () => {
     async function downloadPDF () {
+        // Genereate Chart Images
         const lineChart = lineChartRef.current.chartInstance.toBase64Image();
         const clinicalChart = clinicalChartRef.current.chartInstance.toBase64Image();
         const functionalChart = functionalChartRef.current.chartInstance.toBase64Image();
@@ -125,7 +126,6 @@ export default function Results(props) {
                     />;
         const asPdf = pdf();
         asPdf.updateContainer(doc);
-        console.log(asPdf);
         const blob = await asPdf.toBlob();
         //const blob = generatePDF(doc);
         const filename = 'revup_' + dateTime[0] + "_" + dateTime[1] + '.pdf';
@@ -137,28 +137,20 @@ export default function Results(props) {
 
     //const downloadZip = () => {
     async function downloadZip () {
+        // Generate Chart Images
         const lineChart = lineChartRef.current.chartInstance.toBase64Image().split(',')[1];
         const clinicalChart = clinicalChartRef.current.chartInstance.toBase64Image().split(',')[1];
         const functionalChart = functionalChartRef.current.chartInstance.toBase64Image().split(',')[1];
         const dateTime = getDateTime();
 
-        const zip = require('jszip')();
-
-        // Add line chart
-        zip.file('revup_linechart.png', lineChart, {base64: true});
-
-        // Add gauge charts
-        zip.file('revup_clinical_score.png', clinicalChart, {base64: true});
-        zip.file('revup_functional_score.png', functionalChart, {base64: true});
-
-        // Add PDFs
+        // Generate Table PDFs
         const clinicalDoc = <ClinicalResultsTablePDF 
                                 additionalInfo={props.additionalInfo}
                                 modifiedScores={props.modifiedScores}
                                 variantInfo={props.variantInfo}
                                 comments={props.comments}
                                 downloadTime={dateTime[0] + " " + dateTime[1]}
-                            />;
+                            />;             
         const functionalDoc = <FunctionalResultsTablePDF 
                                 additionalInfo={props.additionalInfo}
                                 modifiedScores={props.modifiedScores}
@@ -168,14 +160,11 @@ export default function Results(props) {
                             />;
         const asPdfClinical = pdf();
         asPdfClinical.updateContainer(clinicalDoc);
-        console.log(asPdfClinical)
         const blobClinical = await asPdfClinical.toBlob();
-        zip.file('revup_clinical_table.pdf', blobClinical, {blob: true});
-
+        
         const asPdfFunctional = pdf();
         asPdfFunctional.updateContainer(functionalDoc);
         const blobFunctional = await asPdfFunctional.toBlob();
-        zip.file('revup_functional_table.pdf', blobFunctional, {blob: true});
 
         // Create CSV
         const data = {
@@ -187,10 +176,29 @@ export default function Results(props) {
         }
         const clinicalCsvContent = ClinicalResultsTableCSV(data);
         const functionalCsvContent = FunctionalResultsTableCSV(data);
+
+        // Create and Download zip
+        const zip = require('jszip')();
+
+        // Add line chart
+        zip.file('revup_linechart.png', lineChart, {base64: true});
+
+        // Add gauge charts
+        zip.file('revup_clinical_score.png', clinicalChart, {base64: true});
+        zip.file('revup_functional_score.png', functionalChart, {base64: true});
+
+        // Add Clinical Table PDF
+        zip.file('revup_clinical_table.pdf', blobClinical, {blob: true});
+
+        // Add Functional Table PDF
+        zip.file('revup_functional_table.pdf', blobFunctional, {blob: true});
+
+        // Add Clinical CSV
         zip.file('revup_clinical_table.csv', clinicalCsvContent);
+
+        // Add Functional CSV
         zip.file('revup_functional_table.csv', functionalCsvContent);
 
-        // Download zip
         const filename = 'revup_' + dateTime[0] + "_" + dateTime[1] + '.zip';
         zip.generateAsync({type: "blob"}).then(content => {
           saveAs(content, filename);

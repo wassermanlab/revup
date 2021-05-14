@@ -23,7 +23,7 @@ import {
     defaultScoresDict,
     defaultValsDict,
     defaultResultsDict,
-    testVarGnomadCoor
+    testVars
 } from '../constants'
 
 const drawerWidth = 240;
@@ -91,7 +91,7 @@ export default function Scoring() {
             const json = await response.json();
             var variant = [query["chro"], query["pos"], json["dna"].toUpperCase(), query["alt"]];
             var testFlag = false;
-            if (variant.join("-") === testVarGnomadCoor) {
+            if (variant.join("-") === testVars[0]["gnomadCoor"] || variant.join("-") === testVars[1]["gnomadCoor"]) {
                 testFlag = true;
             }
             setVariantInfo({
@@ -113,7 +113,7 @@ export default function Scoring() {
                 // gnomAD coord format is chro-pos-ref-alt
                 var variant = query["gnomad_coord"].split("-");
                 var testFlag = false;
-                if (query["gnomad_coord"] === testVarGnomadCoor) {
+                if (query["gnomad_coord"] === testVars[0]["gnomadCoor"] || query["gnomad_coord"] === testVars[1]["gnomadCoor"]) {
                     testFlag = true;
                 }
                 setVariantInfo({

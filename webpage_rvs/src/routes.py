@@ -1,4 +1,5 @@
 import sys
+import uuid
 import logging
 from webpage_rvs import (
     app,
@@ -76,7 +77,12 @@ def calculate_initial_scores():
                 else:
                     response["initial_scores"][key] = "0"
 
-        
+        # Take care of double negative
+        # if body["query"]["c_2_2"] == "yes":
+        #     response["initial_scores"]["c_2_2"] = "0"
+        # else:
+        #     response["initial_scores"]["c_2_2"] = "1"
+
         # Check CADD and FATHMM scores
         snv.set_cadd_score()
         # TODO: FATHMM
@@ -131,6 +137,7 @@ def calculate_initial_scores():
             response["additional_info"]["f_1_1"]["crms"] = crm_string
         else:
             response["initial_scores"]["f_1_1"] = "0"
+            response["additional_info"]["f_1_1"]["crms"] = "None"
 
         # Check Hi-C
         snv.set_ccre_method()
@@ -200,9 +207,11 @@ def calculate_scores():
         response["standard_rve"] = rve_density
 
         # Save variant in database 
+        db_id = str(uuid.uuid4())
         '''
         db.snvs.insert_one({
             "date_submitted": request.json["timeSubmitted"],
+            "id": db_id,
             "variant_id": variant_info["variant_id"],
             "patient_id": variant_info["patient_id"],
             "ref_assembly": variant_info["ref_genome"],
@@ -257,13 +266,13 @@ def calc_all_scores(data):
     for key, val in data.items():
         if key.startswith("c_") and not key.endswith("_comments") and val != '':
             base = key.split("_")[1]
-            new_score = int(val)*(int(base)**2)
+            #new_score = int(val)*(int(base)**2)
             clinical += int(val)*(int(base)**2)
-            print("KEY: {}, INITIAL: {}, SCORE: {}".format(key, val, new_score))
+            #print("KEY: {}, INITIAL: {}, SCORE: {}".format(key, val, new_score))
         elif key.startswith("f_") and not key.endswith("_comments") and val != '':
             base = key.split("_")[1]
-            new_score = int(val)*(int(base)**2)
+            #new_score = int(val)*(int(base)**2)
             functional += int(val)*(int(base)**2)
-            print("KEY: {}, INITIAL: {}, SCORE: {}".format(key, val, new_score))
+            #print("KEY: {}, INITIAL: {}, SCORE: {}".format(key, val, new_score))
 
     return (clinical, functional)

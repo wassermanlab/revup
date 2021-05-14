@@ -21,12 +21,7 @@ import {
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 import {
-    testVarChro,
-    testVarPos,
-    testVarAlt,
-    testVarTargetGene,
-    testVarRefGenome,
-    testVarGnomadCoor
+    testVars
 } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
@@ -91,17 +86,17 @@ export default function StepOneForm(props) {
         }
     }
 
-    const handleExample = () => {
+    const handleExample = (value) => {
         props.setQuery({
             ...props.query,
-            "patient_id": "Test patient",
-            "variant_id": "Test variant",
-            "chro": testVarChro,
-            "pos": testVarPos,
-            "alt": testVarAlt,
-            "target_gene": testVarTargetGene,
-            "ref_genome": testVarRefGenome,
-            "gnomad_coor": testVarGnomadCoor
+            "patient_id": testVars[value]["patientId"],
+            "variant_id": testVars[value]["variantId"],
+            "chro": testVars[value]["chro"],
+            "pos": testVars[value]["pos"],
+            "alt": testVars[value]["alt"],
+            "target_gene": testVars[value]["targetGene"],
+            "ref_genome": testVars[value]["refGenome"],
+            "gnomad_coor": testVars[value]["gnomadCoor"]
         })
     }
    
@@ -173,6 +168,40 @@ export default function StepOneForm(props) {
             <form className={classes.root} autoComplete="off">
                 <Grid className={classes.grid} container direction="row" justify="center" alignItems="center" alignContent="flex-end" spacing={3}>
                     <Paper className={classes.paper} elevation={0}>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={2}>
+                                <FormLabel style={{ fontWeight: "bold", fontSize: 18}}>Example Variants</FormLabel>
+                                <Tooltip title={"Click these variants to populate required fields and test the scoring process with an example"}>
+                                    <InfoOutlinedIcon className={classes.infoIcon}/>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={10}>
+                                        <Link href="#" onClick={() => handleExample(0)}>
+                                            {testVars[0]["gnomadCoor"]}
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={10}>
+                                        <Link href="#" onClick={() => handleExample(1)}>
+                                            {testVars[1]["gnomadCoor"]}
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <br></br>
+                        <Divider />
+                        <br></br>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={10}>
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Position Details</b>
+                                </Typography>
+                            </Grid>
+                        </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={5}>
                                 <TextField 
@@ -290,16 +319,6 @@ export default function StepOneForm(props) {
                                     error={targetGeneError["error"]}
                                     onChange={(e) => handleChange('target_gene', e)}
                                 />
-                            </Grid>
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={2}>
-                                <FormLabel>Example Variant:  </FormLabel>
-                            </Grid>
-                            <Grid item xs={8}>
-                                <Link href="#" onClick={handleExample}>
-                                    17-4987635-C-T
-                                </Link>
                             </Grid>
                         </Grid>
                         <br></br>

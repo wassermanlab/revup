@@ -199,7 +199,7 @@ export default function Faq() {
                                                     variant details (chromosome, position, reference allele, alternate allele), 
                                                     so we won’t be able to study individual variants that are submitted. Our 
                                                     goal is to observe how many users submit with which reference genome, how 
-                                                    many users did functional analysis, etc. 
+                                                    many users did functional analysis, etc.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
@@ -271,6 +271,38 @@ export default function Faq() {
                                                     region of interest, and therefore, this will not be reflected in the 
                                                     score. To compensate, you can manually modify the score during step 3, 
                                                     and add a comment / remark to explain why you did modify the score.
+                                                </Typography>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel9-content"
+                                                id="panel9-header">
+                                                <Typography variant="h6" color="secondary">
+                                                    How is the answer "Unknown" scored?
+                                                </Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Typography variant="body1" color="textSecondary" paragraph>
+                                                    By default, "unknown" is selected, giving a score of 0 to the evidence. 
+                                                </Typography>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel9-content"
+                                                id="panel9-header">
+                                                <Typography variant="h6" color="secondary">
+                                                    Is it better to input coordinates in hg37 or hg38?
+                                                </Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Typography variant="body1" color="textSecondary" paragraph>
+                                                    All of the external databases are queried using the GRCh38 coordinates, therefore it is better
+                                                    if the user uses GRCh38 coordinates in RevUP. However, the user can also query RevUP using GRCh37
+                                                    coordinates and a lift-over is performed using a Python implementatino of the UCSC LiftOver tool.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
