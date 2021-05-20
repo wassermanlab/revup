@@ -114,7 +114,7 @@ export default function About() {
                                                 </Typography>
                                                 <Typography  variant="body1"  color="textSecondary">
                                                     To know the list of external databases that the tool is querying and 
-                                                    the scoring system associated, refer to Table 1 [Link to Table 1].
+                                                    the scoring system associated, refer to Table 1 on our <Link href="/faq" color="secondary">FAQ page</Link>.
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -164,7 +164,7 @@ export default function About() {
                                                 </Typography>
                                                 <Typography  variant="body1"  color="textSecondary">
                                                     Van der Lee R, Correard S and Wasserman WW in “Deregulated Regulators: Disease-Causing cis Variants in Transcription Factor Genes” (Trends in Genetics, 2020)
-                                                    [Add ref of website paper when published]
+                                                    {/* TODO: Add link to webpage ref when published */}
                                                 </Typography>
                                             </CardContent>
                                         </Card>

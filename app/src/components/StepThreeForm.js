@@ -177,7 +177,9 @@ export default function StepThreeForm(props) {
                     <br></br>
                     <Grid justify="center" container spacing={3}>
                         <Grid item xs={10}>
-                            <Typography variant="h5">Clinical Table</Typography>
+                            <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                <b>Clinical Table</b>
+                            </Typography>
                             <TableContainer>
                                 <Table aria-label="simple table">
                                     <colgroup>
@@ -297,7 +299,9 @@ export default function StepThreeForm(props) {
                     </Grid>
                     <Grid justify="center" container spacing={3}>
                         <Grid item xs={10}>
-                            <Typography variant="h5">Functional Table</Typography>
+                            <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                <b>Functional Table</b>
+                            </Typography>
                             <TableContainer>
                                 <Table aria-label="simple table">
                                 <colgroup>

@@ -12,6 +12,12 @@ import {
     Container,
     Divider,
     Grid,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
     Link,
     Typography, 
 } from '@material-ui/core';
@@ -60,6 +66,14 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
     },
+    tableHead: {
+        verticalAlign: 'top',
+        fontWeight: 'normal',
+        fontSize: '17px',
+    },
+    details: {
+        flexDirection: "column"
+      }
 }));
 
 
@@ -212,11 +226,173 @@ export default function Faq() {
                                                     What source of information are you using?
                                                 </Typography>
                                             </AccordionSummary>
-                                            <AccordionDetails>
+                                            <AccordionDetails className={classes.details}>
                                                 <Typography  variant="body1" color="textSecondary" paragraph>
                                                     To know the details behind the scoring system and which databases the tool 
-                                                    is querying, refer to Table 1 [Link to Table 1].
+                                                    is querying, refer to the Table 1 below.
                                                 </Typography>
+
+                                                <div>
+                                                    <TableContainer>
+                                                        <Table aria-label="table1" style={{ whiteSpace: 'pre-line' }}>
+                                                            <colgroup>
+                                                                <col style={{width:'20%'}}/>
+                                                                <col style={{width:'20%'}}/>
+                                                                <col style={{width:'20%'}}/>
+                                                                <col style={{width:'20%'}}/>
+                                                                <col style={{width:'20%'}}/>
+                                                            </colgroup>
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell className={classes.tableHead}>
+                                                                        Evidence Level: Evidence for Pathogenicity
+                                                                    </TableCell>
+                                                                    <TableCell className={classes.tableHead}>
+                                                                        Source of Information
+                                                                    </TableCell>
+                                                                    <TableCell className={classes.tableHead}>
+                                                                        Information Extracted
+                                                                    </TableCell>
+                                                                    <TableCell className={classes.tableHead}>
+                                                                        Scoring
+                                                                    </TableCell>
+                                                                    <TableCell className={classes.tableHead}>
+                                                                        Query
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                <TableRow>
+                                                                    <TableCell rowspan={2}>
+                                                                        C1.1: Variant position is evolutionarily conserved
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        PhyloP (Cooper <i>et al.</i>, 2005)
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        PhyloP Score
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        PhyloP &gt; 1.5 or
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        UCSC REST API;{"\n"}track: phyloP100way;{"\n"}hg38
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell>
+                                                                        PhastCons (Siepel <i>et al.</i>, 2005))
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        PhastCons Score
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        PhastCons &gt; 0.5
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        UCSC REST API;{"\n"}track: phastCons100way;{"\n"}hg38
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell>
+                                                                        C1.2 : Variant is rare in unaffected individuals in specific sets of controls or reference population databases
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        gnomAD v3.1.1 (Karczewski <i>et al.</i>, 2020)  
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        Allele count (AC) {"\n"}
+                                                                        Allele Number (AN) {"\n"}
+                                                                        Number of homozygotes
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        gnomAD AF &lt; 0.05 
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        gnomAD GraphQL;{"\n"}dataset: gnomad_r3;{"\n"}hg38
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell>
+                                                                        C2.3 : Variant is considered deleterious by computational prediction methods 
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        CADD v1.6 (Rentzsch <i>et al.</i>, 2019)
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        CADD phred score
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        CADD &gt; 15
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        CADD REST API;{"\n"}v1.0;{"\n"}GRCh38
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell>
+                                                                        F1.1 : Variant position is implicated in TF binding based on experimental data 
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        ReMap 2020 (Chèneby <i>et al.</i>, 2020)
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        TF included in overlapping Cis-Regulatory Modules (CRMs)
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        If the variant position intersect with at least one CRM → 1;{"\n"}else → 0
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        Intersect with file downloaded from ReMap 2020, Homo Sapiens, CRMs, hg38 (1.7 millions)
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell>
+                                                                        F1.2 : Variant localizes to a regulatory region based on genome annotations
+                                                                    </TableCell>
+                                                                    <TableCell rowspan={3}>
+                                                                        ENCODE / SCREEN (Davis <i>et al.</i>, 2018)
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        cCRE details : cCRE, description and name
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        If the variant position intersect with at least one cCRE → 1;{"\n"}else → 0
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        UCSC REST API;{"\n"}track: encodeCcreCombined;{"\n"}hg38
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell>
+                                                                        F1.3 : Regulatory region and target gene are directly linked based on annotation or experimental data
+                                                                    </TableCell>
+                                                                    <TableCell rowspan={2}>
+                                                                        Method and cell type
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        if F1.2 = 0 → 0;{"\n"}
+                                                                        else, if cCRE and potential target gene linked based on eQTL method → 1;{"\n"}
+                                                                        else → 0
+                                                                    </TableCell>
+                                                                    <TableCell rowspan={2}>
+                                                                        SCREEN GraphQL;{"\n"}GRCh38
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell>
+                                                                        F1.4 : Variant is statistically associated with expression levels of the target gene
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        if F1.2 = 0 → 0; {"\n"}
+                                                                        else, if cCRE and potential target gene linked based on Hi-C or CHIA-PET method → 1; {"\n"}
+                                                                        else → 0
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                </div>
                                             </AccordionDetails>
                                         </Accordion>
                                         <Accordion>
@@ -251,7 +427,7 @@ export default function Faq() {
                                                     Van der Lee R, Correard S and Wasserman WW in “Deregulated Regulators: 
                                                     Disease-Causing cis Variants in Transcription Factor Genes” (Trends in Genetics, 2020)
                                                     <br></br>
-                                                    [Add ref of website paper when published]
+                                                    {/* TODO: Add link to webpapge paper when published*/ }
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>

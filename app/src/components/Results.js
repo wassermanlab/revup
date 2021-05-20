@@ -230,8 +230,8 @@ export default function Results(props) {
                     <Paper className={classes.paper}>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
-                                <Typography variant="h5" align="left" gutterBottom>
-                                    General Information
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>General Information</b>
                                 </Typography>
                             </Grid> 
                         </Grid>
@@ -326,8 +326,8 @@ export default function Results(props) {
                         </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
-                                <Typography variant="h5" align="left" gutterBottom>
-                                    Scores
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Scores</b>
                                 </Typography>
                             </Grid> 
                         </Grid>
@@ -377,7 +377,9 @@ export default function Results(props) {
 
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
-                                <Typography variant="h5">Clinical Table</Typography>
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Clinical Table</b>
+                                </Typography>
                                 <TableContainer>
                                     <Table aria-label="simple table">
                                         <colgroup>
@@ -472,7 +474,9 @@ export default function Results(props) {
                         <br></br>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
-                                <Typography variant="h5">Functional Table</Typography>
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Functional Table</b>
+                                </Typography>
                                 <TableContainer>
                                     <Table aria-label="simple table">
                                         <colgroup>
@@ -587,8 +591,8 @@ export default function Results(props) {
                         <br></br>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={9}>
-                                <Typography variant="h5" align="left" gutterBottom>
-                                    Citing RevUP
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Citing RevUP</b>
                                 </Typography>
                             </Grid> 
                             <Grid item xs={1}>

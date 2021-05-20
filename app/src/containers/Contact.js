@@ -16,6 +16,7 @@ import {
     TextField,
     Typography, 
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import clsx from 'clsx';
 import theme from '../styles/theme';
 import NavBar from '../components/NavBar';
@@ -92,6 +93,7 @@ export default function About() {
                                             <CardContent>
                                                 <div style={{padding: "2%"}}>
                                                 <Grid container direction="row" justify="center" alignItems="flex-start" alignContent="flex-end" spacing={3}>
+                                                    <Alert severity="warning">This page is still under construction, please check back soon to submit feedback or report bugs!</Alert>
                                                     <Grid justify="center" container spacing={3}>
                                                         <Grid item xs={12}>
                                                             <Typography variant="h4">

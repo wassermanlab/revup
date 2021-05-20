@@ -113,6 +113,7 @@ export function getDoughnutData(score, type) {
     var weak_lim = 0;
     var mod_lim = 0;
     var background_color = "#FFC371"
+    var offset_score = 0;
     // Determine colour
     if (type === 'clinical') {
         max_score = MAX_CLINICAL_SCORE
@@ -126,17 +127,21 @@ export function getDoughnutData(score, type) {
 
     if(score <= weak_lim && score >= 0.0) {
         background_color = "#FFC371"
+        offset_score = (33.0/weak_lim)*parseFloat(score);
     } else if(score > weak_lim && score <= mod_lim) {
         background_color = "#FF995F"
+        offset_score = (33.0/(mod_lim-weak_lim))*(parseFloat(score)-weak_lim) + 33.0;
     } else if(score > mod_lim) {
         background_color = "#FF5F6D"
+        offset_score = (33.0/(max_score-mod_lim))*(parseFloat(score)-mod_lim) + 66.0;
     }
     // First set is the clinical score, secont set is the grey background
     const chartData = {
         //labels : ["Clinical Score","Blue"],
         datasets: [{
             label: "Gauge",
-            data : [parseFloat(score), max_score-parseFloat(score)],
+            //data : [parseFloat(score), max_score-parseFloat(score)],
+            data : [offset_score, 99-offset_score],
             backgroundColor: [
                 background_color,
                 "#D1D5D5",

@@ -5,6 +5,7 @@ import Scoring from './containers/Scoring';
 import About from './containers/About';
 import Contact from './containers/Contact';
 import Faq from './containers/Faq'
+import AdditionalResources from './containers/AdditionalResources'
 
 function AppRouter() {
     return (
@@ -15,6 +16,7 @@ function AppRouter() {
             <Route path="/about" exact component={About}/>
             <Route path="/contact" exact component={Contact}/>
             <Route path="/faq" exact component={Faq}/>
+            <Route path="/additional_resources" exact component={AdditionalResources}/>
         </Router>
     )
 }

@@ -134,10 +134,6 @@ export default function ScoringForm(props) {
                             </div>
                             ) : (
                             <div>
-                                <Alert severity="warning">
-                                    Downloading the results page is currently not supported in Safari. If you wish to download the results for your variant please
-                                    use an alternate web browser!
-                                </Alert>
                                 <Typography component={'span'} className={classes.instructions}>{getStepContent(activeStep)}</Typography>
                             </div>
                         )}

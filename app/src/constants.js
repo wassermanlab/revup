@@ -160,13 +160,13 @@ export const MAX_CLINICAL_SCORE = 114.0;
 export const MAX_FUNCTIONAL_SCORE = 38.0;
 
 export const CLINICAL_RANGE_MAXIMUMS = {
-    "weak": 25.0,
-    "moderate": 55.0,
+    "weak": 15.0,
+    "moderate": 40.0,
     "strong": 114.0,
 }
 export const FUNCTIONAL_RANGE_MAXIMUMS = {
     "weak": 9.0,
-    "moderate": 30.0,
+    "moderate": 25.0,
     "strong": 38.0
 }
 
