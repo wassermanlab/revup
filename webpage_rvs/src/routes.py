@@ -4,6 +4,7 @@ import logging
 from webpage_rvs import (
     app,
     #db
+    dynamo
 )
 
 from flask import request, jsonify
@@ -37,7 +38,7 @@ def index():
     return output
 
 
-@app.route('/initial_scores', methods=["POST"])
+@app.route('/api/initial_scores', methods=["POST"])
 def calculate_initial_scores():
     """
     """
@@ -177,7 +178,7 @@ def calculate_initial_scores():
     return jsonify(response)
 
 
-@app.route('/calc_scores', methods=["POST"])
+@app.route('/api/calc_scores', methods=["POST"])
 def calculate_scores():
     """
     """
@@ -208,8 +209,7 @@ def calculate_scores():
 
         # Save variant in database 
         db_id = str(uuid.uuid4())
-        '''
-        db.snvs.insert_one({
+        dynamo.tables['revup_snv'].put_item(Item={
             "date_submitted": request.json["timeSubmitted"],
             "id": db_id,
             "variant_id": variant_info["variant_id"],
@@ -253,7 +253,6 @@ def calculate_scores():
             "clinical": scores[0],
             "functional": scores[1]
         })
-        '''
 
     return jsonify(response)
 
@@ -266,13 +265,9 @@ def calc_all_scores(data):
     for key, val in data.items():
         if key.startswith("c_") and not key.endswith("_comments") and val != '':
             base = key.split("_")[1]
-            #new_score = int(val)*(int(base)**2)
             clinical += int(val)*(int(base)**2)
-            #print("KEY: {}, INITIAL: {}, SCORE: {}".format(key, val, new_score))
         elif key.startswith("f_") and not key.endswith("_comments") and val != '':
             base = key.split("_")[1]
-            #new_score = int(val)*(int(base)**2)
             functional += int(val)*(int(base)**2)
-            #print("KEY: {}, INITIAL: {}, SCORE: {}".format(key, val, new_score))
 
     return (clinical, functional)

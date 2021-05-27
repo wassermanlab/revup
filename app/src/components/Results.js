@@ -37,6 +37,7 @@ import {
 } from './ResultsCharts'
 import ResultsPDF from './ResultsPDF'
 import {
+    GeneralInfoTablePDF,
     ClinicalResultsTablePDF,
     FunctionalResultsTablePDF
 } from './ResultsTablesPDF'
@@ -144,6 +145,12 @@ export default function Results(props) {
         const dateTime = getDateTime();
 
         // Generate Table PDFs
+        const generalDoc = <GeneralInfoTablePDF
+                                variantInfo={props.variantInfo}
+                                finalResults={props.finalResults}
+                                assemblies={props.assemblies}
+                                downloadTime={dateTime[0] + " " + dateTime[1]}
+                            />;
         const clinicalDoc = <ClinicalResultsTablePDF 
                                 additionalInfo={props.additionalInfo}
                                 modifiedScores={props.modifiedScores}
@@ -158,6 +165,10 @@ export default function Results(props) {
                                 comments={props.comments}
                                 downloadTime={dateTime[0] + " " + dateTime[1]}
                             />;
+        const asPdfGeneral = pdf();
+        asPdfGeneral.updateContainer(generalDoc);
+        const blobGeneral = await asPdfGeneral.toBlob();
+        
         const asPdfClinical = pdf();
         asPdfClinical.updateContainer(clinicalDoc);
         const blobClinical = await asPdfClinical.toBlob();
@@ -187,6 +198,9 @@ export default function Results(props) {
         zip.file('revup_clinical_score.png', clinicalChart, {base64: true});
         zip.file('revup_functional_score.png', functionalChart, {base64: true});
 
+        // Add General Info Table PDF
+        zip.file('revup_general_info_table.pdf', blobGeneral, {blob: true});
+        
         // Add Clinical Table PDF
         zip.file('revup_clinical_table.pdf', blobClinical, {blob: true});
 
@@ -331,6 +345,7 @@ export default function Results(props) {
                                 </Typography>
                             </Grid> 
                         </Grid>
+                        {/* 
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={7}>
                                 <Grid justify="center" container spacing={3}>
@@ -374,6 +389,73 @@ export default function Results(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
+                        */}
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={8}>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <Line
+                                            id="linechart"
+                                            data={getLineData(props.finalResults)}
+                                            options={getLineOptions(props.finalResults)}
+                                            height={400}
+                                            ref={lineChartRef}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={5}>
+                                <Doughnut 
+                                    data={getDoughnutData(props.finalResults["clinical"], 'clinical')} 
+                                    options={getDoughnutOptions(props.finalResults["clinical"], 'clinical')}
+                                    height={200}
+                                    ref={clinicalChartRef}
+                                />
+                            </Grid>
+                            <Grid item xs={5}>
+                                <Doughnut 
+                                    data={getDoughnutData(props.finalResults["functional"], 'functional')} 
+                                    options={getDoughnutOptions(props.finalResults["functional"], 'functional')}
+                                    height={200}
+                                    ref={functionalChartRef}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={2}>
+                                RVE Score = 
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={12}>
+                                        {props.finalResults["clinical"]}
+                                    </Grid>
+                                </Grid>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={12}>
+                                        (Clinical Score)
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={1}>
+                                +
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={12}>
+                                        {props.finalResults["functional"]}
+                                    </Grid>
+                                </Grid>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={12}>
+                                        (Functional Score)
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
 
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>

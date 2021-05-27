@@ -142,6 +142,173 @@ const styles = StyleSheet.create({
 });
 
 
+export function GeneralInfoTable(props) {
+    return (
+        <React.Fragment>
+            <View break>
+                <Text style={styles.heading}>General Information</Text>
+            </View>
+            <View style={styles.resultsTable}>
+                {(function () {
+                    if(props.variantInfo["variant_id"]) {
+                        return (
+                            <View style={styles.tableRow}>
+                                <View style={styles.resultsTableCol}>
+                                    <Text style={styles.tableCell}>Variant ID: </Text>
+                                </View>
+                                <View style={styles.resultsTableCol}>
+                                    <Text style={styles.tableCell}>{props.variantInfo["variant_id"]}</Text>
+                                </View>
+                            </View>
+                    )} else {return ("")}
+                })()}
+                {(function () {
+                    if(props.variantInfo["patient_id"]) {
+                        return (
+                            <View style={styles.tableRow}>
+                                <View style={styles.resultsTableCol}>
+                                    <Text style={styles.tableCell}>Patient ID: </Text>
+                                </View>
+                                <View style={styles.resultsTableCol}>
+                                    <Text style={styles.tableCell}>{props.variantInfo["patient_id"]}</Text>
+                                </View>
+                            </View>
+                    )} else {return ("")}
+                })()}
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            hg19 position:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.assemblies["hg19"]}
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            hg38 position:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.assemblies["hg38"]}
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            Reference Assembly:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.variantInfo["ref_genome"]}
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            Patient's Genotype:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.variantInfo["genotype"]}
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            Target Gene:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.variantInfo["target_gene"]}
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            C- Score:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.finalResults["clinical"]}
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            F-Score:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.finalResults["functional"]}
+                        </Text>
+                    </View>
+                </View>
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            RVE Score:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.finalResults["rve"]}
+                        </Text>
+                    </View>
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.heading}>
+                    Citing RevUP
+                </Text>
+                <Text style={styles.citation}>
+                    Van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 
+                    cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. 
+                    doi: 10.1016/j.tig.2020.04.006. Epub 2020 May 22.
+                </Text>
+            </View>
+            <View>
+                <Text style={styles.normal}>
+                    Downloaded: {props.downloadTime}
+                </Text>
+            </View>
+        </React.Fragment>
+    )
+}
+
+export function GeneralInfoTablePDF(props) {
+    return (
+        <React.Fragment>
+            <Document>
+                <Page style={styles.body}>
+                    <GeneralInfoTable 
+                        variantInfo={props.variantInfo}
+                        finalResults={props.finalResults}
+                        assemblies={props.assemblies}
+                        downloadTime={props.downloadTime}
+                    />
+                </Page>
+            </Document>
+        </React.Fragment>
+    )
+}
+
 
 export function ClinicalResultsTable(props) {
     return (

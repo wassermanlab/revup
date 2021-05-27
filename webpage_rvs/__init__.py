@@ -3,7 +3,7 @@ import sys
 
 from flask import Flask
 from flask_cors import CORS
-from flask_pymongo import PyMongo
+from flask_dynamo import Dynamo
 
 
 app = Flask(__name__, static_folder='./app/build', static_url_path='/')
@@ -11,12 +11,19 @@ app.config.from_mapping(
     SECRET_KEY='dev'
 )
 # TODO: Add this to a config file
-'''
-app.config["MONGO_URI"] = "mongodb://localhost:27017/revup_test"
-mongo_client = PyMongo(app)
-#mongo_client = PyMongo(app, uri="mongodb://localhost:27017/revup_test")
-db = mongo_client.db
-'''
+app.config['DYNAMO_TABLES'] = [
+    {
+         "TableName":'revup_snv',
+         "KeySchema":[dict(AttributeName='id', KeyType='HASH')],
+         "AttributeDefinitions": [dict(AttributeName='id', AttributeType='S')],
+         "ProvisionedThroughput": dict(ReadCapacityUnits=5, WriteCapacityUnits=5)
+    }
+]
+app.config['DYNAMO_ENABLE_LOCAL'] = os.environ.get('DYNAMO_ENABLE_LOCAL', False)
+app.config['DYNAMO_LOCAL_HOST'] = os.environ.get('DYNAMO_LOCAL_HOST', '')
+app.config['DYNAMO_LOCAL_PORT'] = os.environ.get('DYNAMO_LOCAL_PORT', '')
+
+dynamo = Dynamo(app)
 
 # load the instance config, if it exists, when not testing
 app.config.from_pyfile('config.py', silent=True)

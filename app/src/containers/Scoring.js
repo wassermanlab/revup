@@ -144,7 +144,7 @@ export default function Scoring() {
                 "variant_info": variantInfo,
                 "query": query
             }
-            const response = await fetch(config.backend_url + '/initial_scores', {
+            const response = await fetch(config.backend_url + '/api/initial_scores', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
@@ -180,7 +180,7 @@ export default function Scoring() {
                 "variantInfo": variantInfo,
                 "additionalInfo": additionalInfo
             }
-            const response = await fetch(config.backend_url + '/calc_scores', {
+            const response = await fetch(config.backend_url + '/api/calc_scores', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
