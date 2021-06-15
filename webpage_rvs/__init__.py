@@ -39,7 +39,7 @@ except OSError:
     pass
 
 cors = CORS(app, resources={
-    r"/*": {"origins": ["http://localhost:3000", "https://regulatory-variants.netlify.app", "http://ec2-44-231-133-239.us-west-2.compute.amazonaws.com"]}
+    r"/*": {"origins": ["http://revup-classifier.ca", "http://www.revup-classifier.ca", "http://localhost:3000", "https://regulatory-variants.netlify.app", "http://ec2-44-231-133-239.us-west-2.compute.amazonaws.com"]}
 })
 
 import webpage_rvs.src.routes
