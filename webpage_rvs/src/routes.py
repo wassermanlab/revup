@@ -18,7 +18,8 @@ from webpage_rvs.src.constants import (
     AF_CUTOFF,
     C_3_1_LABELS,
     DEFAULT_DICT,
-    ADDITIONAL_INFO_DICT
+    ADDITIONAL_INFO_DICT,
+    FAMILIAL_SEGREGATION_MAP
 )
 from webpage_rvs.src.variant import (
     SNV
@@ -78,11 +79,9 @@ def calculate_initial_scores():
                 else:
                     response["initial_scores"][key] = "0"
 
-        # Take care of double negative
-        # if body["query"]["c_2_2"] == "yes":
-        #     response["initial_scores"]["c_2_2"] = "0"
-        # else:
-        #     response["initial_scores"]["c_2_2"] = "1"
+        # Familial Segregation
+        if response["initial_scores"]["c_3_1"] == "1":
+            response["additional_info"]["c_3_1"] = FAMILIAL_SEGREGATION_MAP[body["query"]["c_3_1_additional"]]
 
         # Check CADD and FATHMM scores
         snv.set_cadd_score()

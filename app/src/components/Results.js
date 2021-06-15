@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import {Line, Doughnut} from 'react-chartjs-2';
-//import GaugeChart from 'react-gauge-chart'
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     Button,
@@ -39,7 +38,8 @@ import ResultsPDF from './ResultsPDF'
 import {
     GeneralInfoTablePDF,
     ClinicalResultsTablePDF,
-    FunctionalResultsTablePDF
+    FunctionalResultsTablePDF,
+    CalculationsTablePDF
 } from './ResultsTablesPDF'
 import {
     ClinicalResultsTableCSV,
@@ -48,6 +48,7 @@ import {
 import {
     CITATION
 } from '../constants'
+import rve_scores from '../images/rve_scores.png'
     
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -80,8 +81,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Results(props) {
-    //const functionalPercentage = parseFloat(props.finalResults["functional"])/MAX_FUNCTIONAL_SCORE;
-    //const clinicalPercentage = parseFloat(props.finalResults["clinical"])/MAX_CLINICAL_SCORE;
     const classes = useStyles();
     const lineChartRef = useRef(null);
     const clinicalChartRef = useRef(null);
@@ -103,14 +102,53 @@ export default function Results(props) {
     const copy = (event) => {
         navigator.clipboard.writeText(CITATION).catch((error) => { alert(`Copy failed! ${error}`) });
     }
+    function getCalcValues (scoreType, resultsInfo) {
+        var calcString = ""
+        const regexpScore = /[c,f]_(\d+)_(\d+)/;
+        var match = "";
+
+        if (scoreType === "clinical") {
+            for (let key in resultsInfo) {
+                // do something for each key in the object 
+                if (resultsInfo[key] === '1' && key.startsWith("c")) {
+                    match = key.match(regexpScore);
+                    if (calcString === "") {
+                        calcString = calcString + " " + "C" + match[1] + "." + match[2]
+                    } else {
+                        calcString = calcString + ", " + "C" + match[1] + "." + match[2]
+                    }
+                    
+                }
+            }
+        } else if (scoreType === "functional") {
+            for (let key in resultsInfo) {
+                // do something for each key in the object 
+                if (resultsInfo[key] === '1' && key.startsWith("f")) {
+                    match = key.match(regexpScore);
+                    if (calcString === "") {
+                        calcString = calcString + " " + "F" + match[1] + "." + match[2]
+                    } else {
+                        calcString = calcString + ", " + "F" + match[1] + "." + match[2]
+                    }
+                }
+            }
+        }
+        return calcString
+    }
 
     //const downloadPDF = () => {
     async function downloadPDF () {
-        // Genereate Chart Images
+        // Genereate Charts/Images
         const lineChart = lineChartRef.current.chartInstance.toBase64Image();
         const clinicalChart = clinicalChartRef.current.chartInstance.toBase64Image();
         const functionalChart = functionalChartRef.current.chartInstance.toBase64Image();
         const dateTime = getDateTime();
+
+        // Get values for calculations
+        const posEvidenceLevels = {
+            "clinical": getCalcValues('clinical', props.modifiedScores),
+            "functional": getCalcValues('functional', props.modifiedScores)
+        }
 
         // Create the PDF
         const doc = <ResultsPDF 
@@ -123,6 +161,7 @@ export default function Results(props) {
                         lineChart={lineChart}
                         clinicalChart={clinicalChart}
                         functionalChart={functionalChart}
+                        posEvidenceLevels={posEvidenceLevels}
                         downloadTime={dateTime[0] + " " + dateTime[1]}
                     />;
         const asPdf = pdf();
@@ -143,6 +182,12 @@ export default function Results(props) {
         const clinicalChart = clinicalChartRef.current.chartInstance.toBase64Image().split(',')[1];
         const functionalChart = functionalChartRef.current.chartInstance.toBase64Image().split(',')[1];
         const dateTime = getDateTime();
+
+        // Get values for calculations
+        const posEvidenceLevels = {
+            "clinical": getCalcValues('clinical', props.modifiedScores),
+            "functional": getCalcValues('functional', props.modifiedScores)
+        }
 
         // Generate Table PDFs
         const generalDoc = <GeneralInfoTablePDF
@@ -165,6 +210,13 @@ export default function Results(props) {
                                 comments={props.comments}
                                 downloadTime={dateTime[0] + " " + dateTime[1]}
                             />;
+        const calculationsDoc = <CalculationsTablePDF
+                                    finalResults={props.finalResults}
+                                    modifiedScores={props.modifiedScores}
+                                    variantInfo={props.variantInfo}
+                                    posEvidenceLevels={posEvidenceLevels}
+                                    downloadTime={dateTime[0] + " " + dateTime[1]}
+                            />;
         const asPdfGeneral = pdf();
         asPdfGeneral.updateContainer(generalDoc);
         const blobGeneral = await asPdfGeneral.toBlob();
@@ -176,6 +228,10 @@ export default function Results(props) {
         const asPdfFunctional = pdf();
         asPdfFunctional.updateContainer(functionalDoc);
         const blobFunctional = await asPdfFunctional.toBlob();
+
+        const asPdfCalculations = pdf();
+        asPdfCalculations.updateContainer(calculationsDoc);
+        const blobCalculations = await asPdfCalculations.toBlob();
 
         // Create CSV
         const data = {
@@ -206,6 +262,9 @@ export default function Results(props) {
 
         // Add Functional Table PDF
         zip.file('revup_functional_table.pdf', blobFunctional, {blob: true});
+
+        // Add Calculations Table PDF
+        zip.file('revup_calculations.pdf', blobCalculations, {blob: true});
 
         // Add Clinical CSV
         zip.file('revup_clinical_table.csv', clinicalCsvContent);
@@ -345,7 +404,11 @@ export default function Results(props) {
                                 </Typography>
                             </Grid> 
                         </Grid>
-                        {/* 
+                        <Grid justify="center" alignItems="center" container spacing={3}>
+                            <Grid item xs={7}>
+                                <Typography align="center" variant="h6" color="textSecondary" style={{fontSize: '40px', fontWeight: 'lighter'}}>RVE-Score = {props.finalResults["rve"]}</Typography>
+                            </Grid>
+                        </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={7}>
                                 <Grid justify="center" container spacing={3}>
@@ -389,7 +452,8 @@ export default function Results(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        */}
+
+                        {/*
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={8}>
                                 <Grid justify="center" container spacing={3}>
@@ -424,37 +488,13 @@ export default function Results(props) {
                             </Grid>
                         </Grid>
                         <Grid justify="center" container spacing={3}>
-                            <Grid item xs={2}>
-                                RVE Score = 
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={12}>
-                                        {props.finalResults["clinical"]}
-                                    </Grid>
-                                </Grid>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={12}>
-                                        (Clinical Score)
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={1}>
-                                +
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={12}>
-                                        {props.finalResults["functional"]}
-                                    </Grid>
-                                </Grid>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={12}>
-                                        (Functional Score)
-                                    </Grid>
-                                </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" align="center" color="primary" gutterBottom>
+                                    RVE Score = {props.finalResults["rve"]}
+                                </Typography>
                             </Grid>
                         </Grid>
+                        */}
 
 
                         <Grid justify="center" container spacing={3}>
@@ -535,6 +575,12 @@ export default function Results(props) {
                                                                         <Tooltip title={"CADD can quantitatively prioritize functional, deleterious, and disease causal variants across a wide range of functional categories, effect sizes and genetic architectures and can be used prioritize causal variation in both research and clinical settings. CADD score > 15 indicates variant is deleterious"}>
                                                                             <InfoOutlinedIcon className={classes.infoIcon}/>
                                                                         </Tooltip> : {props.additionalInfo["c_2_3"]["cadd_score"]}
+                                                                    </React.Fragment>
+                                                                )
+                                                            } else if(key === "c_3_1") {
+                                                                return (
+                                                                    <React.Fragment>
+                                                                        {props.additionalInfo["c_3_1"]}
                                                                     </React.Fragment>
                                                                 )
                                                             } else {
@@ -670,7 +716,80 @@ export default function Results(props) {
                                 </TableContainer>
                             </Grid>
                         </Grid>
+
                         <br></br>
+
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={10}>
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>Calculations</b>
+                                </Typography>
+                            </Grid> 
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={7}>
+                                <TableContainer>
+                                    <Table aria-label="simple table">
+                                        <colgroup>
+                                            <col style={{width:'20%'}}/>
+                                            <col style={{width:'10%'}}/>
+                                            <col style={{width:'40%'}}/>
+                                        </colgroup>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell align="center" style={{ verticalAlign: 'top'}}>
+                                                </TableCell>
+                                                <TableCell align="center" style={{ verticalAlign: 'top'}}>
+                                                    Value
+                                                </TableCell>
+                                                <TableCell align="center" style={{ verticalAlign: 'top'}}>
+                                                    Applicable Evidence Levels
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            <TableRow key='clinical_row'>
+                                                <TableCell>
+                                                    Clinical Score
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {props.finalResults["clinical"]}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {getCalcValues('clinical', props.modifiedScores)}
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow key='functional_row'>
+                                                <TableCell>
+                                                    Functional Score
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {props.finalResults["functional"]}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {getCalcValues('functional', props.modifiedScores)}
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container alignItems="center" alignContent="center" spacing={3}>
+                            <Grid item xs={12}>
+                                <img src={rve_scores}
+                                    style={{
+                                        padding: '30px',
+                                        display: 'block',
+                                        marginLeft: 'auto',
+                                        marginRight: 'auto',
+                                    }}
+                                    width="60%" alt="RVEScore" />
+                            </Grid>
+                        </Grid>
+
+                        <br></br>
+
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={9}>
                                 <Typography variant="h5" align="left" color="secondary" gutterBottom>

@@ -5,6 +5,8 @@ import {
 } from '@material-ui/core/styles';
 import { 
     Container,
+    Button,
+    Link,
     Typography, 
 } from '@material-ui/core';
 import clsx from 'clsx';
@@ -81,59 +83,68 @@ export default function Scoring() {
     const [finalResults, setFinalResults] = useState(defaultResultsDict);
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState("");
     const [status, setStatus] = useState("unfilled");
     const classes = useStyles();
 
     useEffect(() => {
-        const fetchRefData = async () => {
+        const fetRefData = async () => {
             setLoading(true)
             const response = await fetch(`https://api.genome.ucsc.edu/getData/sequence?genome=${query["ref_genome"]};chrom=chr${query["chro"]};start=${(parseFloat(query["pos"])-1).toString()};end=${query["pos"]}`);
-            const json = await response.json();
-            var variant = [query["chro"], query["pos"], json["dna"].toUpperCase(), query["alt"]];
-            var testFlag = false;
-            if (variant.join("-") === testVars[0]["gnomadCoor"] || variant.join("-") === testVars[1]["gnomadCoor"]) {
-                testFlag = true;
-            }
-            setVariantInfo({
-                ...variantInfo,
-                "patient_id": query["patient_id"],
-                "variant_id": query["variant_id"],
-                "variant_name": `${query["ref_genome"]}.chr${query["chro"]}:${query["pos"]}.${json["dna"].toUpperCase()}>${query["alt"]}`, 
-                "variant_pos": `${query["ref_genome"]}.chr${query["chro"]}:${query["pos"]}`,
-                "variant_description": variant.join("-"),
-                "ref_genome": query["ref_genome"],
-                "target_gene": query["target_gene"],
-                "genotype": query["genotype"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
-                "test_variant": testFlag
-            });
-            setLoading(false);
-        }
-        if (query["query_ref"] === true){
-            if (query["gnomad_coord"] !== "") {
-                // gnomAD coord format is chro-pos-ref-alt
-                var variant = query["gnomad_coord"].split("-");
-                var testFlag = false;
-                if (query["gnomad_coord"] === testVars[0]["gnomadCoor"] || query["gnomad_coord"] === testVars[1]["gnomadCoor"]) {
-                    testFlag = true;
-                }
-                setVariantInfo({
-                    ...variantInfo,
-                    "patient_id": query["patient_id"],
-                    "variant_id": query["variant_id"],
-                    "variant_name": `${query["ref_genome"]}.chr${variant[0]}:${variant[1]}.${variant[2]}>${variant[3]}`, 
-                    "variant_pos": `${query["ref_genome"]}.chr${variant[0]}:${variant[1]}`,
-                    "variant_description": variant.join("-"),
-                    "ref_genome": query["ref_genome"],
-                    "target_gene": query["target_gene"],
-                    "genotype": query["genotype"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
-                    "test_variant": testFlag
-                });
+            if(!response.ok) {
+                setLoading(false);
+                setIsError(true);
+                setError("Not a valid variant, please try again!");
             } else {
-                fetchRefData();
+                const json = await response.json();
+                console.log(json)
+                if (query["gnomad_coord"] !== "") {
+                    // gnomAD coord format is chro-pos-ref-alt
+                    var variant = query["gnomad_coord"].split("-");
+                    var testFlag = false;
+                    if (query["gnomad_coord"] === testVars[0]["gnomadCoor"] || query["gnomad_coord"] === testVars[1]["gnomadCoor"]) {
+                        testFlag = true;
+                    }
+                    setVariantInfo({
+                        ...variantInfo,
+                        "patient_id": query["patient_id"],
+                        "variant_id": query["variant_id"],
+                        "variant_name": `${query["ref_genome"]}.chr${variant[0]}:${variant[1]}.${variant[2]}>${variant[3]}`, 
+                        "variant_pos": `${query["ref_genome"]}.chr${variant[0]}:${variant[1]}`,
+                        "variant_description": variant.join("-"),
+                        "ref_genome": query["ref_genome"],
+                        "target_gene": query["target_gene"],
+                        "genotype": query["genotype"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
+                        "test_variant": testFlag
+                    });
+                } else {
+                    var variant = [query["chro"], query["pos"], json["dna"].toUpperCase(), query["alt"]];
+                    var testFlag = false;
+                    if (variant.join("-") === testVars[0]["gnomadCoor"] || variant.join("-") === testVars[1]["gnomadCoor"]) {
+                        testFlag = true;
+                    }
+                    setVariantInfo({
+                        ...variantInfo,
+                        "patient_id": query["patient_id"],
+                        "variant_id": query["variant_id"],
+                        "variant_name": `${query["ref_genome"]}.chr${query["chro"]}:${query["pos"]}.${json["dna"].toUpperCase()}>${query["alt"]}`, 
+                        "variant_pos": `${query["ref_genome"]}.chr${query["chro"]}:${query["pos"]}`,
+                        "variant_description": variant.join("-"),
+                        "ref_genome": query["ref_genome"],
+                        "target_gene": query["target_gene"],
+                        "genotype": query["genotype"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
+                        "test_variant": testFlag
+                    });
+                }
+                setLoading(false);
             }
+        }
+
+        if (query["query_ref"] === true) {
+            fetRefData();
             setQuery({...query, "query_ref": false});
-            
-        } 
+        }
     }, [query]);
 
 
@@ -144,7 +155,7 @@ export default function Scoring() {
                 "variant_info": variantInfo,
                 "query": query
             }
-            const response = await fetch(config.backend_url + '/api/initial_scores', {
+            const response = await fetch(config.backend_url + 'api/initial_scores', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
@@ -162,7 +173,7 @@ export default function Scoring() {
             setClinicalEvidenceLabels(json["evidence_description"]["clinical"]);
             setFunctionalEvidenceLabels(json["evidence_description"]["functional"]);
             setLoading(false)
-            console.log(json);
+            //console.log(json);
         }
         if (query["calc_scores"] === true){
             fetchInitialData();
@@ -180,7 +191,7 @@ export default function Scoring() {
                 "variantInfo": variantInfo,
                 "additionalInfo": additionalInfo
             }
-            const response = await fetch(config.backend_url + '/api/calc_scores', {
+            const response = await fetch(config.backend_url + 'api/calc_scores', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
@@ -226,6 +237,25 @@ export default function Scoring() {
                                 <DialogTitle id="LoadingBarTitle">Loading...</DialogTitle>
                                 <DialogContent>
                                     <CircularProgress/>
+                                </DialogContent>
+                            </Dialog>
+                            <Dialog 
+                                aria-labelledby="ErrorDialog" 
+                                disableBackdropClick={true} 
+                                disableEscapeKeyDown={true} 
+                                open={isError}
+                                style={{textAlign: "center"}}
+                            >
+                                <DialogTitle id="ErrorTitle">Error</DialogTitle>
+                                <DialogContent>
+                                    {error}
+                                    <br></br>
+                                    <br></br>
+                                    <Link href="/scoring" color="secondary" underline="none">
+                                        <Button variant="contained" color="secondary" size="large" onClick={() => { setIsError(false) }}>
+                                            Try Again! 
+                                        </Button>
+                                    </Link>
                                 </DialogContent>
                             </Dialog>
                             { status === "unfilled" ? 

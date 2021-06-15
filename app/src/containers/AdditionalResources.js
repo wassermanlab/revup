@@ -103,7 +103,7 @@ export default function AdditionalResources() {
                                                 <br></br>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
                                                     The following tables outline the evidence classification used 
-                                                    to score variants in RevUP. They were created by Van der Lee R, 
+                                                    to score variants in RevUP. They were adapted from Van der Lee R, 
                                                     Correard S and Wasserman WW in “Deregulated Regulators: Disease-
                                                     Causing cis Variants in Transcription Factor Genes” (Trends in 
                                                     Genetics, 2020).

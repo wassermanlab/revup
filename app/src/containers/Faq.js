@@ -123,7 +123,7 @@ export default function Faq() {
                                                 aria-controls="panel1-content"
                                                 id="panel1-header">
                                                 <Typography variant="h6" color="secondary">
-                                                    What are the different steps?
+                                                    What are the different steps to obtain the RVE-Score?
                                                 </Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
@@ -135,48 +135,50 @@ export default function Faq() {
                                                         <li>Step 2 includes questions about the potential target gene and the variant</li>
                                                         <li>Step 3 allows users to modify answers and add comments/remarks</li>
                                                     </ul>
-                                                    In step 3, users can modify their answers, as well as add information / remarks. For example, the user could add the reference of the paper where they found the information for a given evidence.
+                                                    In step 3, users can modify their answers, as well as add information / 
+                                                    remarks. For example, the user could add the reference of the paper where they 
+                                                    found the information for a given evidence.
                                                     <br></br>  
-                                                    Finally, the user will obtain the final score as well as a document providing the details provided.
+                                                    Finally, the user will obtain the final score as well as a document 
+                                                    providing the details provided.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
                                         <Accordion>
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}
-                                                aria-controls="panel2-content"
-                                                id="panel2-header">
+                                                aria-controls="panel9-content"
+                                                id="panel9-header">
                                                 <Typography variant="h6" color="secondary">
-                                                    How to score compound Heterozygous variants?
+                                                    How to add information about the variant, the target gene 
+                                                    or the genomic region that were not found by RevUP?
                                                 </Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
-                                                    To date, the tool does not allow to score compound heterozygous variants in a combined fashion. Users should score both variants separately and then combine the results in a critical manner, as features may not be additive, and scores are not additives. 
-                                                    <br></br>
-                                                    We are planning on working on this feature for a future release.
+                                                    RevUP quarries automatically a maximum of features, but it 
+                                                    may not find the latest CHIP-seq results for your region of 
+                                                    interest, and therefore, this will not be reflected in the 
+                                                    score. To compensate, users can manually modify the score 
+                                                    during step 3, and add a comment / remark to explain why 
+                                                    they did modify the score.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
                                         <Accordion>
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}
-                                                aria-controls="panel3-content"
-                                                id="panel3-header">
+                                                aria-controls="panel9-content"
+                                                id="panel9-header">
                                                 <Typography variant="h6" color="secondary">
-                                                    How to score structural variants?
+                                                    Is it better to input coordinates in hg37 or hg38?
                                                 </Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
-                                                <Typography  variant="body1"  color="textSecondary" paragraph>
-                                                    To date, the tool only allow the scoring of non-coding SNV (
-                                                    Single nucleotide variants), to obtain the score of a structural 
-                                                    variant, user should refer to the tables in Van der Lee R, 
-                                                    Correard S and Wasserman WW in “Deregulated Regulators: 
-                                                    Disease-Causing cis Variants in Transcription Factor Genes” 
-                                                    (Trends in Genetics, 2020)
-                                                    <br></br>
-                                                    We are planning on working on this feature for a future release.
+                                                <Typography variant="body1" color="textSecondary" paragraph>
+                                                    All of the external databases are queried using the GRCh38 coordinates, therefore it is better
+                                                    if the user uses GRCh38 coordinates in RevUP. However, the user can also query RevUP using GRCh37
+                                                    coordinates and a lift-over is performed using a Python implementatino of the UCSC LiftOver tool.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
@@ -200,20 +202,15 @@ export default function Faq() {
                                         <Accordion>
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}
-                                                aria-controls="panel5-content"
-                                                id="panel5-header">
+                                                aria-controls="panel9-content"
+                                                id="panel9-header">
                                                 <Typography variant="h6" color="secondary">
-                                                    What information are you keeping when I score a variant?
+                                                    How is the answer "Unknown" scored?
                                                 </Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
-                                                <Typography variant="body1" color="textSecondary" gutterBottom>
-                                                    In order to create statistics on the submission, we do keep metadata. 
-                                                    We do not conserve users information (IP address) nor we conserve the 
-                                                    variant details (chromosome, position, reference allele, alternate allele), 
-                                                    so we won’t be able to study individual variants that are submitted. Our 
-                                                    goal is to observe how many users submit with which reference genome, how 
-                                                    many users did functional analysis, etc.
+                                                <Typography variant="body1" color="textSecondary" paragraph>
+                                                    By default, "unknown" is selected, giving a score of 0 to the evidence. 
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
@@ -295,7 +292,8 @@ export default function Faq() {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell>
-                                                                        C1.2 : Variant is rare in unaffected individuals in specific sets of controls or reference population databases
+                                                                        C1.2 : Variant is rare in unaffected individuals in specific 
+                                                                        sets of controls or reference population databases
                                                                     </TableCell>
                                                                     <TableCell>
                                                                         gnomAD v3.1.1 (Karczewski <i>et al.</i>, 2020)  
@@ -343,7 +341,8 @@ export default function Faq() {
                                                                         If the variant position intersect with at least one CRM → 1;{"\n"}else → 0
                                                                     </TableCell>
                                                                     <TableCell>
-                                                                        Intersect with file downloaded from ReMap 2020, Homo Sapiens, CRMs, hg38 (1.7 millions)
+                                                                        Intersect with file downloaded from ReMap 2020, Homo Sapiens, 
+                                                                        CRMs, hg38 (1.7 millions)
                                                                     </TableCell>
                                                                 </TableRow>
                                                                 <TableRow>
@@ -365,7 +364,8 @@ export default function Faq() {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell>
-                                                                        F1.3 : Regulatory region and target gene are directly linked based on annotation or experimental data
+                                                                        F1.3 : Regulatory region and target gene are directly linked based 
+                                                                        on annotation or experimental data
                                                                     </TableCell>
                                                                     <TableCell rowspan={2}>
                                                                         Method and cell type
@@ -381,11 +381,13 @@ export default function Faq() {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell>
-                                                                        F1.4 : Variant is statistically associated with expression levels of the target gene
+                                                                        F1.4 : Variant is statistically associated with expression levels 
+                                                                        of the target gene
                                                                     </TableCell>
                                                                     <TableCell>
                                                                         if F1.2 = 0 → 0; {"\n"}
-                                                                        else, if cCRE and potential target gene linked based on Hi-C or CHIA-PET method → 1; {"\n"}
+                                                                        else, if cCRE and potential target gene linked based on Hi-C or 
+                                                                        CHIA-PET method → 1; {"\n"}
                                                                         else → 0
                                                                     </TableCell>
                                                                 </TableRow>
@@ -393,6 +395,67 @@ export default function Faq() {
                                                         </Table>
                                                     </TableContainer>
                                                 </div>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel2-content"
+                                                id="panel2-header">
+                                                <Typography variant="h6" color="secondary">
+                                                    How to score compound Heterozygous variants?
+                                                </Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Typography variant="body1" color="textSecondary" paragraph>
+                                                    To date, the tool does not allow to score compound heterozygous 
+                                                    variants in a combined fashion. Users should score both variants 
+                                                    separately and then combine the results in a critical manner, as 
+                                                    features may not be additive, and scores are not additives. 
+
+                                                </Typography>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel3-content"
+                                                id="panel3-header">
+                                                <Typography variant="h6" color="secondary">
+                                                    How to score structural variants?
+                                                </Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Typography  variant="body1"  color="textSecondary" paragraph>
+                                                    To date, the tool only allow the scoring of non-coding SNV (
+                                                    Single nucleotide variants), to obtain the score of a structural 
+                                                    variant, user should refer to the tables in Van der Lee R, 
+                                                    Correard S and Wasserman WW in “Deregulated Regulators: 
+                                                    Disease-Causing cis Variants in Transcription Factor Genes” 
+                                                    (Trends in Genetics, 2020)
+                                                    <br></br>
+                                                    We are planning on working on this feature for a future release.
+                                                </Typography>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel5-content"
+                                                id="panel5-header">
+                                                <Typography variant="h6" color="secondary">
+                                                    What information are you keeping when I score a variant?
+                                                </Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Typography variant="body1" color="textSecondary" gutterBottom>
+                                                    In order to create statistics on the submission, we do keep metadata. 
+                                                    We do not conserve users information (IP address) nor we conserve the 
+                                                    variant details (chromosome, position, reference allele, alternate allele), 
+                                                    so we won’t be able to study individual variants that are submitted. Our 
+                                                    goal is to observe how many users submit with which reference genome, how 
+                                                    many users did functional analysis, etc.
+                                                </Typography>
                                             </AccordionDetails>
                                         </Accordion>
                                         <Accordion>
@@ -422,63 +485,13 @@ export default function Faq() {
                                             <AccordionDetails>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
                                                     If you used this website to score a variant, and / or want to include the 
-                                                    final figure in your paper, please cite both :
+                                                    final figure in your paper, please cite:
                                                     <br></br>
-                                                    Van der Lee R, Correard S and Wasserman WW in “Deregulated Regulators: 
-                                                    Disease-Causing cis Variants in Transcription Factor Genes” (Trends in Genetics, 2020)
+                                                    van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 
+                                                    cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. 
+                                                    doi: 10.1016/j.tig.2020.04.006. Epub 2020 May 22. PMID: 32451166.
                                                     <br></br>
                                                     {/* TODO: Add link to webpapge paper when published*/ }
-                                                </Typography>
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <Accordion>
-                                            <AccordionSummary
-                                                expandIcon={<ExpandMoreIcon />}
-                                                aria-controls="panel9-content"
-                                                id="panel9-header">
-                                                <Typography variant="h6" color="secondary">
-                                                    I have some additional information on the variant, the target gene or the genomic region, which will influence the score, but I can’t add it.
-                                                </Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <Typography variant="body1" color="textSecondary" paragraph>
-                                                    Indeed, this may be an issue. As we wanted to automate a maximum of 
-                                                    features, the tool may not find the latest CHIP-seq results for your 
-                                                    region of interest, and therefore, this will not be reflected in the 
-                                                    score. To compensate, you can manually modify the score during step 3, 
-                                                    and add a comment / remark to explain why you did modify the score.
-                                                </Typography>
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <Accordion>
-                                            <AccordionSummary
-                                                expandIcon={<ExpandMoreIcon />}
-                                                aria-controls="panel9-content"
-                                                id="panel9-header">
-                                                <Typography variant="h6" color="secondary">
-                                                    How is the answer "Unknown" scored?
-                                                </Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <Typography variant="body1" color="textSecondary" paragraph>
-                                                    By default, "unknown" is selected, giving a score of 0 to the evidence. 
-                                                </Typography>
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <Accordion>
-                                            <AccordionSummary
-                                                expandIcon={<ExpandMoreIcon />}
-                                                aria-controls="panel9-content"
-                                                id="panel9-header">
-                                                <Typography variant="h6" color="secondary">
-                                                    Is it better to input coordinates in hg37 or hg38?
-                                                </Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <Typography variant="body1" color="textSecondary" paragraph>
-                                                    All of the external databases are queried using the GRCh38 coordinates, therefore it is better
-                                                    if the user uses GRCh38 coordinates in RevUP. However, the user can also query RevUP using GRCh37
-                                                    coordinates and a lift-over is performed using a Python implementatino of the UCSC LiftOver tool.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>

@@ -66,6 +66,8 @@ export default function StepTwoForm(props) {
             } else {
                 document.getElementById("func_analysis_questions").style.display="none"
                 // TODO: Set all func analysis question answers to "unknown" or "no"
+                var x = document.getElementById("func_analysis_questions").querySelectorAll(".select");
+                console.log(x)
             }
         }
     }

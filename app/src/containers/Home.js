@@ -115,10 +115,11 @@ export default function Home() {
                                                     on the ACMG / AMP 2015 guidelines (ex: 
                                                     <Link href="http://wintervar.wglab.org" color="secondary">InterVar-Genetic variants Interpretation by ACMG/AMP 2015 guideline</Link>
                                                     ), RevUP focuses on the interpretation of suspected regulatory 
-                                                    variants, based on the classification developed by Van der Lee R, 
+                                                    variants, based on the classification developed by 
+                                                    <Link href="https://doi.org/10.1016/j.tig.2020.04.006" color="secondary">Van der Lee R, 
                                                     Correard S and Wasserman WW in “Deregulated Regulators: Disease-
                                                     Causing cis Variants in Transcription Factor Genes” (Trends in 
-                                                    Genetics, 2020).
+                                                    Genetics, 2020)</Link>.
                                                 </Typography>
                                                 <Typography style={{paddingTop: "2%"}} variant="body1" align="center" gutterBottom>
                                                     <Link href="/about" color="secondary" underline="none">

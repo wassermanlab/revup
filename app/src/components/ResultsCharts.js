@@ -16,7 +16,7 @@ export function getLineData(finalResults) {
         labels: finalResults["standard_rve"]["x"],
         datasets: [
           {
-            label: 'RVE-Score Distribution obtained from classifying 42 regulatory variants in van der Lee et al., 2020',
+            label: ['RVE-Score Distribution obtained from classifying 42', 'regulatory variants in van der Lee et al., 2020'],
             fill: false,
             lineTension: 0.1,
             backgroundColor: 'rgba(75,192,192,0.4)',
@@ -59,7 +59,7 @@ export function getLineOptions(finalResults) {
                 borderWidth: 3,
                 borderColor: "red",
                 label: {
-                  content: "RVE Score = ".concat(finalResults["rve"]),
+                  content: "RVE-Score = ".concat(finalResults["rve"]),
                   enabled: true,
                   position: "top"
                 }
@@ -76,7 +76,7 @@ export function getLineOptions(finalResults) {
                 },
                 scaleLabel: {
                     display: true,
-                    labelString: 'RVE Scores'
+                    labelString: 'RVE-Scores'
                   }
             }],
             yAxes: [{

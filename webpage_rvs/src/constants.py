@@ -1,6 +1,12 @@
 # Logging stuff
 LOGGING_FORMAT = "%(asctime)s - %(levelname)s - %(lineno)d - %(message)s"
 
+FAMILIAL_SEGREGATION_MAP = {
+    "trio": "Variant segregates as expected in a trio ** (parents and proband)",
+    "small_family": "Variant segregates as expected in a small family ** (trio and 1 or 2 siblings)",
+    "large_family": "Variant segregates as expected in a large family ** (over 5 individuals)"
+}
+
 
 CLINICAL_QUESTIONS = [
     "c_5_2",

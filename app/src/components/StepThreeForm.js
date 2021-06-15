@@ -278,6 +278,12 @@ export default function StepThreeForm(props) {
                                                                     </Tooltip> : {props.additionalInfo["c_2_3"]["cadd_score"]}
                                                                 </React.Fragment>
                                                             )
+                                                        } else if(key === "c_3_1") {
+                                                            return (
+                                                                <React.Fragment>
+                                                                    {props.additionalInfo["c_3_1"]}
+                                                                </React.Fragment>
+                                                            )
                                                         } else {
                                                             return (
                                                                 <React.Fragment>

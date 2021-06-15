@@ -23,7 +23,11 @@ export function ClinicalResultsTableCSV(props) {
             comments = "gnomAD Allele Frequency:" + props.additionalInfo["c_1_2"]["af"] + ";";
         } else if(key === "c_2_3") {
             comments = "CADD score:" + props.additionalInfo["c_2_3"]["cadd_score"] + ";";
-        } 
+        } else if(key === "c_3_1") {
+            if (props.additionalInfo["c_3_1"] !== "") {
+                comments = props.additionalInfo["c_3_1"] + ";";
+            }
+        }
 
         if(props.comments[key] !== "") {
             comments = comments + "comments:" + props.comments[key] + ";";

@@ -1,10 +1,3 @@
-export const testVarChro = "17";
-export const testVarPos = "4987635";
-export const testVarAlt = "T";
-export const testVarRefGenome = "hg38";
-export const testVarGnomadCoor = "17-4987635-C-T";
-export const testVarTargetGene = "CAMTA2";
-
 export const testVars = [
     {
         "patientId": "Test Patient",
@@ -137,6 +130,7 @@ export const additionalInfoDict = {
     "c_2_3": {
         "cadd_score": "",
     },
+    "c_3_1": "",
     "f_1_1": {
         "crms": [],
     },

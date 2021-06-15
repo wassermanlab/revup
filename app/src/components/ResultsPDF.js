@@ -1,12 +1,10 @@
 import React from 'react';
 import { Page, Text, View, Document, Image, StyleSheet } from '@react-pdf/renderer';
 import {
-    CLINICAL_RANGE_MAXIMUMS,
-    FUNCTIONAL_RANGE_MAXIMUMS
-} from '../constants'
-import {
+    GeneralInfoTable,
     ClinicalResultsTable,
-    FunctionalResultsTable
+    FunctionalResultsTable,
+    CalculationsTable
 } from './ResultsTablesPDF'
 
 const BORDER_COLOR = '#E5E5E5'
@@ -156,82 +154,18 @@ export default function ResultsPDF(props) {
         <React.Fragment>
             <Document>
                 <Page style={styles.body}>
-                    <View>
-                        <Text style={styles.heading}>
-                            General Information
-                        </Text>
-                    </View>
-                    <View style={styles.table}>
-                        {(function () {
-                            if(props.variantInfo["variant_id"]) {
-                                return (
-                                    <View style={styles.tableRow}>
-                                        <View style={styles.tableCol}>
-                                            <Text style={styles.tableCell}>Variant ID: </Text>
-                                        </View>
-                                        <View style={styles.tableColLg}>
-                                            <Text style={styles.tableCell}>{props.variantInfo["variant_id"]}</Text>
-                                        </View>
-                                    </View>
-                            )} else {return ("")}
-                        })()}
-                        {(function () {
-                            if(props.variantInfo["patient_id"]) {
-                                return (
-                                    <View style={styles.tableRow}>
-                                        <View style={styles.tableCol}>
-                                            <Text style={styles.tableCell}>Patient ID: </Text>
-                                        </View>
-                                        <View style={styles.tableColLg}>
-                                            <Text style={styles.tableCell}>{props.variantInfo["patient_id"]}</Text>
-                                        </View>
-                                    </View>
-                            )} else {return ("")}
-                        })()}
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>hg19 position: </Text>
-                            </View>
-                            <View style={styles.tableColLg}>
-                                <Text style={styles.tableCell}>{props.assemblies["hg19"]}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>hg38 position: </Text>
-                            </View>
-                            <View style={styles.tableColLg}>
-                                <Text style={styles.tableCell}>{props.assemblies["hg38"]}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Reference Assembly: </Text>
-                            </View>
-                            <View style={styles.tableColLg}>
-                                <Text style={styles.tableCell}>{props.variantInfo["ref_genome"]}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Patient's Genotype: </Text>
-                            </View>
-                            <View style={styles.tableColLg}>
-                                <Text style={styles.tableCell}>{props.variantInfo["genotype"]}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Target Gene: </Text>
-                            </View>
-                            <View style={styles.tableColLg}>
-                                <Text style={styles.tableCell}>{props.variantInfo["target_gene"]}</Text>
-                            </View>
-                        </View>
-                    </View>
+                    <GeneralInfoTable 
+                        variantInfo={props.variantInfo}
+                        finalResults={props.finalResults}
+                        assemblies={props.assemblies}
+                        downloadTime={props.downloadTime}
+                    />
 
                     <View>
                         <Text style={styles.heading}>Scores</Text>
+                    </View>
+                    <View>
+                        <Text style={styles.subheadingCentered}>RVE Score = {props.finalResults["rve"]}</Text>
                     </View>
                     <View style={styles.table}> 
                         <View style={styles.tableRow}> 
@@ -327,6 +261,14 @@ export default function ResultsPDF(props) {
                         comments={props.comments}
                         downloadTime={props.downloadTime}
                     />
+                    <CalculationsTable
+                        finalResults={props.finalResults}
+                        modifiedScores={props.modifiedScores}
+                        variantInfo={props.variantInfo}
+                        posEvidenceLevels={props.posEvidenceLevels}
+                        downloadTime={props.downloadTime}
+                    />
+
                 </Page>
             </Document>
         </React.Fragment>

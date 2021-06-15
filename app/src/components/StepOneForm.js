@@ -340,7 +340,7 @@ export default function StepOneForm(props) {
                                     <Select id="genotype" value={props.query["genotype"] ? props.query["genotype"] : ""} onChange={(e) => handleChange('genotype', e)} variant="outlined">
                                         <MenuItem value={"heterozygous"}>Heterozygous</MenuItem>
                                         <MenuItem value={"homozygous"}>Homozygous</MenuItem>
-                                        <MenuItem value={"compound_het"}>Compound Het</MenuItem>
+                                        <MenuItem value={"compound_heterozygous"}>Compound Heterozygous</MenuItem>
                                         <MenuItem value={"unknown"}>Unknown</MenuItem>
                                     </Select>
                                 </FormControl>

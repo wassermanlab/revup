@@ -1,5 +1,6 @@
 import React from 'react';
 import { Page, Text, View, Document, Image, StyleSheet } from '@react-pdf/renderer';
+import rve_scores from '../images/rve_scores.png'
 
 const BORDER_COLOR = '#E5E5E5'
 //const BORDER_STYLE = 'solid'
@@ -141,11 +142,32 @@ const styles = StyleSheet.create({
     },
 });
 
+export function Citation(props) {
+    return (
+        <React.Fragment>
+            <View>
+                <Text style={styles.heading}>
+                    Citing RevUP
+                </Text>
+                <Text style={styles.citation}>
+                    Van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 
+                    cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. 
+                    doi: 10.1016/j.tig.2020.04.006. Epub 2020 May 22.
+                </Text>
+            </View>
+            <View>
+                <Text style={styles.normal}>
+                    Downloaded: {props.downloadTime}
+                </Text>
+            </View>
+        </React.Fragment>
+    )
+}
 
 export function GeneralInfoTable(props) {
     return (
         <React.Fragment>
-            <View break>
+            <View>
                 <Text style={styles.heading}>General Information</Text>
             </View>
             <View style={styles.resultsTable}>
@@ -160,7 +182,11 @@ export function GeneralInfoTable(props) {
                                     <Text style={styles.tableCell}>{props.variantInfo["variant_id"]}</Text>
                                 </View>
                             </View>
-                    )} else {return ("")}
+                    )} else {
+                        return (
+                            <View></View>
+                        )
+                    }
                 })()}
                 {(function () {
                     if(props.variantInfo["patient_id"]) {
@@ -173,7 +199,11 @@ export function GeneralInfoTable(props) {
                                     <Text style={styles.tableCell}>{props.variantInfo["patient_id"]}</Text>
                                 </View>
                             </View>
-                    )} else {return ("")}
+                    )} else {
+                        return (
+                            <View></View>
+                        )
+                    }
                 })()}
                 <View style={styles.tableRow}>
                     <View style={styles.resultsTableCol}>
@@ -234,59 +264,7 @@ export function GeneralInfoTable(props) {
                             {props.variantInfo["target_gene"]}
                         </Text>
                     </View>
-                </View>
-                <View style={styles.tableRow}>
-                    <View style={styles.resultsTableCol}>
-                        <Text style={styles.tableCell}>
-                            C- Score:
-                        </Text>
-                    </View>
-                    <View style={styles.resultsTableCol}>
-                        <Text style={styles.tableCell}>
-                            {props.finalResults["clinical"]}
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.tableRow}>
-                    <View style={styles.resultsTableCol}>
-                        <Text style={styles.tableCell}>
-                            F-Score:
-                        </Text>
-                    </View>
-                    <View style={styles.resultsTableCol}>
-                        <Text style={styles.tableCell}>
-                            {props.finalResults["functional"]}
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.tableRow}>
-                    <View style={styles.resultsTableCol}>
-                        <Text style={styles.tableCell}>
-                            RVE Score:
-                        </Text>
-                    </View>
-                    <View style={styles.resultsTableCol}>
-                        <Text style={styles.tableCell}>
-                            {props.finalResults["rve"]}
-                        </Text>
-                    </View>
-                </View>
-            </View>
-
-            <View>
-                <Text style={styles.heading}>
-                    Citing RevUP
-                </Text>
-                <Text style={styles.citation}>
-                    Van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 
-                    cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. 
-                    doi: 10.1016/j.tig.2020.04.006. Epub 2020 May 22.
-                </Text>
-            </View>
-            <View>
-                <Text style={styles.normal}>
-                    Downloaded: {props.downloadTime}
-                </Text>
+                </View>   
             </View>
         </React.Fragment>
     )
@@ -302,7 +280,9 @@ export function GeneralInfoTablePDF(props) {
                         finalResults={props.finalResults}
                         assemblies={props.assemblies}
                         downloadTime={props.downloadTime}
+                        isPDF
                     />
+                    <Citation downloadTime={props.downloadTime}/>
                 </Page>
             </Document>
         </React.Fragment>
@@ -482,7 +462,8 @@ export function ClinicalResultsTable(props) {
                     </View> 
                     <View style={styles.resultsTableCol}>
                         <Text style={styles.tableCell}>
-                            {props.comments["c_3_1"] ? props.comments["c_3_1"]: "-"}
+                            {props.comments["c_3_1"] ? props.comments["c_3_1"]+"\n": ""}
+                            {props.additionalInfo["c_3_1"] ? props.additionalInfo["c_3_1"]: ""}
                         </Text> 
                     </View>
                 </View>
@@ -556,21 +537,7 @@ export function ClinicalResultsTable(props) {
                 </View>      
             </View>
 
-            <View>
-                <Text style={styles.heading}>
-                    Citing RevUP
-                </Text>
-                <Text style={styles.citation}>
-                    Van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 
-                    cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. 
-                    doi: 10.1016/j.tig.2020.04.006. Epub 2020 May 22.
-                </Text>
-            </View>
-            <View>
-                <Text style={styles.normal}>
-                    Downloaded: {props.downloadTime}
-                </Text>
-            </View>
+            <Citation downloadTime={props.downloadTime}/>
         </React.Fragment>
     )
 }
@@ -770,21 +737,7 @@ export function FunctionalResultsTable(props) {
                 </View>
             </View>
 
-            <View>
-                <Text style={styles.heading}>
-                    Citing RevUP
-                </Text>
-                <Text style={styles.citation}>
-                    Van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 
-                    cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. 
-                    doi: 10.1016/j.tig.2020.04.006. Epub 2020 May 22.
-                </Text>
-            </View>
-            <View>
-                <Text style={styles.normal}>
-                    Downloaded: {props.downloadTime}
-                </Text>
-            </View>
+            <Citation downloadTime={props.downloadTime}/>
         </React.Fragment>
     )
 }
@@ -799,6 +752,97 @@ export function FunctionalResultsTablePDF(props) {
                         modifiedScores={props.modifiedScores}
                         variantInfo={props.variantInfo}
                         comments={props.comments}
+                        downloadTime={props.downloadTime}
+                    />
+                </Page>
+            </Document>
+        </React.Fragment>
+    )
+}
+
+export function CalculationsTable(props) {
+    return (
+        <React.Fragment>
+            <View break>
+                <Text style={styles.heading}>Calculations for {props.variantInfo["variant_name"]}</Text>
+            </View>
+            <View style={styles.resultsTable}> 
+                <View style={styles.tableRow}> 
+                    <View style={styles.resultsTableColHeader}> 
+                        <Text style={styles.tableCellHeader}></Text> 
+                    </View> 
+                    <View style={styles.resultsTableColSmHeader}> 
+                        <Text style={styles.tableCellHeader}>Value</Text> 
+                    </View> 
+                    <View style={styles.resultsTableColHeader}> 
+                        <Text style={styles.tableCellHeader}>Applicable Evidence Levels</Text> 
+                    </View> 
+                </View>
+                <View style={styles.tableRow}> 
+                    <View style={styles.resultsTableCol}> 
+                        <Text style={styles.tableCell}>
+                            Clinical Score
+                        </Text> 
+                    </View> 
+                    <View style={styles.resultsTableColSm}> 
+                        <Text style={styles.tableCellCentered}>
+                            {props.finalResults["clinical"]}
+                        </Text> 
+                    </View> 
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.posEvidenceLevels["clinical"]}
+                        </Text> 
+                    </View>
+                </View>  
+                <View style={styles.tableRow}> 
+                    <View style={styles.resultsTableCol}> 
+                        <Text style={styles.tableCell}>
+                            Functional Score
+                        </Text> 
+                    </View> 
+                    <View style={styles.resultsTableColSm}> 
+                        <Text style={styles.tableCellCentered}>
+                            {props.finalResults["functional"]}
+                        </Text> 
+                    </View> 
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.posEvidenceLevels["functional"]}
+                        </Text> 
+                    </View>
+                </View> 
+            </View>
+
+            <View>
+                {/* TODO: This doesnt work!!!!! */}
+                <Image src={rve_scores}
+                    style={{
+                        padding: '30px',
+                        display: 'block',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                    }}
+                    width="60%"
+                />
+            </View>
+
+            <Citation downloadTime={props.downloadTime}/>
+        </React.Fragment>
+    )
+}
+
+export function CalculationsTablePDF(props) {
+    return (
+        <React.Fragment>
+            <Document>
+                <Page style={styles.body}>
+                    <CalculationsTable 
+                        finalResults={props.finalResults}
+                        modifiedScores={props.modifiedScores}
+                        variantInfo={props.variantInfo}
+                        revupPhoto={props.revupPhoto}
+                        posEvidenceLevels={props.posEvidenceLevels}
                         downloadTime={props.downloadTime}
                     />
                 </Page>
