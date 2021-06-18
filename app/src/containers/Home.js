@@ -10,8 +10,7 @@ import {
     Container,
     Grid,
     Link,
-    Typography,
-    withTheme, 
+    Typography, 
 } from '@material-ui/core';
 import clsx from 'clsx';
 import theme from '../styles/theme';

@@ -7,7 +7,6 @@ import {
     Container,
     Button,
     Link,
-    Typography, 
 } from '@material-ui/core';
 import clsx from 'clsx';
 import Dialog from "@material-ui/core/Dialog";
@@ -98,11 +97,11 @@ export default function Scoring() {
                 setError("Not a valid variant, please try again!");
             } else {
                 const json = await response.json();
-                console.log(json)
+                var variant = "";
+                var testFlag = false;
                 if (query["gnomad_coord"] !== "") {
                     // gnomAD coord format is chro-pos-ref-alt
-                    var variant = query["gnomad_coord"].split("-");
-                    var testFlag = false;
+                    variant = query["gnomad_coord"].split("-");
                     if (query["gnomad_coord"] === testVars[0]["gnomadCoor"] || query["gnomad_coord"] === testVars[1]["gnomadCoor"]) {
                         testFlag = true;
                     }
@@ -119,8 +118,7 @@ export default function Scoring() {
                         "test_variant": testFlag
                     });
                 } else {
-                    var variant = [query["chro"], query["pos"], json["dna"].toUpperCase(), query["alt"]];
-                    var testFlag = false;
+                    variant = [query["chro"], query["pos"], json["dna"].toUpperCase(), query["alt"]];
                     if (variant.join("-") === testVars[0]["gnomadCoor"] || variant.join("-") === testVars[1]["gnomadCoor"]) {
                         testFlag = true;
                     }
@@ -137,6 +135,7 @@ export default function Scoring() {
                         "test_variant": testFlag
                     });
                 }
+                console.log(testFlag)
                 setLoading(false);
             }
         }

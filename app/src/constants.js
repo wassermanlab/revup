@@ -150,6 +150,13 @@ export const defaultResultsDict = {
     "variant_info": {},
 }
 
+export const defaultEmailDict = {
+    "recipient": "",
+    "respond_to": "",
+    "message": "",
+    "submit": false,
+}
+
 export const MAX_CLINICAL_SCORE = 114.0;
 export const MAX_FUNCTIONAL_SCORE = 38.0;
 

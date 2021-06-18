@@ -177,56 +177,11 @@ export default function ResultsPDF(props) {
 
                     <View style={styles.table}> 
                         <View style={styles.tableRow}> 
-                            <View style={styles.tableColMed}>
-                                {/* 
-                                <Text style={styles.subheadingCentered}>
-                                    Clinical Score:
-                                </Text>
-                                <Text style={styles.tableCellCentered}>
-                                    Is there a causal link between genotype and phenotype?
-                                </Text>
-                                */}
+                            <View style={styles.tableColLg}>
                                 <Image src={props.clinicalChart}></Image>
-                                {/* 
-                                <Text style={styles.tableCellCentered}>
-                                    {(function () {
-                                        if(props.finalResults["clinical"] <= CLINICAL_RANGE_MAXIMUMS["weak"] && props.finalResults["clinical"] >= 0.0) {
-                                            return ("Weak Evidence")
-                                        } else if(props.finalResults["clinical"] > CLINICAL_RANGE_MAXIMUMS["weak"] && props.finalResults["clinical"] <= CLINICAL_RANGE_MAXIMUMS["moderate"]) {
-                                            return ("Moderate Evidence")
-                                        } else {
-                                            return ("Strong Evidence")
-                                        }
-                                    })()}
-                                </Text>
-                                */}
                             </View>
-                            <View style={styles.tableColSm}>
-
-                            </View>
-                            <View style={styles.tableColMed}>
-                                {/* 
-                                <Text style={styles.subheadingCentered}>
-                                    Functional Score:
-                                </Text>
-                                <Text style={styles.tableCellCentered}>
-                                Does the variant have a damaging effect on the gene?
-                                </Text>
-                                */}
+                            <View style={styles.tableColLg}>
                                 <Image src={props.functionalChart}></Image>
-                                {/*
-                                <Text style={styles.tableCellCentered}>
-                                    {(function () {
-                                        if(props.finalResults["clinical"] <= FUNCTIONAL_RANGE_MAXIMUMS["weak"] && props.finalResults["clinical"] >= 0.0) {
-                                            return ("Weak Evidence")
-                                        } else if(props.finalResults["clinical"] > FUNCTIONAL_RANGE_MAXIMUMS["weak"] && props.finalResults["clinical"] <= FUNCTIONAL_RANGE_MAXIMUMS["moderate"]) {
-                                            return ("Moderate Evidence")
-                                        } else {
-                                            return ("Strong Evidence")
-                                        }
-                                    })()}
-                                </Text>
-                                */}
                             </View>
                         </View>
                     </View>

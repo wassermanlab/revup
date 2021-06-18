@@ -1,3 +1,10 @@
+import os
+from dotenv import load_dotenv, find_dotenv
+
+# Load the environment variables
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(find_dotenv())
+
 # Logging stuff
 LOGGING_FORMAT = "%(asctime)s - %(levelname)s - %(lineno)d - %(message)s"
 
@@ -212,4 +219,16 @@ ADDITIONAL_INFO_DICT = {
     "f_2_2": "",
     "f_3_1": "",
     "f_4_1": ""
+}
+
+EMAIL_MSG_TEMPLATE = """
+New request from RevUP at revup-classifier.ca:\n
+{query_body}
+\n
+Please respond to: {respond_to}
+"""
+
+EMAIL_RECIPIENT_MAP = {
+    "bug": os.environ.get("REVUP_BUG_EMAIL"),
+    "question_feedback": os.environ.get("REVUP_QUESTION_EMAIL"),
 }

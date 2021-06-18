@@ -410,7 +410,7 @@ export default function Results(props) {
                             </Grid>
                         </Grid>
                         <Grid justify="center" container spacing={3}>
-                            <Grid item xs={7}>
+                            <Grid item xs={6}>
                                 <Grid justify="center" container spacing={3}>
                                     <Grid item xs={12}>
                                         <Line
@@ -423,7 +423,7 @@ export default function Results(props) {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={6}>
                                 <Grid justify="center" container spacing={3}>
                                     <Grid item xs={12}>
                                         <Doughnut 
@@ -545,7 +545,7 @@ export default function Results(props) {
                                                             if(key === "c_1_1") {
                                                                 return (
                                                                     <React.Fragment>
-                                                                        {props.comments["c_1_1"] ? props.comments["c_1_1"]+"\n": ""}
+                                                                        {ReactHtmlParser(props.comments["c_1_1"] ? props.comments["c_1_1"]+"<br><\br>": "")}
                                                                         <b>phyloP Score</b>
                                                                         <Tooltip title={"phyloP score > 1.5 indicates variant is more conserved"}>
                                                                             <InfoOutlinedIcon className={classes.infoIcon}/>
@@ -560,7 +560,7 @@ export default function Results(props) {
                                                             } else if(key === "c_1_2") {
                                                                 return (
                                                                     <React.Fragment>
-                                                                        {props.comments["c_1_2"] ? props.comments["c_1_2"]+"\n": ""}
+                                                                        {ReactHtmlParser(props.comments["c_1_2"] ? props.comments["c_1_2"]+"<br><\br>": "")}
                                                                         <b>gnomAD AF</b>
                                                                         <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
                                                                             <InfoOutlinedIcon className={classes.infoIcon}/>
@@ -570,7 +570,7 @@ export default function Results(props) {
                                                             } else if(key === "c_2_3") {
                                                                 return (
                                                                     <React.Fragment>
-                                                                        {props.comments["c_2_3"] ? props.comments["c_2_3"]+"\n": ""}
+                                                                        {ReactHtmlParser(props.comments["c_2_3"] ? props.comments["c_2_3"]+"<br><\br>": "")}
                                                                         <b>CADD Score</b> 
                                                                         <Tooltip title={"CADD can quantitatively prioritize functional, deleterious, and disease causal variants across a wide range of functional categories, effect sizes and genetic architectures and can be used prioritize causal variation in both research and clinical settings. CADD score > 15 indicates variant is deleterious"}>
                                                                             <InfoOutlinedIcon className={classes.infoIcon}/>
@@ -580,6 +580,7 @@ export default function Results(props) {
                                                             } else if(key === "c_3_1") {
                                                                 return (
                                                                     <React.Fragment>
+                                                                        {ReactHtmlParser(props.comments["c_3_1"] ? props.comments["c_3_1"]+"<br><\br>": "")}
                                                                         {props.additionalInfo["c_3_1"]}
                                                                     </React.Fragment>
                                                                 )
@@ -648,7 +649,7 @@ export default function Results(props) {
                                                             if(key === "f_1_1") {
                                                                 return (
                                                                     <React.Fragment>
-                                                                        {props.comments["f_1_1"] ? props.comments["f_1_1"] + "\n": ""}
+                                                                        {ReactHtmlParser(props.comments["f_1_1"] ? props.comments["f_1_1"]+"<br><\br>": "")}
                                                                         <b>ReMap 2020 Peaks
                                                                         <Tooltip title={"ReMap is a database of transcriptional regulators peaks derived from curated ChIP-seq, ChIP-exo, DAP-seq experiments in Human. Intersection with one or more ReMap 2020 peaks indicates variant is implicated in TF binding"}>
                                                                             <InfoOutlinedIcon className={classes.infoIcon}/>
@@ -658,7 +659,7 @@ export default function Results(props) {
                                                             } else if(key === "f_1_2") {
                                                                 return (
                                                                     <React.Fragment>
-                                                                        {props.comments["f_1_2"] ? props.comments["f_1_2"] + "\n": ""}
+                                                                        {ReactHtmlParser(props.comments["f_1_2"] ? props.comments["f_1_2"]+"<br><\br>": "")}
                                                                         <b>cCREs
                                                                         <Tooltip title={"Candidate cis-Regulatory Elements by ENCODE / SCREEN. Intersection with a cCRE in SCREEN indicates variant localizes to a regulatory region"}>
                                                                             <InfoOutlinedIcon className={classes.infoIcon}/>
@@ -669,7 +670,7 @@ export default function Results(props) {
                                                                 if(props.additionalInfo["f_1_3"] !== "-") {
                                                                     return (
                                                                         <React.Fragment>
-                                                                            {props.comments["f_1_3"] ? props.comments["f_1_3"] + "\n": ""}
+                                                                            {ReactHtmlParser(props.comments["f_1_3"] ? props.comments["f_1_3"]+"<br><\br>": "")}
                                                                             <b>Supporting Experiment
                                                                             <Tooltip title={"Information by ENCODE / SCREEN. cCRE and target genes linked based on Hi-C or CHIA-PET"}>
                                                                                 <InfoOutlinedIcon className={classes.infoIcon}/>
@@ -687,6 +688,7 @@ export default function Results(props) {
                                                                 if(props.additionalInfo["f_1_4"] !== "-") {
                                                                     return (
                                                                         <React.Fragment>
+                                                                            {ReactHtmlParser(props.comments["f_1_4"] ? props.comments["f_1_4"]+"<br><\br>": "")}
                                                                             <b>Supporting Experiment
                                                                             <Tooltip title={"Information by ENCODE / SCREEN. cCRE and targete genes linked based on eQTL"}>
                                                                                 <InfoOutlinedIcon className={classes.infoIcon}/>

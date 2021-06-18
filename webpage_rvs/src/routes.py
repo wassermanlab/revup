@@ -4,10 +4,12 @@ import logging
 from webpage_rvs import (
     app,
     #db
-    dynamo
+    dynamo,
+    mail
 )
 
 from flask import request, jsonify
+from flask_mail import Message
 from webpage_rvs.src.constants import (
     LOGGING_FORMAT,
     CLINICAL_QUESTIONS,
@@ -19,7 +21,9 @@ from webpage_rvs.src.constants import (
     C_3_1_LABELS,
     DEFAULT_DICT,
     ADDITIONAL_INFO_DICT,
-    FAMILIAL_SEGREGATION_MAP
+    FAMILIAL_SEGREGATION_MAP,
+    EMAIL_MSG_TEMPLATE,
+    EMAIL_RECIPIENT_MAP
 )
 from webpage_rvs.src.variant import (
     SNV
@@ -270,3 +274,21 @@ def calc_all_scores(data):
             functional += int(val)*(int(base)**2)
 
     return (clinical, functional)
+
+
+@app.route('/api/contact_email', methods=["POST"])
+def contact_email():
+    """
+    """
+    if request.method == "POST":
+        # Get info from body of the request
+        query_body = request.json["message"]
+        recipient = EMAIL_RECIPIENT_MAP[request.json["recipient"]]
+        respond_to = request.json["respond_to"]
+
+        msg = Message('New message from RevUP classifier', sender='revupclassifier@gmail.com', recipients=[recipient])
+        msg.body = EMAIL_MSG_TEMPLATE.format(query_body=query_body, respond_to=respond_to)
+        mail.send(msg)
+
+    return jsonify("Message Sent")
+

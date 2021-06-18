@@ -1,7 +1,6 @@
 import {Chart} from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
 import 'chartjs-plugin-datalabels';
-import ReactHtmlParser from 'react-html-parser';
 
 import {
     MAX_FUNCTIONAL_SCORE,
@@ -205,7 +204,7 @@ export function getDoughnutOptions(score, type) {
             ctx.font = "7px " + fontStyle;
       
             //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
-            var stringWidth = ctx.measureText(txt).width;
+            //var stringWidth = ctx.measureText(txt).width;
             var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
       
             // Find out how much the font can grow in width.
@@ -245,7 +244,7 @@ export function getDoughnutOptions(score, type) {
         title: {
             display: true,
             text: titleText,
-            fontSize: 12,
+            fontSize: 15,
             fontStyle: 'normal'
         },
         layout: {
@@ -275,6 +274,7 @@ export function getDoughnutOptions(score, type) {
                 scaleLabel: {
                     display: true,
                     labelString: evidence,
+                    fontSize: 15,
                     padding: 0
                 },
                 gridLines: {
@@ -313,7 +313,7 @@ export function getDoughnutOptions(score, type) {
                 formatter: function(value, context) {
                     var i = context.dataIndex;
                     var len = context.dataset.data.length - 1;
-                    if(i == len){
+                    if(i === len){
                         return null;
                     }
                     return value;
