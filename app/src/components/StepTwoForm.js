@@ -144,6 +144,31 @@ export default function StepTwoForm(props) {
                             </Grid>
                         </Grid>
                         <Grid container justify="center" spacing={3}>
+                            {(function () {
+                                if(props.variantInfo["phenotype"]) {
+                                return (
+                                <React.Fragment>
+                                    <Grid item xs={3}>
+                                        <FormLabel>
+                                             Patient's Phenotype:
+                                        </FormLabel>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <FormLabel>{props.variantInfo["phenotype"]}</FormLabel>
+                                    </Grid>
+                                </React.Fragment>)
+                                } else {return ("")}
+                            })()}
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={3}>
+                                <FormLabel>Identification Method:</FormLabel>
+                            </Grid>
+                            <Grid item xs={7}>
+                                <FormLabel>{props.variantInfo["identification_method"]}</FormLabel>
+                            </Grid>
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
                             <Grid item xs={3}>
                                 <FormLabel>Target Gene:</FormLabel>
                             </Grid>

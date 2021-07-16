@@ -20,7 +20,10 @@ export function ClinicalResultsTableCSV(props) {
             comments = comments + "phyloP score:" + props.additionalInfo["c_1_1"]["phylop"] + ";";
 
         } else if(key === "c_1_2") {
-            comments = "gnomAD Allele Frequency:" + props.additionalInfo["c_1_2"]["af"] + ";";
+            if(props.variantInfo["genotype"] === "Homozygous") {
+                comments = "num. of homozygotes:" + props.additionalInfo["c_1_2"]["num_homozygotes"] + ";"
+            }
+            comments = comments + "gnomAD Allele Frequency:" + props.additionalInfo["c_1_2"]["af"] + ";";
         } else if(key === "c_2_3") {
             comments = "CADD score:" + props.additionalInfo["c_2_3"]["cadd_score"] + ";";
         } else if(key === "c_3_1") {

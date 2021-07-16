@@ -11,6 +11,7 @@ import {
 import clsx from 'clsx';
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import CloseIcon from '@material-ui/icons/Close';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import theme from '../styles/theme';
@@ -115,6 +116,7 @@ export default function Scoring() {
                         "ref_genome": query["ref_genome"],
                         "target_gene": query["target_gene"],
                         "genotype": query["genotype"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
+                        "identification_method": query["identification_method"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
                         "test_variant": testFlag
                     });
                 } else {
@@ -132,10 +134,12 @@ export default function Scoring() {
                         "ref_genome": query["ref_genome"],
                         "target_gene": query["target_gene"],
                         "genotype": query["genotype"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
+                        "phenotype": query["phenotype"],
+                        "identification_method": query["identification_method"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
                         "test_variant": testFlag
                     });
                 }
-                console.log(testFlag)
+                //console.log(testFlag)
                 setLoading(false);
             }
         }
@@ -251,8 +255,8 @@ export default function Scoring() {
                                     <br></br>
                                     <br></br>
                                     <Link href="/scoring" color="secondary" underline="none">
-                                        <Button variant="contained" color="secondary" size="large" onClick={() => { setIsError(false) }}>
-                                            Try Again! 
+                                        <Button variant="contained" color="secondary" size="large" startIcon={<CloseIcon />} onClick={() => { setIsError(false) }}>
+                                            Close 
                                         </Button>
                                     </Link>
                                 </DialogContent>

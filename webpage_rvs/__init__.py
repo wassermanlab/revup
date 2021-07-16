@@ -38,8 +38,8 @@ app.config.update(dict(
     MAIL_PORT = 465,
     MAIL_USE_TLS = False,
     MAIL_USE_SSL = True,
-    MAIL_USERNAME = 'revupclassifier',
-    MAIL_PASSWORD = 'revUp_classifi3r'
+    MAIL_USERNAME = os.environ.get('REVUP_SENDER_USERNAME'),
+    MAIL_PASSWORD = os.environ.get('REVUP_SENDER_PASSWORD')
 ))
 
 mail = Mail(app)

@@ -114,20 +114,20 @@ export default function ContactForm(props) {
                                 <Grid container spacing={3}>
                                     <Grid item xs={12}>
                                         <Grid justify="center" container spacing={3}>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={11}>
                                                 <Typography variant="h4">
                                                     Contact Us
                                                 </Typography>
                                             </Grid>
                                         </Grid>
                                         <Grid justify="center" container spacing={3}>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={11}>
                                                 <Divider/>
                                             </Grid>
                                         </Grid> 
                                         <br></br>
                                         <Grid justify="center" container spacing={3}>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={11}>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
                                                     Found a bug? Have a question? Want to offer ideas to include in a future version? Contact us!
                                                 </Typography>
@@ -192,7 +192,7 @@ export default function ContactForm(props) {
                                             </Grid>
                                         </Grid>
                                         <Grid justify="center" container spacing={3}>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={11}>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
                                                     Found this work interesting? The Wasserman Lab develops other tools and databases, go and check 
                                                     out <Link href="http://cisreg.ca/" color="secondary">our website</Link>!

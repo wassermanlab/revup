@@ -48,6 +48,8 @@ export const defaultQueryDict = {
     "f_3_1": "unknown",
     "f_4_1": "unknown",
     "genotype": "unknown",
+    "identification_method": "unknown",
+    "phenotype": "",
     "query_ref": false,
     "calc_scores": false
 }
@@ -61,7 +63,13 @@ export const defaultInfo = {
     "ref_genome": "",
     "target_gene": "",
     "genotype": "",
+    "identification_method": "",
+    "phenotype": "",
     "test_variant": false,
+    "gnomad_link": "",
+    "dbsnp_link": "",
+    "clinvar_link": "",
+    "ucsc_link": ""
 }
 
 export const defaultScoresDict = {
@@ -125,6 +133,7 @@ export const additionalInfoDict = {
         "phastcons": "",
     },
     "c_1_2": {
+        "num_homozygotes": "",
         "af": "",
     },
     "c_2_3": {

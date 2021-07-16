@@ -1,3 +1,4 @@
+import os
 import sys
 import uuid
 import logging
@@ -10,6 +11,7 @@ from webpage_rvs import (
 
 from flask import request, jsonify
 from flask_mail import Message
+from dotenv import load_dotenv, find_dotenv
 from webpage_rvs.src.constants import (
     LOGGING_FORMAT,
     CLINICAL_QUESTIONS,
@@ -18,12 +20,14 @@ from webpage_rvs.src.constants import (
     PHASTCONS_CUTOFF,
     CADD_CUTOFF,
     AF_CUTOFF,
-    C_3_1_LABELS,
     DEFAULT_DICT,
     ADDITIONAL_INFO_DICT,
+)
+from webpage_rvs.src.templates import (
     FAMILIAL_SEGREGATION_MAP,
+    #C_3_1_MAP,
     EMAIL_MSG_TEMPLATE,
-    EMAIL_RECIPIENT_MAP
+    EMAIL_RECIPIENT_MAP,
 )
 from webpage_rvs.src.variant import (
     SNV
@@ -33,6 +37,10 @@ from webpage_rvs.src.helpers import (
     get_nearest,
     get_evidence_labels
 )
+
+# Load the environment variables
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(find_dotenv())
 
 # Set up logging
 logging.basicConfig(format=LOGGING_FORMAT, stream=sys.stderr, level=logging.INFO)
@@ -84,8 +92,8 @@ def calculate_initial_scores():
                     response["initial_scores"][key] = "0"
 
         # Familial Segregation
-        if response["initial_scores"]["c_3_1"] == "1":
-            response["additional_info"]["c_3_1"] = FAMILIAL_SEGREGATION_MAP[body["query"]["c_3_1_additional"]]
+        # if response["initial_scores"]["c_3_1"] == "1":
+        #     response["additional_info"]["c_3_1"] = FAMILIAL_SEGREGATION_MAP[body["query"]["c_3_1_additional"]]
 
         # Check CADD and FATHMM scores
         snv.set_cadd_score()
@@ -107,12 +115,16 @@ def calculate_initial_scores():
             response["initial_scores"]["c_1_1"] = "0"
 
         # Check gnomAD AF
-        snv.set_af()
+        snv.set_gnomad_info()
         response["additional_info"]["c_1_2"]["af"] = '%.4E' % snv.af
         if snv.af < AF_CUTOFF:
             response["initial_scores"]["c_1_2"] = "1"
         else:
             response["initial_scores"]["c_1_2"] = "0"
+
+        # Check number of homozygotes
+        if body["variant_info"]["genotype"] == "homozygous":
+            response["additional_info"]["c_1_2"]["num_homozygotes"] = str(snv.num_homozygotes)
 
         # Check cCRE info
         snv.set_ccre_info()
@@ -166,7 +178,7 @@ def calculate_initial_scores():
         # Check c3.1
         if body["query"]["c_3_1"] == "yes":
             # Add additional info
-            response["additional_info"]["c_3_1"] = C_3_1_LABELS[body["query"]["c_3_1_additional"]]
+            response["additional_info"]["c_3_1"] = FAMILIAL_SEGREGATION_MAP[body["query"]["c_3_1_additional"]]
         else:
             response["additional_info"]["c_3_1"] = ""
 
@@ -210,6 +222,9 @@ def calculate_scores():
         rve_density["nearest_val"] = str(get_nearest(rve_density["x"], rve))
         response["standard_rve"] = rve_density
 
+        # Get external links
+
+
         # Save variant in database 
         db_id = str(uuid.uuid4())
         dynamo.tables['revup_snv'].put_item(Item={
@@ -220,6 +235,8 @@ def calculate_scores():
             "ref_assembly": variant_info["ref_genome"],
             "target_gene": variant_info["target_gene"],
             "patient_genotype": variant_info["genotype"],
+            "patient_phenotype": variant_info["phenotype"],
+            "identification_method": variant_info["identification_method"],
             "cadd_score": additional_info["c_2_3"]["cadd_score"],
             "phylop_score": additional_info["c_1_1"]["phylop"],
             "phastcons_score": additional_info["c_1_1"]["phastcons"],
@@ -286,7 +303,7 @@ def contact_email():
         recipient = EMAIL_RECIPIENT_MAP[request.json["recipient"]]
         respond_to = request.json["respond_to"]
 
-        msg = Message('New message from RevUP classifier', sender='revupclassifier@gmail.com', recipients=[recipient])
+        msg = Message('New message from RevUP classifier', sender=os.environ.get('REVUP_SENDER_EMAIL'), recipients=[recipient])
         msg.body = EMAIL_MSG_TEMPLATE.format(query_body=query_body, respond_to=respond_to)
         mail.send(msg)
 

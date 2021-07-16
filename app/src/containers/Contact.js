@@ -4,8 +4,15 @@ import {
     makeStyles 
 } from '@material-ui/core/styles';
 import { 
+    Button,
+    CircularProgress,
     Container, 
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Link,
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
 import theme from '../styles/theme';
 import NavBar from '../components/NavBar';
@@ -75,10 +82,13 @@ export default function Contact() {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState(defaultEmailDict);
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         const sendEmail = async () => {
-            //setLoading(True);
+            setLoading(true);
             const response = await fetch(config.backend_url + 'api/contact_email', {
                 method: 'POST',
                 body: JSON.stringify(query),
@@ -91,11 +101,13 @@ export default function Contact() {
             });
             
             if(!response.ok) {
-                console.log("error")
                 // TODO: Add error message
+                setLoading(false);
+                setError(true);
             } else {
-                const json = await response.json();
-                console.log("Success")
+                //const json = await response.json();
+                setLoading(false);
+                setSuccess(true);
             }
         }
 
@@ -121,6 +133,56 @@ export default function Contact() {
                     >
                         <div className={classes.drawerHeader} />
                         <Container maxWidth="lg">
+                            <Dialog 
+                                aria-labelledby="SendingBarDialog" 
+                                disableBackdropClick={true} 
+                                disableEscapeKeyDown={true} 
+                                open={loading}
+                                style={{textAlign: "center"}}
+                            >
+                                <DialogTitle id="SendingBarTitle">Sending...</DialogTitle>
+                                <DialogContent>
+                                    <CircularProgress/>
+                                </DialogContent>
+                            </Dialog>
+                            <Dialog 
+                                aria-labelledby="ErrorDialog" 
+                                disableBackdropClick={true} 
+                                disableEscapeKeyDown={true} 
+                                open={error}
+                                style={{textAlign: "center"}}
+                            >
+                                <DialogTitle id="ErrorTitle">Error</DialogTitle>
+                                <DialogContent>
+                                    There was an error, please try again!
+                                    <br></br>
+                                    <br></br>
+                                    <Link href="/contact" color="secondary" underline="none">
+                                        <Button variant="contained" color="secondary" size="large" startIcon={<CloseIcon />} onClick={() => { setError(false) }}>
+                                            Close
+                                        </Button>
+                                    </Link>
+                                </DialogContent>
+                            </Dialog>
+                            <Dialog 
+                                aria-labelledby="SuccessDialog" 
+                                disableBackdropClick={true} 
+                                disableEscapeKeyDown={true} 
+                                open={success}
+                                style={{textAlign: "center"}}
+                            >
+                                <DialogTitle id="SuccessTitle">Message Successfully Sent!</DialogTitle>
+                                <DialogContent>
+                                    Thank you for your feedback!
+                                    <br></br>
+                                    <br></br>
+                                    <Link href="/contact" color="secondary" underline="none">
+                                        <Button variant="contained" color="secondary" size="large" startIcon={<CloseIcon />} onClick={() => { setSuccess(false) }}>
+                                            Close 
+                                        </Button>
+                                    </Link>
+                                </DialogContent>
+                            </Dialog>
                             <ContactForm
                                 query={query}
                                 setQuery={setQuery}

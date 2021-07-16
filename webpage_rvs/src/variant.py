@@ -6,8 +6,6 @@ import pandas as pd
 from webpage_rvs.src.constants import (
     LOGGING_FORMAT,
     GNOMAD_API_URL,
-    GNOMAD_ALLELE_QUERY,
-    CADD_API_URL_TEMPLATE,
     UCSC_API_URL,
     UCSC_ASSEMBLY,
     GNOMAD_ASSEMBLY,
@@ -15,9 +13,13 @@ from webpage_rvs.src.constants import (
     CADD_VERSION,
     REMAP_ASSEMBLY,
     SCREEN_URL,
-    SCREEN_CCRE_QUERY,
     SCREEN_ASSEMBLY,
     REMAP_VARIANT_FILE
+)
+from webpage_rvs.src.templates import (
+    CADD_API_URL_TEMPLATE,
+    GNOMAD_ALLELE_QUERY,
+    SCREEN_CCRE_QUERY
 )
 
 from webpage_rvs.src.helpers import (
@@ -62,6 +64,7 @@ class SNV(Variant):
         self.phylop_score = 0
         self.phastcons_score = 0
         self.af = 0
+        self.num_homozygotes = 0
         self.ccre_info = []
         self.crms = []
         self.ccre_methods = set()
@@ -174,7 +177,7 @@ class SNV(Variant):
         # TODO: Check if there are no results
 
 
-    def set_af(self):
+    def set_gnomad_info(self):
         """
         """
         variant_id = "-".join([
@@ -195,6 +198,7 @@ class SNV(Variant):
             an = results["data"]["variant"]["genome"]["an"]
             ac = results["data"]["variant"]["genome"]["ac"]
             self.af = int(ac)/int(an)
+            self.num_homozygotes = results["data"]["variant"]["genome"]["homozygote_count"]
         else:
             # TODO: What to do here....?
             

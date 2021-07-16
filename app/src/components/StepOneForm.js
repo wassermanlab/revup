@@ -333,6 +333,21 @@ export default function StepOneForm(props) {
                         </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={5}>
+                                <FormLabel>Patient phenotype</FormLabel>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <TextField 
+                                    fullWidth 
+                                    id="phenotype" 
+                                    label="" 
+                                    variant="outlined"
+                                    value={props.query["phenotype"] || ""}
+                                    onChange={(e) => handleChange('phenotype', e)}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={5}>
                                 <FormLabel>Variant genotype in the patient</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
@@ -342,6 +357,22 @@ export default function StepOneForm(props) {
                                         <MenuItem value={"homozygous"}>Homozygous</MenuItem>
                                         <MenuItem value={"compound_heterozygous"}>Compound Heterozygous</MenuItem>
                                         <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={5}>
+                                <FormLabel>Identification Method</FormLabel>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <FormControl fullWidth className={classes.formControl}>
+                                    <Select id="identification_method" value={props.query["identification_method"] ? props.query["identification_method"] : ""} onChange={(e) => handleChange('identification_method', e)} variant="outlined">
+                                        <MenuItem value={"unknown"}>Unknown</MenuItem>
+                                        <MenuItem value={"targeted_sequencing"}>Targeted Sequencing</MenuItem>
+                                        <MenuItem value={"whole_exome_sequencing"}>Whole Exome Sequencing</MenuItem>
+                                        <MenuItem value={"whole_genome_sequencing"}>Whole Genome Sequencing</MenuItem>
+                                        <MenuItem value={"other"}>Other</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>

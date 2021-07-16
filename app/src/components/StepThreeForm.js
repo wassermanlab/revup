@@ -157,13 +157,38 @@ export default function StepThreeForm(props) {
                     </Grid>
                     */}
                     <Grid container justify="center" spacing={3}>
-                            <Grid item xs={3}>
-                                <FormLabel>Patient's Genotype:</FormLabel>
-                            </Grid>
-                            <Grid item xs={7}>
-                                <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
-                            </Grid>
+                        <Grid item xs={3}>
+                            <FormLabel>Patient's Genotype:</FormLabel>
                         </Grid>
+                        <Grid item xs={7}>
+                            <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
+                        </Grid>
+                    </Grid>
+                    <Grid container justify="center" spacing={3}>
+                        {(function () {
+                            if(props.variantInfo["phenotype"]) {
+                            return (
+                            <React.Fragment>
+                                <Grid item xs={3}>
+                                    <FormLabel>
+                                            Patient's Phenotype:
+                                    </FormLabel>
+                                </Grid>
+                                <Grid item xs={7}>
+                                    <FormLabel>{props.variantInfo["phenotype"]}</FormLabel>
+                                </Grid>
+                            </React.Fragment>)
+                            } else {return ("")}
+                        })()}
+                    </Grid>
+                    <Grid container justify="center" spacing={3}>
+                        <Grid item xs={3}>
+                            <FormLabel>Identification Method:</FormLabel>
+                        </Grid>
+                        <Grid item xs={7}>
+                            <FormLabel>{props.variantInfo["identification_method"]}</FormLabel>
+                        </Grid>
+                    </Grid>
                     <Grid justify="center" container spacing={3}>
                         <Grid item xs={3}>
                             <FormLabel>Target Gene: </FormLabel>
@@ -261,14 +286,30 @@ export default function StepThreeForm(props) {
                                                                 </React.Fragment>
                                                             )
                                                         } else if(key === "c_1_2") {
-                                                            return (
-                                                                <React.Fragment>
-                                                                    <b>gnomAD AF</b>
-                                                                    <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
-                                                                        <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                    </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
-                                                                </React.Fragment>
-                                                            )
+                                                            if(props.variantInfo["genotype"] === "Homozygous") {
+                                                                return (
+                                                                    <React.Fragment>
+                                                                        <b>Num. of homozygotes</b>
+                                                                        <Tooltip title={"Number of homozygotes determined from gnomAD"}>
+                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
+                                                                        </Tooltip> : {props.additionalInfo["c_1_2"]["num_homozygotes"]}
+                                                                        <br></br>
+                                                                        <b>gnomAD AF</b>
+                                                                        <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
+                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
+                                                                        </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
+                                                                    </React.Fragment>
+                                                                )
+                                                            } else {
+                                                                return (
+                                                                    <React.Fragment>
+                                                                        <b>gnomAD AF</b>
+                                                                        <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
+                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
+                                                                        </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
+                                                                    </React.Fragment>
+                                                                )
+                                                            }
                                                         } else if(key === "c_2_3") {
                                                             return (
                                                                 <React.Fragment>

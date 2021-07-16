@@ -239,7 +239,8 @@ export default function Results(props) {
             "functionalEvidenceLabels": props.functionalEvidenceLabels,
             "modifiedScores": props.modifiedScores,
             "comments": props.comments,
-            "additionalInfo": props.additionalInfo
+            "additionalInfo": props.additionalInfo,
+            "variantInfo": props.variantInfo
         }
         const clinicalCsvContent = ClinicalResultsTableCSV(data);
         const functionalCsvContent = FunctionalResultsTableCSV(data);
@@ -384,6 +385,31 @@ export default function Results(props) {
                                 <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
                             </Grid>
                         </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            {(function () {
+                                if(props.variantInfo["phenotype"]) {
+                                return (
+                                <React.Fragment>
+                                    <Grid item xs={3}>
+                                        <FormLabel>
+                                             Patient's Phenotype:
+                                        </FormLabel>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <FormLabel>{props.variantInfo["phenotype"]}</FormLabel>
+                                    </Grid>
+                                </React.Fragment>)
+                                } else {return ("")}
+                            })()}
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+                            <Grid item xs={3}>
+                                <FormLabel>Identification Method:</FormLabel>
+                            </Grid>
+                            <Grid item xs={7}>
+                                <FormLabel>{props.variantInfo["identification_method"]}</FormLabel>
+                            </Grid>
+                        </Grid>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={3}>
                                 <FormLabel>Target Gene:</FormLabel>
@@ -397,6 +423,22 @@ export default function Results(props) {
                                 <Divider />
                             </Grid>
                         </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={10}>
+                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                    <b>External Links</b>
+                                </Typography>
+                            </Grid> 
+                        </Grid>
+                        <Grid container justify="center" spacing={3}>
+
+                        </Grid>
+                        <Grid justify="center" container spacing={3}>
+                            <Grid item xs={10}>
+                                <Divider />
+                            </Grid>
+                        </Grid>
+
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
                                 <Typography variant="h5" align="left" color="secondary" gutterBottom>
@@ -558,15 +600,32 @@ export default function Results(props) {
                                                                     </React.Fragment>
                                                                 )
                                                             } else if(key === "c_1_2") {
-                                                                return (
-                                                                    <React.Fragment>
-                                                                        {ReactHtmlParser(props.comments["c_1_2"] ? props.comments["c_1_2"]+"<br><\br>": "")}
-                                                                        <b>gnomAD AF</b>
-                                                                        <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
-                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                        </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
-                                                                    </React.Fragment>
-                                                                )
+                                                                if(props.variantInfo["genotype"] === "Homozygous") {
+                                                                    return (
+                                                                        <React.Fragment>
+                                                                            {ReactHtmlParser(props.comments["c_1_2"] ? props.comments["c_1_2"]+"<br><\br>": "")}
+                                                                            <b>Num. of homozygotes</b>
+                                                                            <Tooltip title={"Number of homozygotes determined from gnomAD"}>
+                                                                                <InfoOutlinedIcon className={classes.infoIcon}/>
+                                                                            </Tooltip> : {props.additionalInfo["c_1_2"]["num_homozygotes"]}
+                                                                            <br></br>
+                                                                            <b>gnomAD AF</b>
+                                                                            <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
+                                                                                <InfoOutlinedIcon className={classes.infoIcon}/>
+                                                                            </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
+                                                                        </React.Fragment>
+                                                                    )
+                                                                } else {
+                                                                    return (
+                                                                        <React.Fragment>
+                                                                            {ReactHtmlParser(props.comments["c_1_2"] ? props.comments["c_1_2"]+"<br><\br>": "")}
+                                                                            <b>gnomAD AF</b>
+                                                                            <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
+                                                                                <InfoOutlinedIcon className={classes.infoIcon}/>
+                                                                            </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
+                                                                        </React.Fragment>
+                                                                    )
+                                                                }
                                                             } else if(key === "c_2_3") {
                                                                 return (
                                                                     <React.Fragment>

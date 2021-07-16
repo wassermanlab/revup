@@ -253,6 +253,35 @@ export function GeneralInfoTable(props) {
                         </Text>
                     </View>
                 </View>
+                {(function () {
+                    if(props.variantInfo["phenotype"]) {
+                        return (
+                            <View style={styles.tableRow}>
+                                <View style={styles.resultsTableCol}>
+                                    <Text style={styles.tableCell}>Patient's Phenotype: </Text>
+                                </View>
+                                <View style={styles.resultsTableCol}>
+                                    <Text style={styles.tableCell}>{props.variantInfo["phenotype"]}</Text>
+                                </View>
+                            </View>
+                    )} else {
+                        return (
+                            <View></View>
+                        )
+                    }
+                })()}
+                <View style={styles.tableRow}>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            Identification Method:
+                        </Text>
+                    </View>
+                    <View style={styles.resultsTableCol}>
+                        <Text style={styles.tableCell}>
+                            {props.variantInfo["identification_method"]}
+                        </Text>
+                    </View>
+                </View>
                 <View style={styles.tableRow}>
                     <View style={styles.resultsTableCol}>
                         <Text style={styles.tableCell}>
@@ -339,12 +368,28 @@ export function ClinicalResultsTable(props) {
                             {props.modifiedScores["c_1_2"] ? props.modifiedScores["c_1_2"]: "-"}
                         </Text> 
                     </View> 
-                    <View style={styles.resultsTableCol}>
-                        <Text style={styles.tableCell}>
-                            {props.comments["c_1_2"] ? props.comments["c_1_2"]+"\n": ""}
-                            gnomAD AF : {props.additionalInfo["c_1_2"]["af"]}
-                        </Text> 
-                    </View>
+                    {(function () {
+                        if(props.variantInfo["genotype"] === "Homozygous") {
+                            return (
+                                <View style={styles.resultsTableCol}>
+                                    <Text style={styles.tableCell}>
+                                        {props.comments["c_1_2"] ? props.comments["c_1_2"]+"\n": ""}
+                                        Num. of homozygotes : {props.additionalInfo["c_1_2"]["num_homozygotes"]}
+                                        {"\n"}
+                                        gnomAD AF : {props.additionalInfo["c_1_2"]["af"]}
+                                    </Text> 
+                                </View>
+                        )} else {
+                            return (
+                                <View style={styles.resultsTableCol}>
+                                    <Text style={styles.tableCell}>
+                                        {props.comments["c_1_2"] ? props.comments["c_1_2"]+"\n": ""}
+                                        gnomAD AF : {props.additionalInfo["c_1_2"]["af"]}
+                                    </Text> 
+                                </View>
+                            )
+                        }
+                    })()}
                 </View> 
                 <View style={styles.tableRow}> 
                     <View style={styles.resultsTableCol}> 
