@@ -1,11 +1,11 @@
-# Webpage Regulatory Variants
+# RevUP
 
 ## Project Setup
-Webpage Regulatory Variants is comprised of a React.js front end and a Flask backend. The front end collects data from the user and sends it to the backend to be processed and produce a score.
+RevUP is comprised of a React.js front end and a Flask backend. The front end collects data from the user and sends it to the backend to be processed and produce a score.
 
 The following shows the structure of this project:
 ```
-~/webpage_regulatory_variants
+~/revup
 ├── README.md
 ├── api
 ├── app
@@ -37,7 +37,7 @@ The `app` directory contains all of the code to produce the front end, the `webp
 If you haven't done so already, clone the GitHub repo:
 ```
 git clone <URL>
-cd webpage_regulatory_variants
+cd revup
 ```
 
 Install any dependencies for MacOS
@@ -62,8 +62,8 @@ sudo apt-get install python3-pip
 
 Make a virtual environment using Python3 and install the requirements
 ```
-python3 -m venv wrv
-source wrv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
@@ -143,6 +143,3 @@ Run the front end
 ```
 yarn start
 ```
-
-
-# regulatory_variants
