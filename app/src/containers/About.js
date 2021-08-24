@@ -96,6 +96,9 @@ export default function About() {
                                                     regulatory genetic variants. While tools already exists for 
                                                     classification of exonic variants based on the ACMG / AMP 2015 guidelines, 
                                                     RevUP focuses on the interpretation of suspected regulatory variants.
+                                                    The tool is comprised of a front end written in React.js and a backend written
+                                                    in Flask. The front end collects data from the user and sends it to the 
+                                                    backend to be processed and produce an RVE (regulatory variant evidence) score.
                                                 </Typography>
                                                 <Typography  variant="body1"  color="textSecondary" paragraph>
                                                     In Van der Lee et al., 2020, a semiquantitative classification scheme 

@@ -429,7 +429,7 @@ export default function Faq() {
                                                 <Typography  variant="body1"  color="textSecondary" paragraph>
                                                     To date, the tool only allow the scoring of non-coding SNV (
                                                     Single Nucleotide Variants). To obtain the score of a structural 
-                                                    variant, user should refer to the tables in 
+                                                    variant, user should refer to the tables in{" "} 
                                                     <Link href="https://doi.org/10.1016/j.tig.2020.04.006" target="_blank" color="secondary">
                                                         Van der Lee R, Correard S and Wasserman WW in “Deregulated Regulators: 
                                                         Disease-Causing cis Variants in Transcription Factor Genes” (Trends in Genetics, 2020)
