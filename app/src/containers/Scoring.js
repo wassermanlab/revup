@@ -117,8 +117,8 @@ export default function Scoring() {
                         "variant_description": variant.join("-"),
                         "ref_genome": query["ref_genome"],
                         "target_gene": query["target_gene"],
-                        "genotype": query["genotype"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
-                        "identification_method": query["identification_method"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
+                        "genotype": query["genotype"].replace(/_/g, " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
+                        "identification_method": query["identification_method"].replace(/_/g, " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
                         "test_variant": testFlag
                     });
                 } else {
@@ -135,9 +135,9 @@ export default function Scoring() {
                         "variant_description": variant.join("-"),
                         "ref_genome": query["ref_genome"],
                         "target_gene": query["target_gene"],
-                        "genotype": query["genotype"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
+                        "genotype": query["genotype"].replace(/_/g, " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
                         "phenotype": query["phenotype"],
-                        "identification_method": query["identification_method"].replace("_", " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
+                        "identification_method": query["identification_method"].replace(/_/g, " ").replace(/(^\w|\s\w)/g, m => m.toUpperCase()),
                         "test_variant": testFlag
                     });
                 }

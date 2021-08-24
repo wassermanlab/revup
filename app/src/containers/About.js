@@ -121,8 +121,8 @@ export default function About() {
                                                 <Divider />
                                                 <br></br>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
-                                                    If you used this website to score a variant, and / or want to include the final 
-                                                    figure in your paper, please cite:
+                                                    A manuscript describing RevUP is under review.  In the meantime, if you used this 
+                                                    website to score a variant, please cite:
                                                 </Typography>
                                                 <Typography  variant="body1"  color="textSecondary">
                                                     van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 

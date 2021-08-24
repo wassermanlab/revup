@@ -107,9 +107,9 @@ export default function Faq() {
                                                 <Divider />
                                                 <br></br>
                                                 <Typography variant="body1" color="textSecondary">
-                                                    We hope that the website will be intuitive, you can use 
+                                                    We hope that the website will be intuitive. You can use 
                                                     the example to score a variant and explore the process. 
-                                                    This page will be completed over time, as users ask us 
+                                                    This page will be expanded over time, as users ask us 
                                                     questions, so feel free to <Link href="/contact" color="secondary">contact us</Link> if you encounter 
                                                     a problem. 
                                                 </Typography>
@@ -123,7 +123,7 @@ export default function Faq() {
                                                 aria-controls="panel1-content"
                                                 id="panel1-header">
                                                 <Typography variant="h6" color="secondary">
-                                                    What are the different steps to obtain the RVE-Score?
+                                                    What are the steps to obtain the RVE-Score?
                                                 </Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
@@ -140,7 +140,7 @@ export default function Faq() {
                                                     found the information for a given evidence.
                                                     <br></br>  
                                                     Finally, the user will obtain the final score as well as a document 
-                                                    providing the details provided.
+                                                    summarizing the details provided.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
@@ -156,12 +156,12 @@ export default function Faq() {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
-                                                    RevUP quarries automatically a maximum of features, but it 
+                                                    RevUP queries automatically a maximum of features, but it 
                                                     may not find the latest CHIP-seq results for your region of 
                                                     interest, and therefore, this will not be reflected in the 
                                                     score. To compensate, users can manually modify the score 
                                                     during step 3, and add a comment / remark to explain why 
-                                                    they did modify the score.
+                                                    they modified the score.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
@@ -178,7 +178,7 @@ export default function Faq() {
                                                 <Typography variant="body1" color="textSecondary" paragraph>
                                                     All of the external databases are queried using the GRCh38 coordinates, therefore it is better
                                                     if the user uses GRCh38 coordinates in RevUP. However, the user can also query RevUP using GRCh37
-                                                    coordinates and a lift-over is performed using a Python implementatino of the UCSC LiftOver tool.
+                                                    coordinates and a lift-over is performed using a Python implemantation of the UCSC LiftOver tool.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
@@ -195,7 +195,7 @@ export default function Faq() {
                                                 <Typography  variant="body1" color="textSecondary" paragraph>
                                                     The scoring system for potential regulatory variants is not a 
                                                     classification system for variant pathogenicity. You should refer 
-                                                    to the latest ACMG / AMP guidelines.
+                                                    to the latest <Link href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4544753/" target="_blank" color="secondary">ACMG / AMP guidelines</Link>.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
@@ -220,7 +220,7 @@ export default function Faq() {
                                                 aria-controls="panel6-content"
                                                 id="panel6-header">
                                                 <Typography variant="h6" color="secondary">
-                                                    What source of information are you using?
+                                                    What source of information is RevUP using?
                                                 </Typography>
                                             </AccordionSummary>
                                             <AccordionDetails className={classes.details}>
@@ -411,7 +411,7 @@ export default function Faq() {
                                                     To date, the tool does not allow to score compound heterozygous 
                                                     variants in a combined fashion. Users should score both variants 
                                                     separately and then combine the results in a critical manner, as 
-                                                    features may not be additive, and scores are not additives. 
+                                                    features may not be additive, and scores are not additive. 
 
                                                 </Typography>
                                             </AccordionDetails>
@@ -428,11 +428,12 @@ export default function Faq() {
                                             <AccordionDetails>
                                                 <Typography  variant="body1"  color="textSecondary" paragraph>
                                                     To date, the tool only allow the scoring of non-coding SNV (
-                                                    Single nucleotide variants), to obtain the score of a structural 
-                                                    variant, user should refer to the tables in Van der Lee R, 
-                                                    Correard S and Wasserman WW in “Deregulated Regulators: 
-                                                    Disease-Causing cis Variants in Transcription Factor Genes” 
-                                                    (Trends in Genetics, 2020)
+                                                    Single Nucleotide Variants). To obtain the score of a structural 
+                                                    variant, user should refer to the tables in 
+                                                    <Link href="https://doi.org/10.1016/j.tig.2020.04.006" target="_blank" color="secondary">
+                                                        Van der Lee R, Correard S and Wasserman WW in “Deregulated Regulators: 
+                                                        Disease-Causing cis Variants in Transcription Factor Genes” (Trends in Genetics, 2020)
+                                                    </Link>
                                                     <br></br>
                                                     We are planning on working on this feature for a future release.
                                                 </Typography>
@@ -450,11 +451,11 @@ export default function Faq() {
                                             <AccordionDetails>
                                                 <Typography variant="body1" color="textSecondary" gutterBottom>
                                                     In order to create statistics on the submission, we do keep metadata. 
-                                                    We do not conserve users information (IP address) nor we conserve the 
+                                                    We do not conserve users information (IP address) nor do we conserve the 
                                                     variant details (chromosome, position, reference allele, alternate allele), 
                                                     so we won’t be able to study individual variants that are submitted. Our 
-                                                    goal is to observe how many users submit with which reference genome, how 
-                                                    many users did functional analysis, etc.
+                                                    goal is to measure how many users submit variants, the reference genome 
+                                                    selected, how many users did functional analysis, etc.
                                                 </Typography>
                                             </AccordionDetails>
                                         </Accordion>
@@ -484,8 +485,8 @@ export default function Faq() {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
-                                                    If you used this website to score a variant, and / or want to include the 
-                                                    final figure in your paper, please cite:
+                                                    A manuscript describing RevUP is under review.  In the meantime, if you used this 
+                                                    website to score a variant, please cite:
                                                     <br></br>
                                                     van der Lee R, Correard S, Wasserman WW. Deregulated Regulators: Disease-Causing 
                                                     cis Variants in Transcription Factor Genes. Trends Genet. 2020 Jul;36(7):523-539. 

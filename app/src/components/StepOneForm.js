@@ -379,7 +379,7 @@ export default function StepOneForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel>Variant shows familiar segregation in the family </FormLabel>
+                                <FormLabel>Variant shows segregation in the family </FormLabel>
                                 <Tooltip title={"If yes is selected, detailed questions concerning the variant segregation in the family will be asked"}>
                                     <InfoOutlinedIcon className={classes.infoIcon}/>
                                 </Tooltip>

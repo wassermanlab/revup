@@ -153,7 +153,9 @@ ADDITIONAL_INFO_DICT = {
 }
 EXTERNAL_LINKS_DICT = {
     "dbsnp": "",
+    "rsid": "",
     "gnomad": "",
     "ucsc": "",
     "clinvar": "",
+    "clinvar_variation": "",
 }

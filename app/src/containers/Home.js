@@ -112,10 +112,10 @@ export default function Home() {
                                                     bioinformatic tool developed to improve clinical interpretation of suspected regulatory 
                                                     genetic variants. While tools already exists for classification of exonic variants based 
                                                     on the ACMG / AMP 2015 guidelines (ex: 
-                                                    <Link href="http://wintervar.wglab.org" color="secondary">InterVar-Genetic variants Interpretation by ACMG/AMP 2015 guideline</Link>
+                                                    <Link href="http://wintervar.wglab.org" target="_blank" color="secondary">InterVar-Genetic variants Interpretation by ACMG/AMP 2015 guideline</Link>
                                                     ), RevUP focuses on the interpretation of suspected regulatory 
                                                     variants, based on the classification developed by 
-                                                    <Link href="https://doi.org/10.1016/j.tig.2020.04.006" color="secondary">Van der Lee R, 
+                                                    <Link href="https://doi.org/10.1016/j.tig.2020.04.006" target="_blank" color="secondary">Van der Lee R, 
                                                     Correard S and Wasserman WW in “Deregulated Regulators: Disease-
                                                     Causing cis Variants in Transcription Factor Genes” (Trends in 
                                                     Genetics, 2020)</Link>.

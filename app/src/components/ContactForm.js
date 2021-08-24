@@ -195,7 +195,7 @@ export default function ContactForm(props) {
                                             <Grid item xs={11}>
                                                 <Typography variant="body1" color="textSecondary" paragraph>
                                                     Found this work interesting? The Wasserman Lab develops other tools and databases, go and check 
-                                                    out <Link href="http://cisreg.ca/" color="secondary">our website</Link>!
+                                                    out <Link href="http://cisreg.ca/" target="_blank" color="secondary">our website</Link>!
                                                 </Typography>
                                             </Grid>
                                         </Grid>

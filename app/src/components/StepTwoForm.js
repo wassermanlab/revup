@@ -185,7 +185,7 @@ export default function StepTwoForm(props) {
                         </Grid>
                         <Grid container justify="center" spacing={3}>
                             <Grid item xs={5}>
-                                <FormLabel><i>{props.variantInfo["target_gene"]}</i> does not contain coding variants in the same individual</FormLabel>
+                                <FormLabel><i>{props.variantInfo["target_gene"]}</i> does <b><u>NOT</u></b> contain coding variants in the same individual</FormLabel>
                             </Grid>
                             <Grid item xs={5}>
                                 <FormControl fullWidth className={classes.formControl}>

@@ -195,12 +195,21 @@ def calculate_initial_scores():
             "hg38": "-".join([str(snv.chro), str(snv.ref_assemblies["hg38"]), snv.ref, snv.alt]),
         }
 
+        print(response)
+        print(snv.rsid)
+        print(snv.clinvar_variation)
+
         # Determine external links
         snv.set_rsid()
         snv.set_clinvar_variation()
+        print(snv.rsid)
+        print(snv.clinvar_variation)
         if snv.rsid != "":
             response["external_links"]["dbsnp"] = DBSNP_URL_TEMPLATE.format(rsid=snv.rsid)
             response["external_links"]["rsid"] = snv.rsid
+        else:
+            response["external_links"]["dbsnp"] = ""
+            response["external_links"]["rsid"] = ""
         if snv.in_gnomad:
             variant_id = "-".join([
                 str(snv.chro),
@@ -212,7 +221,12 @@ def calculate_initial_scores():
             if snv.clinvar_variation != "":
                 response["external_links"]["clinvar"] = CLINVAR_URL_TEMPLATE.format(clinvar_variation=snv.clinvar_variation)
                 response["external_links"]["clinvar_variation"] = snv.clinvar_variation
-        #print()
+            else:
+                response["external_links"]["clinvar_variation"] = ""
+        else:
+            response["external_links"]["gnomad"] = ""
+            response["external_links"]["clinvar_variation"] = ""
+        print(response["external_links"])
     return jsonify(response)
 
 

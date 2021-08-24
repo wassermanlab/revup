@@ -428,6 +428,19 @@ export default function Results(props) {
                                     </Grid>
                                 </Grid> 
                                 {(function () {
+                                    if(!props.externalLinks["dbsnp"] && !props.externalLinks["gnomad"] && !props.externalLinks["ucsc"]) {
+                                        return (
+                                            <React.Fragment>
+                                                <Grid container justify="center" spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <FormLabel>
+                                                            No external links associated with this variant
+                                                        </FormLabel>
+                                                    </Grid>
+                                                </Grid>
+                                            </React.Fragment>)}
+                                })()}
+                                {(function () {
                                     if(props.externalLinks["dbsnp"]) {
                                         return (
                                             <React.Fragment>
