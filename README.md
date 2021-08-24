@@ -35,7 +35,8 @@ The `app` directory contains all of the code related to the front end, and the `
 ## Software Installation
 ### Install Dependencies
 1. **Install backend dependencies**
-Install Brew and Python (MacOS only)
+
+* Install Brew and Python (MacOS only)
 ```
 # Install Brew
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -48,7 +49,7 @@ $ python3 --version
 $ pip3 --version
 ```
 
-Install Python (Ubuntu only)
+* Install Python (Ubuntu only)
 ```
 $ sudo apt update
 $ sudo apt-get install python3-pip
@@ -59,7 +60,8 @@ $ pip3 --version
 ```
 
 2. **Install the AWS CLI**
-Download the installer from the Amazon website and install the CLI. Then, run the following command and fill in the information:
+
+* Download the installer from the Amazon website and install the CLI. Then, run the following command and fill in the information:
 ```
 $ aws configure
 AWS Access Key ID [None]: YOUR_AWS_KEY_ID
@@ -67,6 +69,7 @@ AWS Secret Access Key [None]: YOUR_AWS_SECRET_KEY
 Default region name [None]: us-west-2
 Default output format [None]: ENTER
 ```
+** Note: you can leave these fields blank if you do not have an AWS account
 
 3. **Install a local version of AWS DynamoDB**
 * Download the zip [here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
@@ -92,7 +95,8 @@ $ aws dynamodb create-table \
 ```
 
 4. **Install frontend dependencies**
-Install Node.js and npm (MacOS only)
+
+* Install Node.js and npm (MacOS only)
  ```
 # Install Nodejs and npm
 $ brew install node
@@ -102,7 +106,7 @@ $ node -v     # should be at least v8.10.0
 $ npm -v      # should be at least 3.5.2
 ```
 
-Install Node.js and npm (Ubuntu only)
+* Install Node.js and npm (Ubuntu only)
 ```
 $ sudo apt-get install nodejs
 $ sudo apt-get install npm
@@ -112,7 +116,7 @@ $ nodejs --version          # should be at least v8.10.0
 $ npm --version             # should be at least 3.5.2
 ```
 
-Alternatively, you can install [nvm](https://github.com/nvm-sh/nvm) to manage your node versions on both MacOS and Ubuntu
+* Alternatively, you can install [nvm](https://github.com/nvm-sh/nvm) to manage your node versions on both MacOS and Ubuntu
 ```
 $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 
@@ -141,7 +145,7 @@ $ echo "14.5.0" > .nvmrc
 $ nvm use
 ```
 
-Install Yarn (MacOS only)
+* Install Yarn (MacOS only)
 ```
 $ brew install yarn
 
@@ -149,7 +153,7 @@ $ brew install yarn
 $ yarn -v 
 ```
 
-Install Yarn (Ubuntu only)
+* Install Yarn (Ubuntu only)
 ```
 $ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 $ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
