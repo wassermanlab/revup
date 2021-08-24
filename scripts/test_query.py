@@ -178,7 +178,7 @@ def list_ucsc_tracks(api_url, verbose=False):
 #@click.argument("genome", default="hg38")
 # Example Query
 # python3 test_query.py ucsc-query --list_tracks
-# python3 test_query ucsc-query --show_track_data cons100way
+# python3 test_query.py ucsc-query --show_track_data cons100way
 def ucsc_query(**kwargs):
     """
     """
@@ -200,6 +200,7 @@ def ucsc_query(**kwargs):
 @click.argument("pos")
 # Example Query
 # python3 test_query.py ucsc-get-data 8 101493333
+# python3 test_query.py ucsc-get-data 17 4987635
 def ucsc_get_data(**kwargs):
     """
     """
@@ -242,9 +243,44 @@ def ucsc_get_data(**kwargs):
                 "name": ccre_result["name"]
             })
     print(ccre_data)
-
     #ccre_score = ccre_results["encodeCcreCombined"][0]["score"]
     #print(ccre_score)
+
+    # Get dbSNP data
+    track_query = "track?track=snp151;genome=hg38;chrom={};start={};end={}".format(chro, start, int(end) + 1)
+    dnsnp_query = os.path.join(ucsc_api_url, "getData", track_query)
+
+    dbsnp_results = make_request(dnsnp_query)
+    rsid = ""
+
+    if len(dbsnp_results["snp151"]) > 1:
+        for dbsnp_result in dbsnp_results["snp151"]:
+            # If the start and end position are the same and equal the variant position
+            if int(dbsnp_result["chromStart"]) == int(end):
+                if int(dbsnp_result["chromEnd"]) == int(end): 
+                    rsid = dbsnp_result["name"]
+            # Otherwise use start as one position behind the variant position
+            elif int(dbsnp_result["chromStart"]) == int(start):
+                # Check that rsID is blank so not overwriting the case where start and 
+                # end position equal the provided variant position
+                if int(dbsnp_result["chromEnd"]) == int(end) and rsid == "":
+                    rsid = dbsnp_result["name"]
+    print(rsid)
+
+    '''
+    if dbsnp_results["dbSnp153ViewVariants"]:
+        print(dbsnp_results["dbSnp153ViewVariants"])
+
+        for dbsnp_result in dbsnp_results["encodeCcreCombined"]:
+            dbsnp_data.append({
+                "ccre": ccre_result["ccre"],
+                "description": ccre_result["description"],
+                "name": ccre_result["name"]
+            })
+        '''
+    #print(dbsnp_data)
+
+    
 
 @query.command()
 def test_phastcons():

@@ -17,8 +17,10 @@ from webpage_rvs.src.constants import (
     REMAP_VARIANT_FILE
 )
 from webpage_rvs.src.templates import (
+    UCSC_API_URL_TEMPLATE,
     CADD_API_URL_TEMPLATE,
     GNOMAD_ALLELE_QUERY,
+    GNOMAD_CLINVAR_QUERY,
     SCREEN_CCRE_QUERY
 )
 
@@ -58,6 +60,11 @@ class SNV(Variant):
         self.pos = pos
         self.alt = alt
         self.ref = ""
+
+        # Setup for external links
+        self.rsid = ""
+        self.clinvar_variation = ""
+        self.in_gnomad = True
 
         # Create default scores
         self.cadd_score = 0
@@ -135,16 +142,16 @@ class SNV(Variant):
         start = self.ref_assemblies[UCSC_ASSEMBLY] - 1
         end = self.ref_assemblies[UCSC_ASSEMBLY]
 
-        track_query = "track?track=phyloP100way;genome={};chrom={};start={};end={}".format(
-            UCSC_ASSEMBLY,
-            chro, 
-            str(start), 
-            str(end)
+        # Build the query
+        phylop_query = UCSC_API_URL_TEMPLATE.format(
+            track_query="phyloP100way",
+            genome=UCSC_ASSEMBLY,
+            chrom=chro,
+            start=start,
+            end=end
         )
-        phylop_query = os.path.join(UCSC_API_URL, "getData", track_query)
 
         phylop_results = make_request(phylop_query)
-        #print(phylop_results)
         if len(phylop_results[chro]) > 0:
             self.phylop_score = float(phylop_results[chro][0]["value"])
 
@@ -162,19 +169,81 @@ class SNV(Variant):
         start = self.ref_assemblies[UCSC_ASSEMBLY] - 1
         end = self.ref_assemblies[UCSC_ASSEMBLY]
 
-        track_query = "track?track=phastCons100way;genome={};chrom={};start={};end={}".format(
-            UCSC_ASSEMBLY,
-            chro, 
-            start, 
-            end
+        # Build the query
+        phastcons_query = UCSC_API_URL_TEMPLATE.format(
+            track_query="phastCons100way",
+            genome=UCSC_ASSEMBLY,
+            chrom=chro,
+            start=start,
+            end=end
         )
-        phastcons_query = os.path.join(UCSC_API_URL, "getData", track_query)
-
         phastcons_results = make_request(phastcons_query)
         if len(phastcons_results[chro]) > 0:
             self.phastcons_score = float(phastcons_results[chro][0]["value"])
 
         # TODO: Check if there are no results
+
+
+    def set_rsid(self):
+        """
+        """
+        # Convert coordinates
+        chro = "chr" + str(self.chro)
+        start = self.ref_assemblies[UCSC_ASSEMBLY] - 1
+        end = self.ref_assemblies[UCSC_ASSEMBLY]
+
+        # Build the query
+        dbsnp_query = UCSC_API_URL_TEMPLATE.format(
+            track_query="snp151",
+            genome=UCSC_ASSEMBLY,
+            chrom=chro,
+            start=start,
+            end=str(int(end)+1)
+        )
+        dbsnp_results = make_request(dbsnp_query)
+        if len(dbsnp_results["snp151"]) > 0:
+            for dbsnp_result in dbsnp_results["snp151"]:
+                # If the start and end position are the same and equal the variant position
+                if int(dbsnp_result["chromStart"]) == int(end):
+                    if int(dbsnp_result["chromEnd"]) == int(end): 
+                        self.rsid = dbsnp_result["name"]
+                # Otherwise use start as one position behind the variant position
+                elif int(dbsnp_result["chromStart"]) == int(start):
+                    # Check that rsID is blank so not overwriting the case where start and 
+                    # end position equal the provided variant position
+                    if int(dbsnp_result["chromEnd"]) == int(end) and self.rsid == "":
+                        self.rsid = dbsnp_result["name"]
+
+        # TODO: Check if there are no results
+
+
+    def set_clinvar_variation(self):
+        """
+        """
+        variant_id = "-".join([ 
+            str(self.chro),
+            str(self.ref_assemblies[GNOMAD_ASSEMBLY]),
+            self.ref,
+            self.alt
+        ])
+        results = graphql_query(
+            GNOMAD_API_URL,
+            GNOMAD_CLINVAR_QUERY,
+            {"variantId": variant_id}
+        )
+        # TODO: Check if results is empty
+        # TODO: This could be an issue if the variant is not present in gnomAD but has an rsID
+        print(results)
+        if results["data"]["clinvar_variant"]:
+            self.clinvar_variation = results["data"]["clinvar_variant"]["clinvar_variation_id"]
+        #else:
+            # TODO: What to do here....?
+            #self.in_gnomad = False
+            
+            # Log the errors
+            print("gnomAD errors:")
+            for error in results["errors"]:
+                print(error["message"])
 
 
     def set_gnomad_info(self):
@@ -198,9 +267,10 @@ class SNV(Variant):
             an = results["data"]["variant"]["genome"]["an"]
             ac = results["data"]["variant"]["genome"]["ac"]
             self.af = int(ac)/int(an)
-            self.num_homozygotes = results["data"]["variant"]["genome"]["homozygote_count"]
+            self.num_homozygotes = results["data"][ "variant"]["genome"]["homozygote_count"]
         else:
             # TODO: What to do here....?
+            self.in_gnomad = False
             
             # Log the errors
             print("gnomAD errors:")

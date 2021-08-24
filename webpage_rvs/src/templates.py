@@ -1,5 +1,10 @@
 import os
 
+from webpage_rvs.src.constants import (
+    UCSC_API_URL,
+    CADD_API_URL,
+)
+
 
 # Maps
 FAMILIAL_SEGREGATION_MAP = {
@@ -11,10 +16,18 @@ EMAIL_RECIPIENT_MAP = {
     "bug": os.environ.get("REVUP_BUG_EMAIL"),
     "question_feedback": os.environ.get("REVUP_QUESTION_EMAIL"),
 }
+GNOMAD_DATASETS = {
+    "hg38": "gnomad_r3",
+    "hg19": "gnomad_r2_1"
+}
 
 
 # URL Templates
-CADD_API_URL_TEMPLATE = "https://cadd.gs.washington.edu/api/v1.0/{version}/{chro}:{pos}"
+UCSC_API_URL_TEMPLATE = os.path.join(UCSC_API_URL, "getData", "track?track={track_query};genome={genome};chrom={chrom};start={start};end={end}")
+CADD_API_URL_TEMPLATE = os.path.join(CADD_API_URL, "{version}/{chro}:{pos}")
+DBSNP_URL_TEMPLATE = "https://www.ncbi.nlm.nih.gov/snp/{rsid}?vertical_tab=true"
+GNOMAD_URL_TEMPLATE = "https://gnomad.broadinstitute.org/variant/{gnomad_id}?dataset={gnomad_dataset}"
+CLINVAR_URL_TEMPLATE = "https://www.ncbi.nlm.nih.gov/clinvar/variation/{clinvar_variation}"
 
 
 # API Queries
@@ -48,8 +61,17 @@ query getVariant($variantId: String!) {
             an
             homozygote_count
         }
+        rsid
     }
 }
+"""
+GNOMAD_CLINVAR_QUERY = """
+query getClinvarVariant($variantId: String!) {
+        clinvar_variant(variant_id: $variantId, reference_genome: GRCh38) {
+    		rsid
+    		clinvar_variation_id
+        }
+    }
 """
 
 

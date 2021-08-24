@@ -86,40 +86,38 @@ export default function StepThreeForm(props) {
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid container justify="center" spacing={3}>
-                        {(function () {
-                            if(props.variantInfo["variant_id"]) {
+                    {(function () {
+                        if(props.variantInfo["variant_id"]) {
                             return (
-                            <React.Fragment>
-                                <Grid item xs={3}>
-                                    <FormLabel>
-                                        Variant ID:
-                                    </FormLabel>
-                                </Grid>
-                                <Grid item xs={7}>
-                                    <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
-                                </Grid>
-                            </React.Fragment>)
-                            } else {return ("")}
-                        })()}
-                    </Grid>
-                    <Grid container justify="center" spacing={3}>
-                        {(function () {
-                            if(props.variantInfo["patient_id"]) {
+                                <React.Fragment>
+                                    <Grid container justify="center" spacing={3}>
+                                        <Grid item xs={3}>
+                                            <FormLabel>
+                                                Variant ID:
+                                            </FormLabel>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
+                                        </Grid>
+                                    </Grid>
+                                </React.Fragment>)}
+                    })()}
+                    {(function () {
+                        if(props.variantInfo["patient_id"]) {
                             return (
-                            <React.Fragment>
-                                <Grid item xs={3}>
-                                    <FormLabel>
-                                        Patient ID:
-                                    </FormLabel>
-                                </Grid>
-                                <Grid item xs={7}>
-                                    <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
-                                </Grid>
-                            </React.Fragment>)
-                            } else {return ("")}
-                        })()}
-                    </Grid>
+                                <React.Fragment>
+                                    <Grid container justify="center" spacing={3}>
+                                        <Grid item xs={3}>
+                                            <FormLabel>
+                                                Patient ID:
+                                            </FormLabel>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
+                                        </Grid>
+                                    </Grid>
+                                </React.Fragment>)}
+                    })()}
                     {/* 
                     <Grid justify="center" container spacing={3}>
                         <Grid item xs={3}>
@@ -164,23 +162,22 @@ export default function StepThreeForm(props) {
                             <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
                         </Grid>
                     </Grid>
-                    <Grid container justify="center" spacing={3}>
-                        {(function () {
-                            if(props.variantInfo["phenotype"]) {
+                    {(function () {
+                        if(props.variantInfo["phenotype"]) {
                             return (
-                            <React.Fragment>
-                                <Grid item xs={3}>
-                                    <FormLabel>
-                                            Patient's Phenotype:
-                                    </FormLabel>
-                                </Grid>
-                                <Grid item xs={7}>
-                                    <FormLabel>{props.variantInfo["phenotype"]}</FormLabel>
-                                </Grid>
-                            </React.Fragment>)
-                            } else {return ("")}
-                        })()}
-                    </Grid>
+                                <React.Fragment>
+                                    <Grid container justify="center" spacing={3}>
+                                        <Grid item xs={3}>
+                                            <FormLabel>
+                                                    Patient's Phenotype:
+                                            </FormLabel>
+                                        </Grid>
+                                        <Grid item xs={7}>
+                                            <FormLabel>{props.variantInfo["phenotype"]}</FormLabel>
+                                        </Grid>
+                                    </Grid>
+                                </React.Fragment>)}
+                    })()}
                     <Grid container justify="center" spacing={3}>
                         <Grid item xs={3}>
                             <FormLabel>Identification Method:</FormLabel>

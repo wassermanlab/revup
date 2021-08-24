@@ -303,136 +303,172 @@ export default function Results(props) {
                     </Grid>
                     <Paper className={classes.paper}>
                         <Grid justify="center" container spacing={3}>
-                            <Grid item xs={10}>
-                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
-                                    <b>General Information</b>
-                                </Typography>
-                            </Grid> 
-                        </Grid>
-                        <Grid container justify="center" spacing={3}>
-                            {(function () {
-                                if(props.variantInfo["variant_id"]) {
-                                return (
-                                <React.Fragment>
+                            <Grid item xs={7}>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                            <b>General Information</b>
+                                        </Typography>
+                                    </Grid> 
+                                </Grid>
+                                {(function () {
+                                    if(props.variantInfo["variant_id"]) {
+                                        return (
+                                            <React.Fragment>
+                                                <Grid container justify="center" spacing={3}>
+                                                    <Grid item xs={4}>
+                                                        <FormLabel>
+                                                            Variant ID:
+                                                        </FormLabel>
+                                                    </Grid>
+                                                    <Grid item xs={8}>
+                                                        <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
+                                                    </Grid>
+                                                </Grid>
+                                            </React.Fragment>)}
+                                })()}
+                                {(function () {
+                                    if(props.variantInfo["patient_id"]) {
+                                        return (
+                                            <React.Fragment>
+                                                <Grid container justify="center" spacing={3}>
+                                                    <Grid item xs={4}>
+                                                        <FormLabel>
+                                                            Patient ID:
+                                                        </FormLabel>
+                                                    </Grid>
+                                                    <Grid item xs={8}>
+                                                        <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
+                                                    </Grid>
+                                                </Grid>
+                                            </React.Fragment>)}
+                                })()}
+                                {/* 
+                                <Grid justify="center" container spacing={3}>
                                     <Grid item xs={3}>
-                                        <FormLabel>
-                                            Variant ID:
-                                        </FormLabel>
-                                    </Grid>
+                                        <FormLabel>Variant Description:</FormLabel>
+                                    </Grid> 
                                     <Grid item xs={7}>
-                                        <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
+                                        <FormLabel>{props.variantInfo["variant_description"]}</FormLabel>
+                                    </Grid> 
+                                </Grid>
+                                */}
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={4}>
+                                        <FormLabel>hg19 position: </FormLabel>
                                     </Grid>
-                                </React.Fragment>)
-                                } else {return ("")}
-                            })()}
-                        </Grid>
-                        <Grid container justify="center" spacing={3}>
-                            {(function () {
-                                if(props.variantInfo["patient_id"]) {
-                                return (
-                                <React.Fragment>
-                                    <Grid item xs={3}>
-                                        <FormLabel>
-                                            Patient ID:
-                                        </FormLabel>
+                                    <Grid item xs={8}>
+                                        <FormLabel>{props.assemblies["hg19"]}</FormLabel>
                                     </Grid>
-                                    <Grid item xs={7}>
-                                        <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
+                                </Grid>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={4}>
+                                        <FormLabel>hg38 position: </FormLabel>
                                     </Grid>
-                                </React.Fragment>)
-                                } else {return ("")}
-                            })()}
-                        </Grid>
-                        {/* 
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={3}>
-                                <FormLabel>Variant Description:</FormLabel>
-                            </Grid> 
-                            <Grid item xs={7}>
-                                <FormLabel>{props.variantInfo["variant_description"]}</FormLabel>
-                            </Grid> 
-                        </Grid>
-                        */}
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={3}>
-                                <FormLabel>hg19 position: </FormLabel>
-                            </Grid>
-                            <Grid item xs={7}>
-                                <FormLabel>{props.assemblies["hg19"]}</FormLabel>
-                            </Grid>
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={3}>
-                                <FormLabel>hg38 position: </FormLabel>
-                            </Grid>
-                            <Grid item xs={7}>
-                                <FormLabel>{props.assemblies["hg38"]}</FormLabel>
-                            </Grid>
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={3}>
-                                <FormLabel>Reference Assembly:</FormLabel>
-                            </Grid> 
-                            <Grid item xs={7}>
-                                <FormLabel>{props.variantInfo["ref_genome"]}</FormLabel>
-                            </Grid> 
-                        </Grid>
-                        <Grid container justify="center" spacing={3}>
-                            <Grid item xs={3}>
-                                <FormLabel>Patient's Genotype:</FormLabel>
-                            </Grid>
-                            <Grid item xs={7}>
-                                <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify="center" spacing={3}>
-                            {(function () {
-                                if(props.variantInfo["phenotype"]) {
-                                return (
-                                <React.Fragment>
-                                    <Grid item xs={3}>
-                                        <FormLabel>
-                                             Patient's Phenotype:
-                                        </FormLabel>
+                                    <Grid item xs={8}>
+                                        <FormLabel>{props.assemblies["hg38"]}</FormLabel>
                                     </Grid>
-                                    <Grid item xs={7}>
-                                        <FormLabel>{props.variantInfo["phenotype"]}</FormLabel>
+                                </Grid>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={4}>
+                                        <FormLabel>Reference Assembly:</FormLabel>
+                                    </Grid> 
+                                    <Grid item xs={8}>
+                                        <FormLabel>{props.variantInfo["ref_genome"]}</FormLabel>
+                                    </Grid> 
+                                </Grid>
+                                <Grid container justify="center" spacing={3}>
+                                    <Grid item xs={4}>
+                                        <FormLabel>Patient's Genotype:</FormLabel>
                                     </Grid>
-                                </React.Fragment>)
-                                } else {return ("")}
-                            })()}
-                        </Grid>
-                        <Grid container justify="center" spacing={3}>
-                            <Grid item xs={3}>
-                                <FormLabel>Identification Method:</FormLabel>
+                                    <Grid item xs={8}>
+                                        <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
+                                    </Grid>
+                                </Grid>
+                                {(function () {
+                                    if(props.variantInfo["phenotype"]) {
+                                        return (
+                                            <React.Fragment>
+                                                <Grid container justify="center" spacing={3}>
+                                                    <Grid item xs={4}>
+                                                        <FormLabel>
+                                                            Patient's Phenotype:
+                                                        </FormLabel>
+                                                    </Grid>
+                                                    <Grid item xs={8}>
+                                                        <FormLabel>{props.variantInfo["phenotype"]}</FormLabel>
+                                                    </Grid>
+                                                </Grid>
+                                            </React.Fragment>)}
+                                })()}
+                                <Grid container justify="center" spacing={3}>
+                                    <Grid item xs={4}>
+                                        <FormLabel>Identification Method:</FormLabel>
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <FormLabel>{props.variantInfo["identification_method"]}</FormLabel>
+                                    </Grid>
+                                </Grid>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={4}>
+                                        <FormLabel>Target Gene:</FormLabel>
+                                    </Grid> 
+                                    <Grid item xs={8}>
+                                        <FormLabel><i>{props.variantInfo["target_gene"]}</i></FormLabel>
+                                    </Grid> 
+                                </Grid>
                             </Grid>
-                            <Grid item xs={7}>
-                                <FormLabel>{props.variantInfo["identification_method"]}</FormLabel>
-                            </Grid>
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={3}>
-                                <FormLabel>Target Gene:</FormLabel>
-                            </Grid> 
-                            <Grid item xs={7}>
-                                <FormLabel><i>{props.variantInfo["target_gene"]}</i></FormLabel>
-                            </Grid> 
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={10}>
-                                <Divider />
-                            </Grid>
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={10}>
-                                <Typography variant="h5" align="left" color="secondary" gutterBottom>
-                                    <b>External Links</b>
-                                </Typography>
-                            </Grid> 
-                        </Grid>
-                        <Grid container justify="center" spacing={3}>
 
+                            <Grid item xs={3}>
+                                <Grid justify="center" container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <Typography variant="h5" align="left" color="secondary" gutterBottom>
+                                            <b>External Links</b>
+                                        </Typography>
+                                    </Grid>
+                                </Grid> 
+                                {(function () {
+                                    if(props.externalLinks["dbsnp"]) {
+                                        return (
+                                            <React.Fragment>
+                                                <Grid container justify="center" spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <Link href={props.externalLinks["dbsnp"]} target="_blank" color="primary" underline="none">
+                                                            dbSNP ({props.externalLinks["rsid"]})
+                                                        </Link>
+                                                    </Grid>
+                                                </Grid>
+                                            </React.Fragment>)}
+                                })()}
+                                {(function () {
+                                    if(props.externalLinks["gnomad"]) {
+                                        return (
+                                            <React.Fragment>
+                                                <Grid container justify="center" spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <Link href={props.externalLinks["gnomad"]} target="_blank" color="primary" underline="none">
+                                                            gnomAD
+                                                        </Link>
+                                                    </Grid>
+                                                </Grid>
+                                            </React.Fragment>)}
+                                })()}
+                                {(function () {
+                                    if(props.externalLinks["clinvar"]) {
+                                        return (
+                                            <React.Fragment>
+                                                <Grid container justify="center" spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <Link href={props.externalLinks["clinvar"]} target="_blank" color="primary" underline="none">
+                                                            ClinVar ({props.externalLinks["clinvar_variation"]})
+                                                        </Link>
+                                                    </Grid>
+                                                </Grid>
+                                            </React.Fragment>)}
+                                })()}
+                            </Grid>
                         </Grid>
+
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
                                 <Divider />

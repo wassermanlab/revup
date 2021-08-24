@@ -71,6 +71,14 @@ export const defaultInfo = {
     "clinvar_link": "",
     "ucsc_link": ""
 }
+export const defaultLinksDict = {
+    "dbsnp": "",
+    "rsid": "",
+    "gnomad": "",
+    "ucsc": "",
+    "clinvar": "",
+    "clinvar_variation": ""
+}
 
 export const defaultScoresDict = {
     "c_1_1": "0",

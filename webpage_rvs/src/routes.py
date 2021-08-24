@@ -22,12 +22,18 @@ from webpage_rvs.src.constants import (
     AF_CUTOFF,
     DEFAULT_DICT,
     ADDITIONAL_INFO_DICT,
+    EXTERNAL_LINKS_DICT,
+    GNOMAD_ASSEMBLY,
 )
 from webpage_rvs.src.templates import (
     FAMILIAL_SEGREGATION_MAP,
     #C_3_1_MAP,
     EMAIL_MSG_TEMPLATE,
     EMAIL_RECIPIENT_MAP,
+    DBSNP_URL_TEMPLATE,
+    GNOMAD_URL_TEMPLATE,
+    CLINVAR_URL_TEMPLATE,
+    GNOMAD_DATASETS
 )
 from webpage_rvs.src.variant import (
     SNV
@@ -78,9 +84,8 @@ def calculate_initial_scores():
                                         body["variant_info"]["target_gene"]
                                     ),
             "initial_scores": DEFAULT_DICT,
-            #"modified_scores": DEFAULT_DICT,
             "additional_info": ADDITIONAL_INFO_DICT,
-            #"comments": DEFAULT_DICT,
+            "external_links": EXTERNAL_LINKS_DICT
         }
 
         # Get initial scores
@@ -189,7 +194,25 @@ def calculate_initial_scores():
             "hg19": "-".join([str(snv.chro), str(snv.ref_assemblies["hg19"]), snv.ref, snv.alt]),
             "hg38": "-".join([str(snv.chro), str(snv.ref_assemblies["hg38"]), snv.ref, snv.alt]),
         }
-        
+
+        # Determine external links
+        snv.set_rsid()
+        snv.set_clinvar_variation()
+        if snv.rsid != "":
+            response["external_links"]["dbsnp"] = DBSNP_URL_TEMPLATE.format(rsid=snv.rsid)
+            response["external_links"]["rsid"] = snv.rsid
+        if snv.in_gnomad:
+            variant_id = "-".join([
+                str(snv.chro),
+                str(snv.ref_assemblies[GNOMAD_ASSEMBLY]),
+                snv.ref,
+                snv.alt
+            ])
+            response["external_links"]["gnomad"] = GNOMAD_URL_TEMPLATE.format(gnomad_id=variant_id, gnomad_dataset=GNOMAD_DATASETS[GNOMAD_ASSEMBLY])
+            if snv.clinvar_variation != "":
+                response["external_links"]["clinvar"] = CLINVAR_URL_TEMPLATE.format(clinvar_variation=snv.clinvar_variation)
+                response["external_links"]["clinvar_variation"] = snv.clinvar_variation
+        #print()
     return jsonify(response)
 
 

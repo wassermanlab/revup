@@ -169,7 +169,7 @@ export default function ResultsPDF(props) {
                     </View>
                     <View style={styles.table}> 
                         <View style={styles.tableRow}> 
-                            <View style={styles.tableColXl}> 
+                            <View style={{ width: '60%', border: null}}> 
                                 <Image src={props.lineChart}></Image>
                             </View> 
                         </View>

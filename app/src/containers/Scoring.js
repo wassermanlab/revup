@@ -22,6 +22,7 @@ import Results from '../components/Results';
 import {
     defaultQueryDict,
     defaultInfo,
+    defaultLinksDict,
     defaultScoresDict,
     defaultValsDict,
     defaultResultsDict,
@@ -73,6 +74,7 @@ export default function Scoring() {
     const config = require("../templates.json");
     const [query, setQuery] = useState(defaultQueryDict);
     const [variantInfo, setVariantInfo] = useState(defaultInfo);
+    const [externalLinks, setExternalLinks] = useState(defaultLinksDict);
     const [initialScores, setInitialScores] = useState(defaultScoresDict);
     const [modifiedScores, setModifiedScores] = useState(defaultScoresDict);
     const [additionalInfo, setAdditionalInfo] = useState(defaultScoresDict);
@@ -169,6 +171,7 @@ export default function Scoring() {
                 //credentials: 'include'
             });
             const json = await response.json();
+            setExternalLinks(json["external_links"]);
             setInitialScores(json["initial_scores"]);
             setModifiedScores(json["initial_scores"]);
             setAdditionalInfo(json["additional_info"]);
@@ -281,6 +284,7 @@ export default function Scoring() {
                                 finalResults={finalResults}
                                 modifiedScores={modifiedScores}
                                 additionalInfo={additionalInfo}
+                                externalLinks={externalLinks}
                                 comments={comments}
                                 variantInfo={variantInfo}
                                 assemblies={assemblies}

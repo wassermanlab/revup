@@ -36,7 +36,7 @@ FUNCTIONAL_QUESTIONS = [
 ]
 
 
-# Possible Choices
+# Versions for external databases
 CADD_VERSION_CHOICES = [
     "v1.0",
     "v1.1",
@@ -59,7 +59,7 @@ LIFTOVER_ASSEMBLY_CHOICES = [
 
 # URL Constants
 UCSC_API_URL = "https://api.genome.ucsc.edu"
-CADD_API_URL = "https://cadd.gs.washington.edu.api/v1.0"
+CADD_API_URL = "https://cadd.gs.washington.edu/api/v1.0"
 GNOMAD_API_URL = "https://gnomad.broadinstitute.org/api"
 SCREEN_URL = "https://api.wenglab.org/screen_graphql/graphql"
 
@@ -150,4 +150,10 @@ ADDITIONAL_INFO_DICT = {
     "f_2_2": "",
     "f_3_1": "",
     "f_4_1": ""
+}
+EXTERNAL_LINKS_DICT = {
+    "dbsnp": "",
+    "gnomad": "",
+    "ucsc": "",
+    "clinvar": "",
 }
