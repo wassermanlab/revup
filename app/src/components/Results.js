@@ -35,6 +35,7 @@ import {
     getDoughnutOptions
 } from './ResultsCharts'
 import ResultsPDF from './ResultsPDF'
+import FormattedResultsPDF from './FormattedResultsPDF'
 import {
     GeneralInfoTablePDF,
     ClinicalResultsTablePDF,
@@ -136,7 +137,47 @@ export default function Results(props) {
         return calcString
     }
 
-    //const downloadPDF = () => {
+    
+    async function tempDownloadPDF () {
+        // Genereate Charts/Images
+        const lineChart = lineChartRef.current.chartInstance.toBase64Image();
+        const clinicalChart = clinicalChartRef.current.chartInstance.toBase64Image();
+        const functionalChart = functionalChartRef.current.chartInstance.toBase64Image();
+        const dateTime = getDateTime();
+
+        // Get values for calculations
+        const posEvidenceLevels = {
+            "clinical": getCalcValues('clinical', props.modifiedScores),
+            "functional": getCalcValues('functional', props.modifiedScores)
+        }
+
+        // Create the PDF
+        const doc = <FormattedResultsPDF 
+                        externalLinks={props.externalLinks}
+                        finalResults={props.finalResults}
+                        additionalInfo={props.additionalInfo}
+                        modifiedScores={props.modifiedScores}
+                        variantInfo={props.variantInfo}
+                        comments={props.comments}
+                        assemblies={props.assemblies}
+                        lineChart={lineChart}
+                        clinicalChart={clinicalChart}
+                        functionalChart={functionalChart}
+                        posEvidenceLevels={posEvidenceLevels}
+                        downloadTime={dateTime[0] + " " + dateTime[1]}
+                    />;
+        const asPdf = pdf();
+        asPdf.updateContainer(doc);
+        const blob = await asPdf.toBlob();
+        //const blob = generatePDF(doc);
+        const filename = 'revup_' + dateTime[0] + "_" + dateTime[1] + '.pdf';
+        saveAs(blob, filename);
+
+        // Close the menu icon
+        handleClose();
+    };
+
+
     async function downloadPDF () {
         // Genereate Charts/Images
         const lineChart = lineChartRef.current.chartInstance.toBase64Image();
@@ -298,6 +339,7 @@ export default function Results(props) {
                             >
                                 <MenuItem onClick={downloadPDF}>as PDF</MenuItem>
                                 <MenuItem onClick={downloadZip}>as zip</MenuItem>
+                                <MenuItem onClick={tempDownloadPDF}>as formatted PDF</MenuItem>
                             </Menu>
                         </Grid>    
                     </Grid>

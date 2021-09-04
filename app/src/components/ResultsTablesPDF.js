@@ -1,5 +1,5 @@
 import React from 'react';
-import { Page, Text, View, Document, Image, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, Image, StyleSheet, Link } from '@react-pdf/renderer';
 import rve_scores from '../images/rve_scores.png'
 
 const BORDER_COLOR = '#E5E5E5'
@@ -66,6 +66,14 @@ const styles = StyleSheet.create({
         margin: 5, 
         fontSize: 10 ,
         color: TEXT_COLOR
+    },
+    tableCellLeft: { 
+        margin: 40,
+        marginTop: 5,
+        marginBottom: 5,
+        fontSize: 10 ,
+        color: TEXT_COLOR,
+        textAlign: 'left',
     },
     tableCellCentered: {
         margin: 5,
@@ -317,6 +325,57 @@ export function GeneralInfoTablePDF(props) {
         </React.Fragment>
     )
 }
+
+export function ExternalLinksTable(props) {
+    return (
+        <React.Fragment>
+            <View>
+                <Text style={styles.heading}>External Links</Text>
+            </View>
+            <View style={styles.resultsTable}>
+                {(function () {
+                    if(!props.externalLinks["dbsnp"] && !props.externalLinks["gnomad"] && !props.externalLinks["ucsc"]) {
+                        return (
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellLeft}>No external links associated with this variant</Text>
+                            </View>
+                    )}
+                })()} 
+                {(function () {
+                    if(props.externalLinks["dbsnp"]) {
+                        return(
+                            <View style={{flex: 1, flexDirection: 'row'}}>
+                                <View style={{flex: 1}}>
+                                    <Link src={props.externalLinks["dbsnp"]} style={styles.tableCellLeft}>dbSNP ({props.externalLinks["rsid"]})</Link>
+                                </View>
+                            </View>
+                    )}
+                })()}
+                {(function () {
+                    if(props.externalLinks["gnomad"]) {
+                        return (
+                            <View style={{flex: 1, flexDirection: 'row'}}>
+                                <View style={{flex: 1}}>
+                                    <Link src={props.externalLinks["gnomad"]} style={styles.tableCellLeft}>gnomAD</Link>
+                                </View>
+                            </View>
+                    )}
+                })()} 
+                {(function () {
+                    if(props.externalLinks["clinvar"]) {
+                        return (
+                            <View style={{flex: 1, flexDirection: 'row'}}>
+                                <View style={{flex: 1}}>
+                                    <Link src={props.externalLinks["clinvar"]} style={styles.tableCellLeft}>ClinVar ({props.externalLinks["clinvar_variation"]})</Link>
+                                </View>
+                            </View>
+                    )}
+                })()}   
+            </View>
+        </React.Fragment>
+    )
+}
+
 
 
 export function ClinicalResultsTable(props) {

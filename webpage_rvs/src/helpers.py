@@ -1,11 +1,7 @@
-import os
 import sys
-import json
 import logging
 import requests
-import matplotlib
 
-import seaborn as sns
 import statsmodels.api as sm
 import numpy as np
 
@@ -83,7 +79,7 @@ def get_nearest(arr, val):
 
 def get_standard_rve_scores():
     """
-
+    Read scores from RVE scores txt file
     """
     rve_scores = []
     with open(RVE_SCORES_FILE) as filename:
@@ -96,7 +92,7 @@ def get_standard_rve_scores():
 
 def get_rve_density():
     """
-
+    Creates the density plot for the RVE-score distribution
     """
     rve_scores = get_standard_rve_scores()
     dens = sm.nonparametric.KDEUnivariate(rve_scores)

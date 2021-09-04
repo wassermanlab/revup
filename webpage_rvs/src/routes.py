@@ -4,7 +4,6 @@ import uuid
 import logging
 from webpage_rvs import (
     app,
-    #db
     dynamo,
     mail
 )
@@ -27,7 +26,6 @@ from webpage_rvs.src.constants import (
 )
 from webpage_rvs.src.templates import (
     FAMILIAL_SEGREGATION_MAP,
-    #C_3_1_MAP,
     EMAIL_MSG_TEMPLATE,
     EMAIL_RECIPIENT_MAP,
     DBSNP_URL_TEMPLATE,
@@ -60,6 +58,9 @@ def index():
 @app.route('/api/initial_scores', methods=["POST"])
 def calculate_initial_scores():
     """
+    Endpoint to calculate the initial score values for each evidence level after Step 
+    2 of the user forms. Includes calculations for the boolean value of each evidence 
+    level after querying external databases including (such as gnomAD, UCSC, CADD, and Screen)
     """
     if request.method == "POST":
         # Get info from body of the request
@@ -95,10 +96,6 @@ def calculate_initial_scores():
                     response["initial_scores"][key] = "1"
                 else:
                     response["initial_scores"][key] = "0"
-
-        # Familial Segregation
-        # if response["initial_scores"]["c_3_1"] == "1":
-        #     response["additional_info"]["c_3_1"] = FAMILIAL_SEGREGATION_MAP[body["query"]["c_3_1_additional"]]
 
         # Check CADD and FATHMM scores
         snv.set_cadd_score()
@@ -195,15 +192,9 @@ def calculate_initial_scores():
             "hg38": "-".join([str(snv.chro), str(snv.ref_assemblies["hg38"]), snv.ref, snv.alt]),
         }
 
-        print(response)
-        print(snv.rsid)
-        print(snv.clinvar_variation)
-
         # Determine external links
         snv.set_rsid()
         snv.set_clinvar_variation()
-        print(snv.rsid)
-        print(snv.clinvar_variation)
         if snv.rsid != "":
             response["external_links"]["dbsnp"] = DBSNP_URL_TEMPLATE.format(rsid=snv.rsid)
             response["external_links"]["rsid"] = snv.rsid
@@ -226,41 +217,31 @@ def calculate_initial_scores():
         else:
             response["external_links"]["gnomad"] = ""
             response["external_links"]["clinvar_variation"] = ""
-        print(response["external_links"])
     return jsonify(response)
 
 
 @app.route('/api/calc_scores', methods=["POST"])
 def calculate_scores():
     """
+    Endpoint to calculate the clinical, functional, and RVE scores 
+    after all final changes have been made from the users in the frontend
     """
     if request.method == "POST":
         scores_data = request.json["scores"]
         variant_info = request.json["variantInfo"]
         additional_info = request.json["additionalInfo"]
-        # try:
-            #clinical, functional = 0, 0
 
-            #for key, val in request.json.items():
-            #    print(key)
-            #    print(val)
         scores = calc_all_scores(scores_data)
-        
         rve = scores[0] + scores[1]
         response = {
             "clinical": str(scores[0]),
             "functional": str(scores[1]),
             "rve": str(rve)
         }
-        #except Exception as e:
-        #    response = jsonify({"error": str(e)})
-        #    return response
+
         rve_density = get_rve_density()
         rve_density["nearest_val"] = str(get_nearest(rve_density["x"], rve))
         response["standard_rve"] = rve_density
-
-        # Get external links
-
 
         # Save variant in database 
         db_id = str(uuid.uuid4())
@@ -316,6 +297,8 @@ def calculate_scores():
 
 def calc_all_scores(data):
     """
+    Calculates the clinical and functional scores for each evidence level 
+    in the data from the frontend
     """
     clinical = 0
     functional = 0
@@ -333,6 +316,7 @@ def calc_all_scores(data):
 @app.route('/api/contact_email', methods=["POST"])
 def contact_email():
     """
+    Endpoint to direct emails to the appropriate address based on the message type
     """
     if request.method == "POST":
         # Get info from body of the request
@@ -340,6 +324,7 @@ def contact_email():
         recipient = EMAIL_RECIPIENT_MAP[request.json["recipient"]]
         respond_to = request.json["respond_to"]
 
+        # Format the message and send it
         msg = Message('New message from RevUP classifier', sender=os.environ.get('REVUP_SENDER_EMAIL'), recipients=[recipient])
         msg.body = EMAIL_MSG_TEMPLATE.format(query_body=query_body, respond_to=respond_to)
         mail.send(msg)

@@ -92,7 +92,6 @@ class SNV(Variant):
         """
         Set the reference allele for this variant using UCSC Genome Browser
 
-
         NOTE: UCSC is 0 based, so must subtract 1 from every position in order to obtain
         the correct coordinates. i.e. start is actually start - 1
         """
@@ -110,15 +109,14 @@ class SNV(Variant):
 
         ref_allele_results = make_request(ref_allele_query)
         self.ref = ref_allele_results["dna"].upper()
-        #print(self.ref)
 
         # TODO: Check if there are results or not
 
     
     def set_cadd_score(self):
         """
+        Queries CADD API for CADD score
         """
-
         query = CADD_API_URL_TEMPLATE.format(
             version=CADD_VERSION,
             chro=str(self.chro),
@@ -134,6 +132,7 @@ class SNV(Variant):
 
     def set_phylop_score(self):
         """
+        Queries UCSC API for PhyloP score
 
         NOTE: UCSC is 0 based, so must subtract 1 from every position in order to obtain
         the correct coordinates. i.e. start is actually start - 1
@@ -160,6 +159,7 @@ class SNV(Variant):
 
     def set_phastcons_score(self):
         """
+        Queries UCSC API for PhastCons score
 
         NOTE: UCSC is 0 based, so must subtract 1 from every position in order to obtain
         the correct coordinates. i.e. start is actually start - 1
@@ -186,6 +186,7 @@ class SNV(Variant):
 
     def set_rsid(self):
         """
+        Queries UCSC API for rsID
         """
         # Convert coordinates
         chro = "chr" + str(self.chro)
@@ -219,6 +220,7 @@ class SNV(Variant):
 
     def set_clinvar_variation(self):
         """
+        Queries gnomAD API for ClinVar number
         """
         variant_id = "-".join([ 
             str(self.chro),
@@ -231,23 +233,21 @@ class SNV(Variant):
             GNOMAD_CLINVAR_QUERY,
             {"variantId": variant_id}
         )
-        # TODO: Check if results is empty
-        # TODO: This could be an issue if the variant is not present in gnomAD but has an rsID
-        print(results)
+        # TODO: What to do if results are empty?
+        # TODO: This could be an issue if the variant is not present in gnomAD but has an rsID in UCSC
         if results["data"]["clinvar_variant"]:
             self.clinvar_variation = results["data"]["clinvar_variant"]["clinvar_variation_id"]
-        #else:
-            # TODO: What to do here....?
-            #self.in_gnomad = False
-            
-            # Log the errors
-            print("gnomAD errors:")
+        else:    
+            # Log the errors to console
+            # TODO: Log to file instead
             for error in results["errors"]:
-                print(error["message"])
+                logging.error("gnomAD Error: {}".format(error["message"]))
 
 
     def set_gnomad_info(self):
         """
+        Queries gnomAD GraphQL API to find allele number, allele count, 
+        allele frequency, and number of homozygotes
         """
         variant_id = "-".join([
             str(self.chro),
@@ -260,26 +260,25 @@ class SNV(Variant):
             GNOMAD_ALLELE_QUERY, 
             {"variantId": variant_id}
         )
-        #print(results)
 
-        # TODO: Check if results is empty
+        # TODO: What to do if results are empty??
         if results["data"]["variant"]:
             an = results["data"]["variant"]["genome"]["an"]
             ac = results["data"]["variant"]["genome"]["ac"]
             self.af = int(ac)/int(an)
             self.num_homozygotes = results["data"][ "variant"]["genome"]["homozygote_count"]
         else:
-            # TODO: What to do here....?
             self.in_gnomad = False
             
-            # Log the errors
-            print("gnomAD errors:")
+            # Log the errors to console
+            # TODO: Log to file instead
             for error in results["errors"]:
-                print(error["message"])
+                logging.error("gnomAD Error: {}".format(error["message"]))
 
 
     def set_ccre_info(self):
         """
+        Queries UCSC API to determine info about cCREs
 
         NOTE: UCSC is 0 based, so must subtract 1 from every position in order to obtain
         the correct coordinates. i.e. start is actually start - 1
@@ -309,6 +308,7 @@ class SNV(Variant):
     
     def set_ccre_method(self):
         """
+        Queries the Screen API to determine the cCRE method for the target gene
         """
         pos = self.ref_assemblies[SCREEN_ASSEMBLY]
         chro = "chr" + str(self.chro)
@@ -324,7 +324,6 @@ class SNV(Variant):
             for ccre in ccres:
                 for linked_gene in ccre["details"]["linkedGenes"]:
                     if linked_gene["gene"] == self.target_gene:
-                        #print(linked_gene["method"])
                         self.ccre_methods.add(linked_gene["method"])
     
 

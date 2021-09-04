@@ -15,7 +15,6 @@ import {
 import clsx from 'clsx';
 import theme from '../styles/theme';
 import NavBar from '../components/NavBar';
-//import getCsrfToken from '../components/csrftoken';
 
 const drawerWidth = 240;
 
