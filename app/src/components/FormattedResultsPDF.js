@@ -6,7 +6,7 @@ import {
     ClinicalResultsTable,
     FunctionalResultsTable,
     CalculationsTable
-} from './ResultsTablesPDF'
+} from '../tables/ResultsTablesPDF'
 import rve_scores from '../images/rve_scores.png'
 
 const BORDER_COLOR = '#E5E5E5'

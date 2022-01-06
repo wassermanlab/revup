@@ -21,12 +21,10 @@ import {
 } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
 import IconButton from '@material-ui/core/IconButton';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
-import ReactHtmlParser from 'react-html-parser'; 
 
 import {
     getLineData,
@@ -35,21 +33,25 @@ import {
     getDoughnutOptions
 } from './ResultsCharts'
 import ResultsPDF from './ResultsPDF'
-import FormattedResultsPDF from './FormattedResultsPDF'
 import {
     GeneralInfoTablePDF,
     ClinicalResultsTablePDF,
     FunctionalResultsTablePDF,
     CalculationsTablePDF
-} from './ResultsTablesPDF'
+} from '../tables/ResultsTablesPDF'
 import {
     ClinicalResultsTableCSV,
     FunctionalResultsTableCSV,
-} from './ResultsTablesCSV'
+} from '../tables/ResultsTablesCSV'
 import {
     CITATION
 } from '../constants'
 import rve_scores from '../images/rve_scores.png'
+import {
+    GeneralInfoTable,
+    ClinicalTable,
+    FunctionalTable 
+} from '../tables/ResultsTables';
     
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,11 +75,7 @@ const useStyles = makeStyles((theme) => ({
         padding: "0px",
         marginRight: "auto",
         marginLeft: "auto",
-    },
-    infoIcon: {
-        fontSize: 15,
-        color: "#BCBCBC",
-    },
+    }
 }))
 
 
@@ -136,46 +134,6 @@ export default function Results(props) {
         }
         return calcString
     }
-
-    
-    async function tempDownloadPDF () {
-        // Genereate Charts/Images
-        const lineChart = lineChartRef.current.chartInstance.toBase64Image();
-        const clinicalChart = clinicalChartRef.current.chartInstance.toBase64Image();
-        const functionalChart = functionalChartRef.current.chartInstance.toBase64Image();
-        const dateTime = getDateTime();
-
-        // Get values for calculations
-        const posEvidenceLevels = {
-            "clinical": getCalcValues('clinical', props.modifiedScores),
-            "functional": getCalcValues('functional', props.modifiedScores)
-        }
-
-        // Create the PDF
-        const doc = <FormattedResultsPDF 
-                        externalLinks={props.externalLinks}
-                        finalResults={props.finalResults}
-                        additionalInfo={props.additionalInfo}
-                        modifiedScores={props.modifiedScores}
-                        variantInfo={props.variantInfo}
-                        comments={props.comments}
-                        assemblies={props.assemblies}
-                        lineChart={lineChart}
-                        clinicalChart={clinicalChart}
-                        functionalChart={functionalChart}
-                        posEvidenceLevels={posEvidenceLevels}
-                        downloadTime={dateTime[0] + " " + dateTime[1]}
-                    />;
-        const asPdf = pdf();
-        asPdf.updateContainer(doc);
-        const blob = await asPdf.toBlob();
-        //const blob = generatePDF(doc);
-        const filename = 'revup_' + dateTime[0] + "_" + dateTime[1] + '.pdf';
-        saveAs(blob, filename);
-
-        // Close the menu icon
-        handleClose();
-    };
 
 
     async function downloadPDF () {
@@ -339,128 +297,17 @@ export default function Results(props) {
                             >
                                 <MenuItem onClick={downloadPDF}>as PDF</MenuItem>
                                 <MenuItem onClick={downloadZip}>as zip</MenuItem>
-                                <MenuItem onClick={tempDownloadPDF}>as formatted PDF</MenuItem>
                             </Menu>
                         </Grid>    
                     </Grid>
                     <Paper className={classes.paper}>
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={7}>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <Typography variant="h5" align="left" color="secondary" gutterBottom>
-                                            <b>General Information</b>
-                                        </Typography>
-                                    </Grid> 
-                                </Grid>
-                                {(function () {
-                                    if(props.variantInfo["variant_id"]) {
-                                        return (
-                                            <React.Fragment>
-                                                <Grid container justify="center" spacing={3}>
-                                                    <Grid item xs={4}>
-                                                        <FormLabel>
-                                                            Variant ID:
-                                                        </FormLabel>
-                                                    </Grid>
-                                                    <Grid item xs={8}>
-                                                        <FormLabel>{props.variantInfo["variant_id"]}</FormLabel>
-                                                    </Grid>
-                                                </Grid>
-                                            </React.Fragment>)}
-                                })()}
-                                {(function () {
-                                    if(props.variantInfo["patient_id"]) {
-                                        return (
-                                            <React.Fragment>
-                                                <Grid container justify="center" spacing={3}>
-                                                    <Grid item xs={4}>
-                                                        <FormLabel>
-                                                            Patient ID:
-                                                        </FormLabel>
-                                                    </Grid>
-                                                    <Grid item xs={8}>
-                                                        <FormLabel>{props.variantInfo["patient_id"]}</FormLabel>
-                                                    </Grid>
-                                                </Grid>
-                                            </React.Fragment>)}
-                                })()}
-                                {/* 
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={3}>
-                                        <FormLabel>Variant Description:</FormLabel>
-                                    </Grid> 
-                                    <Grid item xs={7}>
-                                        <FormLabel>{props.variantInfo["variant_description"]}</FormLabel>
-                                    </Grid> 
-                                </Grid>
-                                */}
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={4}>
-                                        <FormLabel>hg19 position: </FormLabel>
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <FormLabel>{props.assemblies["hg19"]}</FormLabel>
-                                    </Grid>
-                                </Grid>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={4}>
-                                        <FormLabel>hg38 position: </FormLabel>
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <FormLabel>{props.assemblies["hg38"]}</FormLabel>
-                                    </Grid>
-                                </Grid>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={4}>
-                                        <FormLabel>Reference Assembly:</FormLabel>
-                                    </Grid> 
-                                    <Grid item xs={8}>
-                                        <FormLabel>{props.variantInfo["ref_genome"]}</FormLabel>
-                                    </Grid> 
-                                </Grid>
-                                <Grid container justify="center" spacing={3}>
-                                    <Grid item xs={4}>
-                                        <FormLabel>Patient's Genotype:</FormLabel>
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <FormLabel>{props.variantInfo["genotype"]}</FormLabel>
-                                    </Grid>
-                                </Grid>
-                                {(function () {
-                                    if(props.variantInfo["phenotype"]) {
-                                        return (
-                                            <React.Fragment>
-                                                <Grid container justify="center" spacing={3}>
-                                                    <Grid item xs={4}>
-                                                        <FormLabel>
-                                                            Patient's Phenotype:
-                                                        </FormLabel>
-                                                    </Grid>
-                                                    <Grid item xs={8}>
-                                                        <FormLabel>{props.variantInfo["phenotype"]}</FormLabel>
-                                                    </Grid>
-                                                </Grid>
-                                            </React.Fragment>)}
-                                })()}
-                                <Grid container justify="center" spacing={3}>
-                                    <Grid item xs={4}>
-                                        <FormLabel>Identification Method:</FormLabel>
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <FormLabel>{props.variantInfo["identification_method"]}</FormLabel>
-                                    </Grid>
-                                </Grid>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={4}>
-                                        <FormLabel>Target Gene:</FormLabel>
-                                    </Grid> 
-                                    <Grid item xs={8}>
-                                        <FormLabel><i>{props.variantInfo["target_gene"]}</i></FormLabel>
-                                    </Grid> 
-                                </Grid>
+                                <GeneralInfoTable 
+                                    variantInfo={props.variantInfo}
+                                    assemblies={props.assemblies}
+                                />
                             </Grid>
-
                             <Grid item xs={3}>
                                 <Grid justify="center" container spacing={3}>
                                     <Grid item xs={12}>
@@ -523,7 +370,6 @@ export default function Results(props) {
                                 })()}
                             </Grid>
                         </Grid>
-
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
                                 <Divider />
@@ -586,168 +432,18 @@ export default function Results(props) {
                             </Grid>
                         </Grid>
 
-                        {/*
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={8}>
-                                <Grid justify="center" container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <Line
-                                            id="linechart"
-                                            data={getLineData(props.finalResults)}
-                                            options={getLineOptions(props.finalResults)}
-                                            height={400}
-                                            ref={lineChartRef}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={5}>
-                                <Doughnut 
-                                    data={getDoughnutData(props.finalResults["clinical"], 'clinical')} 
-                                    options={getDoughnutOptions(props.finalResults["clinical"], 'clinical')}
-                                    height={200}
-                                    ref={clinicalChartRef}
-                                />
-                            </Grid>
-                            <Grid item xs={5}>
-                                <Doughnut 
-                                    data={getDoughnutData(props.finalResults["functional"], 'functional')} 
-                                    options={getDoughnutOptions(props.finalResults["functional"], 'functional')}
-                                    height={200}
-                                    ref={functionalChartRef}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Grid justify="center" container spacing={3}>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" align="center" color="primary" gutterBottom>
-                                    RVE Score = {props.finalResults["rve"]}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        */}
-
-
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
                                 <Typography variant="h5" align="left" color="secondary" gutterBottom>
                                     <b>Clinical Table</b>
                                 </Typography>
-                                <TableContainer>
-                                    <Table aria-label="simple table">
-                                        <colgroup>
-                                            <col style={{width:'45%'}}/>
-                                            <col style={{width:'11%'}}/>
-                                            <col style={{width:'44%'}}/>
-                                        </colgroup>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell style={{ verticalAlign: 'top'}}>
-                                                    Evidence Description {" "}
-                                                    <Tooltip title={"Evidence level used in the scoring framework"}>
-                                                        <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell style={{ verticalAlign: 'top'}}>
-                                                    Score {" "}
-                                                    <Tooltip title={"Final value after external queries and modifications made by the user"}>
-                                                        <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell style={{ verticalAlign: 'top'}}>
-                                                    Additional Information/Comments {" "}
-                                                    <Tooltip title={"Additional information related to queries from external databases and user recorded comments relevant to the topic"}>
-                                                        <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {Object.keys(props.clinicalEvidenceLabels).map((key, index) => (
-                                                <TableRow key={key + '_row'}>
-                                                    <TableCell>
-                                                        {ReactHtmlParser(props.clinicalEvidenceLabels[key])}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {props.modifiedScores[key]}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {(function () {
-                                                            if(key === "c_1_1") {
-                                                                return (
-                                                                    <React.Fragment>
-                                                                        {ReactHtmlParser(props.comments["c_1_1"] ? props.comments["c_1_1"]+"<br><\br>": "")}
-                                                                        <b>phyloP Score</b>
-                                                                        <Tooltip title={"phyloP score > 1.5 indicates variant is more conserved"}>
-                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                        </Tooltip> : {props.additionalInfo["c_1_1"]["phylop"]}
-                                                                        <br></br>
-                                                                        <b>phastCons Score</b> 
-                                                                        <Tooltip title={"phastCons score > 0.5 indicates variant is more conserved"}>
-                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                        </Tooltip> : {props.additionalInfo["c_1_1"]["phastcons"]}
-                                                                    </React.Fragment>
-                                                                )
-                                                            } else if(key === "c_1_2") {
-                                                                if(props.variantInfo["genotype"] === "Homozygous") {
-                                                                    return (
-                                                                        <React.Fragment>
-                                                                            {ReactHtmlParser(props.comments["c_1_2"] ? props.comments["c_1_2"]+"<br><\br>": "")}
-                                                                            <b>Num. of homozygotes</b>
-                                                                            <Tooltip title={"Number of homozygotes determined from gnomAD"}>
-                                                                                <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                            </Tooltip> : {props.additionalInfo["c_1_2"]["num_homozygotes"]}
-                                                                            <br></br>
-                                                                            <b>gnomAD AF</b>
-                                                                            <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
-                                                                                <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                            </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
-                                                                        </React.Fragment>
-                                                                    )
-                                                                } else {
-                                                                    return (
-                                                                        <React.Fragment>
-                                                                            {ReactHtmlParser(props.comments["c_1_2"] ? props.comments["c_1_2"]+"<br><\br>": "")}
-                                                                            <b>gnomAD AF</b>
-                                                                            <Tooltip title={"gnomAD allele frequency < 0.05 indicates variant is rare in reference population databases"}>
-                                                                                <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                            </Tooltip> : {props.additionalInfo["c_1_2"]["af"]}
-                                                                        </React.Fragment>
-                                                                    )
-                                                                }
-                                                            } else if(key === "c_2_3") {
-                                                                return (
-                                                                    <React.Fragment>
-                                                                        {ReactHtmlParser(props.comments["c_2_3"] ? props.comments["c_2_3"]+"<br><\br>": "")}
-                                                                        <b>CADD Score</b> 
-                                                                        <Tooltip title={"CADD can quantitatively prioritize functional, deleterious, and disease causal variants across a wide range of functional categories, effect sizes and genetic architectures and can be used prioritize causal variation in both research and clinical settings. CADD score > 15 indicates variant is deleterious"}>
-                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                        </Tooltip> : {props.additionalInfo["c_2_3"]["cadd_score"]}
-                                                                    </React.Fragment>
-                                                                )
-                                                            } else if(key === "c_3_1") {
-                                                                return (
-                                                                    <React.Fragment>
-                                                                        {ReactHtmlParser(props.comments["c_3_1"] ? props.comments["c_3_1"]+"<br><\br>": "")}
-                                                                        {props.additionalInfo["c_3_1"]}
-                                                                    </React.Fragment>
-                                                                )
-                                                            } else {
-                                                                return (
-                                                                    <React.Fragment>
-                                                                        {props.comments[key] ? props.comments[key]: "-"}
-                                                                    </React.Fragment>
-                                                                )
-                                                            }
-                                                        })()}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}                        
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
+                                <ClinicalTable 
+                                    clinicalEvidenceLabels={props.clinicalEvidenceLabels}
+                                    comments={props.comments}
+                                    additionalInfo={props.additionalInfo}
+                                    modifiedScores={props.modifiedScores}
+                                    variantInfo={props.variantInfo}
+                                /> 
                             </Grid>
                         </Grid>
                         <br></br>
@@ -756,121 +452,15 @@ export default function Results(props) {
                                 <Typography variant="h5" align="left" color="secondary" gutterBottom>
                                     <b>Functional Table</b>
                                 </Typography>
-                                <TableContainer>
-                                    <Table aria-label="simple table">
-                                        <colgroup>
-                                            <col style={{width:'45%'}}/>
-                                            <col style={{width:'11%'}}/>
-                                            <col style={{width:'44%'}}/>
-                                        </colgroup>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell style={{ verticalAlign: 'top'}}>
-                                                    Evidence Description {" "}
-                                                    <Tooltip title={"Evidence level used in the scoring framework"}>
-                                                        <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell style={{ verticalAlign: 'top'}}>
-                                                    Score {" "}
-                                                    <Tooltip title={"Final value after external queries and modifications made by the user"}>
-                                                        <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell style={{ verticalAlign: 'top'}}>
-                                                    Additional Information/Comments {" "}
-                                                    <Tooltip title={"Additional information related to queries from external databases and user recorded comments relevant to the topic"}>
-                                                        <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                    </Tooltip>
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {Object.keys(props.functionalEvidenceLabels).map((key, index) => (
-                                                <TableRow key={key + '_row'}>
-                                                    <TableCell>
-                                                        {ReactHtmlParser(props.functionalEvidenceLabels[key])}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {props.modifiedScores[key]}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {(function () {
-                                                            if(key === "f_1_1") {
-                                                                return (
-                                                                    <React.Fragment>
-                                                                        {ReactHtmlParser(props.comments["f_1_1"] ? props.comments["f_1_1"]+"<br><\br>": "")}
-                                                                        <b>ReMap 2020 Peaks
-                                                                        <Tooltip title={"ReMap is a database of transcriptional regulators peaks derived from curated ChIP-seq, ChIP-exo, DAP-seq experiments in Human. Intersection with one or more ReMap 2020 peaks indicates variant is implicated in TF binding"}>
-                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                        </Tooltip> :</b> {props.additionalInfo["f_1_1"]["crms"]}
-                                                                    </React.Fragment>
-                                                                )
-                                                            } else if(key === "f_1_2") {
-                                                                return (
-                                                                    <React.Fragment>
-                                                                        {ReactHtmlParser(props.comments["f_1_2"] ? props.comments["f_1_2"]+"<br><\br>": "")}
-                                                                        <b>cCREs
-                                                                        <Tooltip title={"Candidate cis-Regulatory Elements by ENCODE / SCREEN. Intersection with a cCRE in SCREEN indicates variant localizes to a regulatory region"}>
-                                                                            <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                        </Tooltip> :</b> {props.additionalInfo["f_1_2"]["ccre_descriptions"]}
-                                                                    </React.Fragment>
-                                                                )
-                                                            } else if(key === "f_1_3") {
-                                                                if(props.additionalInfo["f_1_3"] !== "-") {
-                                                                    return (
-                                                                        <React.Fragment>
-                                                                            {ReactHtmlParser(props.comments["f_1_3"] ? props.comments["f_1_3"]+"<br><\br>": "")}
-                                                                            <b>Supporting Experiment
-                                                                            <Tooltip title={"Information by ENCODE / SCREEN. cCRE and target genes linked based on Hi-C or CHIA-PET"}>
-                                                                                <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                            </Tooltip> :</b> {props.additionalInfo["f_1_3"]}
-                                                                        </React.Fragment>
-                                                                    )
-                                                                } else {
-                                                                    return (
-                                                                        <React.Fragment>
-                                                                            {props.comments["f_1_3"] ? props.comments["f_1_3"]: "-"}
-                                                                        </React.Fragment>
-                                                                    )
-                                                                }
-                                                            } else if(key === "f_1_4") {
-                                                                if(props.additionalInfo["f_1_4"] !== "-") {
-                                                                    return (
-                                                                        <React.Fragment>
-                                                                            {ReactHtmlParser(props.comments["f_1_4"] ? props.comments["f_1_4"]+"<br><\br>": "")}
-                                                                            <b>Supporting Experiment
-                                                                            <Tooltip title={"Information by ENCODE / SCREEN. cCRE and targete genes linked based on eQTL"}>
-                                                                                <InfoOutlinedIcon className={classes.infoIcon}/>
-                                                                            </Tooltip> :</b> {props.additionalInfo["f_1_4"]}
-                                                                        </React.Fragment>
-                                                                    )
-                                                                } else {
-                                                                    return (
-                                                                        <React.Fragment>
-                                                                            {props.comments["f_1_4"] ? props.comments["f_1_4"]: "-"}
-                                                                        </React.Fragment>
-                                                                    )
-                                                                }
-                                                            } else {
-                                                                return (
-                                                                    <React.Fragment>
-                                                                        {props.comments[key] ? props.comments[key]: ""}
-                                                                    </React.Fragment>
-                                                                )
-                                                            }
-                                                        })()}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}                        
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
+                                <FunctionalTable
+                                    functionalEvidenceLabels={props.functionalEvidenceLabels} 
+                                    comments={props.comments}
+                                    additionalInfo={props.additionalInfo}
+                                    modifiedScores={props.modifiedScores}
+                                />
                             </Grid>
                         </Grid>
-
                         <br></br>
-
                         <Grid justify="center" container spacing={3}>
                             <Grid item xs={10}>
                                 <Typography variant="h5" align="left" color="secondary" gutterBottom>

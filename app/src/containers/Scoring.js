@@ -25,6 +25,8 @@ import {
     defaultLinksDict,
     defaultScoresDict,
     defaultValsDict,
+    defaultClinicalLabels,
+    defaultFunctionalLabels,
     defaultResultsDict,
     testVars
 } from '../constants'
@@ -79,8 +81,8 @@ export default function Scoring() {
     const [modifiedScores, setModifiedScores] = useState(defaultScoresDict);
     const [additionalInfo, setAdditionalInfo] = useState(defaultScoresDict);
     const [assemblies, setAssemblies] = useState(defaultAssembliesDict);
-    const [clinicalEvidenceLabels, setClinicalEvidenceLabels] = useState(defaultValsDict);
-    const [functionalEvidenceLabels, setFunctionalEvidenceLabels] = useState(defaultValsDict);
+    const [clinicalEvidenceLabels, setClinicalEvidenceLabels] = useState(defaultClinicalLabels);
+    const [functionalEvidenceLabels, setFunctionalEvidenceLabels] = useState(defaultFunctionalLabels);
     const [comments, setComments] = useState(defaultValsDict);
     const [finalResults, setFinalResults] = useState(defaultResultsDict);
     const [open, setOpen] = useState(false);
@@ -91,7 +93,7 @@ export default function Scoring() {
     const classes = useStyles();
 
     useEffect(() => {
-        const fetRefData = async () => {
+        const fetchRefData = async () => {
             setLoading(true)
             const response = await fetch(`https://api.genome.ucsc.edu/getData/sequence?genome=${query["ref_genome"]};chrom=chr${query["chro"]};start=${(parseFloat(query["pos"])-1).toString()};end=${query["pos"]}`);
             if(!response.ok) {
@@ -147,7 +149,7 @@ export default function Scoring() {
         }
 
         if (query["query_ref"] === true) {
-            fetRefData();
+            fetchRefData();
             setQuery({...query, "query_ref": false});
         }
     }, [query]);
@@ -176,8 +178,8 @@ export default function Scoring() {
             setModifiedScores(json["initial_scores"]);
             setAdditionalInfo(json["additional_info"]);
             setAssemblies(json["positions"]);
-            setClinicalEvidenceLabels(json["evidence_description"]["clinical"]);
-            setFunctionalEvidenceLabels(json["evidence_description"]["functional"]);
+            setClinicalEvidenceLabels(json["clinical_evidence_description"]);
+            setFunctionalEvidenceLabels(json["functional_evidence_description"]);
             setLoading(false)
             //console.log(json);
         }

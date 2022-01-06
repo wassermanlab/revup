@@ -5,7 +5,7 @@ import {
     ClinicalResultsTable,
     FunctionalResultsTable,
     CalculationsTable
-} from './ResultsTablesPDF'
+} from '../tables/ResultsTablesPDF'
 
 const BORDER_COLOR = '#E5E5E5'
 //const BORDER_STYLE = 'solid'

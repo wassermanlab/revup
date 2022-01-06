@@ -205,6 +205,26 @@ export default function Faq() {
                                                 aria-controls="panel9-content"
                                                 id="panel9-header">
                                                 <Typography variant="h6" color="secondary">
+                                                    What p-value should I expect to attach the score of 1 to one of the arguments?
+                                                </Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Typography variant="body1" color="textSecondary" paragraph>
+                                                    The p-value threshold depends on several variables, so it is your role to identify the 
+                                                    adequate one for your method. In the example of cis-eQTL, as mentioned in the table, 
+                                                    we would recommend the user to use GTEX threshold: “eQTL mapping showed that 78,633 SNPs 
+                                                    were significantly associated with the expression trait of at least one gene at the 
+                                                    genome-wide suggestive threshold (−log10 (P) > 5.39, α = 1)” (Zhang et al., 2020). 
+                                                    However, if another technic is used, the user should use a different threshold.
+                                                </Typography>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel9-content"
+                                                id="panel9-header">
+                                                <Typography variant="h6" color="secondary">
                                                     How is the answer "Unknown" scored?
                                                 </Typography>
                                             </AccordionSummary>

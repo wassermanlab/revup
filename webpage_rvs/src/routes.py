@@ -66,6 +66,9 @@ def calculate_initial_scores():
         # Get info from body of the request
         body = request.json
 
+        print(body["variant_info"])
+        print(body["query"])
+
         # Create the SNV object
         snv = SNV(
             ref_genome=body["query"]["ref_genome"],
@@ -77,17 +80,33 @@ def calculate_initial_scores():
             variant_id=body["query"]["variant_id"],
         )
 
+        variant_pos = "{}.chr{}:{}".format(
+            body["query"]["ref_genome"], 
+            body["query"]["chro"], 
+            body["query"]["pos"]
+        )
+        variant_name = "{}.chr{}:{}.{}>{}".format(
+            body["query"]["ref_genome"], 
+            body["query"]["chro"], 
+            body["query"]["pos"], 
+            snv.ref, 
+            body["query"]["alt"]
+        )
+
         # Form the response
+        evidence_description = get_evidence_labels(
+                                    variant_pos,
+                                    variant_name,
+                                    snv.target_gene
+                                )
         response = {
-            "evidence_description": get_evidence_labels(
-                                        body["variant_info"]["variant_pos"],
-                                        body["variant_info"]["variant_name"],
-                                        body["variant_info"]["target_gene"]
-                                    ),
+            "clinical_evidence_description": evidence_description["clinical"],
+            "functional_evidence_description": evidence_description["functional"],
             "initial_scores": DEFAULT_DICT,
             "additional_info": ADDITIONAL_INFO_DICT,
             "external_links": EXTERNAL_LINKS_DICT
         }
+
 
         # Get initial scores
         for key, value in body["query"].items():

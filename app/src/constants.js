@@ -5,6 +5,7 @@ export const testVars = [
         "chro": "17",
         "pos": "4987635",
         "alt": "T",
+        "ref": "C",
         "refGenome": "hg38",
         "gnomadCoor": "17-4987635-C-T",
         "targetGene": "CAMTA2"
@@ -15,6 +16,7 @@ export const testVars = [
         "chro": "9",
         "pos": "139444949",
         "alt": "A",
+        "ref": "C",
         "refGenome": "hg19",
         "gnomadCoor": "9-139444949-C-A",
         "targetGene": "NOTCH1"
@@ -124,6 +126,34 @@ export const defaultValsDict = {
     "c_5_2": "",
     "f_0_1": "",
     "f_0_2": "",
+    "f_1_1": "",
+    "f_1_2": "",
+    "f_1_3": "",
+    "f_1_4": "",
+    "f_1_5": "",
+    "f_2_1": "",
+    "f_2_2": "",
+    "f_3_1": "",
+    "f_4_1": ""
+}
+
+export const defaultClinicalLabels = {
+    "c_1_1": "",
+    "c_1_2": "",
+    "c_1_3": "",
+    "c_2_1": "",
+    "c_2_2": "",
+    "c_2_3": "",
+    "c_2_4": "",
+    "c_2_5": "",
+    "c_3_1": "",
+    "c_4_1": "",
+    "c_4_2": "",
+    "c_5_1": "",
+    "c_5_2": "",
+}
+
+export const defaultFunctionalLabels = {
     "f_1_1": "",
     "f_1_2": "",
     "f_1_3": "",

@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Home() {
-    // TODO: Change this import method!!
     const [open, setOpen] = useState(false);
     const classes = useStyles();
 

@@ -108,9 +108,16 @@ class SNV(Variant):
         ref_allele_query = os.path.join(UCSC_API_URL, "getData", track_query)
 
         ref_allele_results = make_request(ref_allele_query)
-        self.ref = ref_allele_results["dna"].upper()
-
-        # TODO: Check if there are results or not
+        try:
+            self.ref = ref_allele_results["dna"].upper()
+            logging.info("Successfully set reference allele {} for variant at chro {} pos {} using {}".format(
+                self.ref,
+                self.chro,
+                self.ref_assemblies[UCSC_ASSEMBLY],
+                UCSC_ASSEMBLY
+            ))
+        except KeyError:
+            logging.error("UCSC ERROR: no results for track query {}".format(track_query))
 
     
     def set_cadd_score(self):
@@ -123,11 +130,24 @@ class SNV(Variant):
             pos=str(self.ref_assemblies[CADD_ASSEMBLY])
         )
         results = make_request(query)
-        for result in results:
-            if result["Alt"] == self.alt and result["Ref"] == self.ref:
-                self.cadd_score = float(result["PHRED"])
-
-        # TODO: If no results, iterate through different versions?
+        try:
+            for result in results:
+                if result["Alt"] == self.alt and result["Ref"] == self.ref:
+                    self.cadd_score = float(result["PHRED"])
+                    logging.info("Successfully found CADD score {} for variant at chro {} pos {} using {}".format(
+                        self.cadd_score,
+                        self.chro,
+                        self.ref_assemblies[CADD_ASSEMBLY],
+                        CADD_ASSEMBLY
+                    ))
+        except KeyError:
+            logging.error("CADD ERROR: variant with chro {} pos {} alt {} and ref {} could not be found in CADD version {}".format(
+                self.chro,
+                self.ref_assemblies[CADD_ASSEMBLY],
+                self.alt,
+                self.ref,
+                CADD_VERSION
+            ))
 
 
     def set_phylop_score(self):
@@ -151,10 +171,20 @@ class SNV(Variant):
         )
 
         phylop_results = make_request(phylop_query)
-        if len(phylop_results[chro]) > 0:
-            self.phylop_score = float(phylop_results[chro][0]["value"])
-
-        # TODO: Check if there are no results
+        try:
+            if len(phylop_results[chro]) > 0:
+                self.phylop_score = float(phylop_results[chro][0]["value"])
+                logging.info("Successfully found PhyloP score {} for variant at chro {} start {} end {} using {}".format(
+                    self.phylop_score,
+                    self.chro,
+                    start,
+                    end,
+                    UCSC_ASSEMBLY
+                ))
+            else:
+                logging.error("No UCSC PhyloP score for track query {}".format(phylop_query))
+        except KeyError:
+            logging.error("UCSC ERROR: No PhyloP results for track query {}".format(phylop_query))
 
 
     def set_phastcons_score(self):
@@ -177,11 +207,22 @@ class SNV(Variant):
             start=start,
             end=end
         )
-        phastcons_results = make_request(phastcons_query)
-        if len(phastcons_results[chro]) > 0:
-            self.phastcons_score = float(phastcons_results[chro][0]["value"])
 
-        # TODO: Check if there are no results
+        phastcons_results = make_request(phastcons_query)
+        try:
+            if len(phastcons_results[chro]) > 0:
+                self.phastcons_score = float(phastcons_results[chro][0]["value"])
+                logging.info("Successfully found PhastCons score {} for variant at chro {} start {} end {} using {}".format(
+                    self.phastcons_score,
+                    self.chro,
+                    start,
+                    end,
+                    UCSC_ASSEMBLY
+                ))
+            else:
+                logging.error("No UCSC PhastCons score for track query {}".format(phastcons_query))
+        except KeyError:
+            logging.error("UCSC ERROR: No PhastCons results for track query {}".format(phastcons_query))
 
 
     def set_rsid(self):
@@ -202,20 +243,36 @@ class SNV(Variant):
             end=str(int(end)+1)
         )
         dbsnp_results = make_request(dbsnp_query)
-        if len(dbsnp_results["snp151"]) > 0:
-            for dbsnp_result in dbsnp_results["snp151"]:
-                # If the start and end position are the same and equal the variant position
-                if int(dbsnp_result["chromStart"]) == int(end):
-                    if int(dbsnp_result["chromEnd"]) == int(end): 
-                        self.rsid = dbsnp_result["name"]
-                # Otherwise use start as one position behind the variant position
-                elif int(dbsnp_result["chromStart"]) == int(start):
-                    # Check that rsID is blank so not overwriting the case where start and 
-                    # end position equal the provided variant position
-                    if int(dbsnp_result["chromEnd"]) == int(end) and self.rsid == "":
-                        self.rsid = dbsnp_result["name"]
-
-        # TODO: Check if there are no results
+        try:
+            if len(dbsnp_results["snp151"]) > 0:
+                for dbsnp_result in dbsnp_results["snp151"]:
+                    # If the start and end position are the same and equal the variant position
+                    if int(dbsnp_result["chromStart"]) == int(end):
+                        if int(dbsnp_result["chromEnd"]) == int(end): 
+                            self.rsid = dbsnp_result["name"]
+                            logging.info("Successfully found rsID {} for variant chro {} start {} end {} using {}".format(
+                                self.rsid,
+                                chro,
+                                start,
+                                int(end)+1,
+                                UCSC_ASSEMBLY
+                            ))
+                    # Otherwise use start as one position behind the variant position
+                    elif int(dbsnp_result["chromStart"]) == int(start):
+                        # Check that rsID is blank so not overwriting the case where start and 
+                        # end position equal the provided variant position
+                        if int(dbsnp_result["chromEnd"]) == int(end) and self.rsid == "":
+                            self.rsid = dbsnp_result["name"]
+                            logging.info("Successfully found rsID {} for variant chro {} start {} end {}".format(
+                                self.rsid,
+                                chro,
+                                start,
+                                int(end)+1
+                            ))
+            else:
+                logging.error("No rsID found for track query {}".format(dbsnp_query))
+        except KeyError:
+            logging.error("UCSC ERROR: No rsID found for track query {}".format(dbsnp_query))
 
 
     def set_clinvar_variation(self):
@@ -235,13 +292,21 @@ class SNV(Variant):
         )
         # TODO: What to do if results are empty?
         # TODO: This could be an issue if the variant is not present in gnomAD but has an rsID in UCSC
-        if results["data"]["clinvar_variant"]:
-            self.clinvar_variation = results["data"]["clinvar_variant"]["clinvar_variation_id"]
-        else:    
-            # Log the errors to console
-            # TODO: Log to file instead
-            for error in results["errors"]:
-                logging.error("gnomAD Error: {}".format(error["message"]))
+        try:
+            if results["data"]["clinvar_variant"]:
+                self.clinvar_variation = results["data"]["clinvar_variant"]["clinvar_variation_id"]
+                logging.info("Successfully found clinVar variation {} for variant {} using {}".format(
+                    self.clinvar_variation,
+                    variant_id,
+                    GNOMAD_ASSEMBLY
+                ))
+            else:    
+                # Log the errors to console
+                # TODO: Log to file instead
+                for error in results["errors"]:
+                    logging.error("GNOAMD Error: {}".format(error["message"]))
+        except KeyError:
+            logging.error("GNOMAD ERROR: {}".format(error["message"]))
 
 
     def set_gnomad_info(self):
@@ -262,18 +327,27 @@ class SNV(Variant):
         )
 
         # TODO: What to do if results are empty??
-        if results["data"]["variant"]:
-            an = results["data"]["variant"]["genome"]["an"]
-            ac = results["data"]["variant"]["genome"]["ac"]
-            self.af = int(ac)/int(an)
-            self.num_homozygotes = results["data"][ "variant"]["genome"]["homozygote_count"]
-        else:
-            self.in_gnomad = False
-            
-            # Log the errors to console
-            # TODO: Log to file instead
-            for error in results["errors"]:
-                logging.error("gnomAD Error: {}".format(error["message"]))
+        try:
+            if results["data"]["variant"]:
+                an = results["data"]["variant"]["genome"]["an"]
+                ac = results["data"]["variant"]["genome"]["ac"]
+                self.af = int(ac)/int(an)
+                self.num_homozygotes = results["data"][ "variant"]["genome"]["homozygote_count"]
+                logging.info("Successfully found af {} and number of homozygotes {} for variant {} using {}".format(
+                    self.af,
+                    self.num_homozygotes,
+                    variant_id,
+                    GNOMAD_ASSEMBLY
+                ))
+            else:
+                self.in_gnomad = False
+                
+                # Log the errors to console
+                # TODO: Log to file instead
+                for error in results["errors"]:
+                    logging.error("GNOMAD Error: {}".format(error["message"]))
+        except KeyError:
+            logging.error("GNOMAD ERROR: {}".format(error["message"]))
 
 
     def set_ccre_info(self):
@@ -298,14 +372,28 @@ class SNV(Variant):
         ccre_query = os.path.join(UCSC_API_URL, "getData", track_query)
 
         ccre_results = make_request(ccre_query)
-        if len(ccre_results["encodeCcreCombined"]) > 0:
-            for ccre_result in ccre_results["encodeCcreCombined"]:
-                self.ccre_info.append({
-                    "ccre": ccre_result["ccre"],
-                    "description": ccre_result["description"],
-                    "name": ccre_result["name"]
-                })
+        try:
+            if len(ccre_results["encodeCcreCombined"]) > 0:
+                for ccre_result in ccre_results["encodeCcreCombined"]:
+                    self.ccre_info.append({
+                        "ccre": ccre_result["ccre"],
+                        "description": ccre_result["description"],
+                        "name": ccre_result["name"]
+                    })
+                    logging.info("Successfully found cCRE info {} for cCRE {} for variant at chro {} start {} end {} using {}".format(
+                        ccre_result["name"],
+                        ccre_result["ccre"],
+                        chro,
+                        start,
+                        end,
+                        UCSC_ASSEMBLY
+                    ))
+                else:
+                    logging.error("UCSC ERROR: could not find cCRE results for track query {}".format(ccre_query))
+        except KeyError:
+            logging.error("UCSC ERROR: could not find cCRE results for track query {}".format(ccre_query))
     
+
     def set_ccre_method(self):
         """
         Queries the Screen API to determine the cCRE method for the target gene
@@ -319,12 +407,31 @@ class SNV(Variant):
         results = graphql_query(SCREEN_URL, query)
         data = results["data"]["ccres"]
 
-        if data and data["total"] > 0:
-            ccres = data["ccres"]
-            for ccre in ccres:
-                for linked_gene in ccre["details"]["linkedGenes"]:
-                    if linked_gene["gene"] == self.target_gene:
-                        self.ccre_methods.add(linked_gene["method"])
+        try:
+            if data and data["total"] > 0:
+                ccres = data["ccres"]
+                for ccre in ccres:
+                    for linked_gene in ccre["details"]["linkedGenes"]:
+                        if linked_gene["gene"] == self.target_gene:
+                            self.ccre_methods.add(linked_gene["method"])
+                            logging.info("Successfully found cCRE method {} for variant {}".format(
+                                linked_gene["method"],
+                                "-".join([str(self.chro), str(self.ref_assemblies[SCREEN_ASSEMBLY]), self.ref, self.alt])
+                            ))
+            else:
+                logging.error("SCREEN ERROR: could not find cCRE method for variant at chro {} start {} end {} using {}".format(
+                    chro,
+                    start,
+                    end,
+                    SCREEN_ASSEMBLY
+                ))
+        except KeyError:
+            logging.error("SCREEN ERROR: could not find cCRE method for variant at chro {} start {} end {} using {}".format(
+                chro,
+                start,
+                end,
+                SCREEN_ASSEMBLY
+            ))
     
 
     def set_remap_score(self):
@@ -346,7 +453,16 @@ class SNV(Variant):
         subset = self.remap_df[self.remap_df.loc[:, 0] == ('chr' + str(self.chro))]
         subset = subset[(subset.loc[:, 1] < pos) & (subset.loc[:, 2] > pos)]
 
-        # TODO: Error checking here
+        if subset.empty:
+            logging.error("REMAP ERROR: No peaks found in ReMAP input file for chro {} pos {}".format(
+                self.chro,
+                pos
+            ))
         for index, row in subset.iterrows():
             crm = row[3].split(':')[0]
             self.crms.append(crm)
+            logging.info("Successfully found CRM ReMAP peak {} for variant at chro {} pos {}".format(
+                crm,
+                self.chro,
+                pos
+            ))
